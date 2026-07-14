@@ -38,7 +38,7 @@ const translations: Record<string, { zh: string; en: string }> = {
   "topbar_social": { zh: "微信", en: "WhatsApp" },
   "mobile_cta_call": { zh: "电话咨询", en: "Call Us" },
   "mobile_cta_whatsapp": { zh: "WhatsApp", en: "WhatsApp" },
-  "mobile_cta_inquiry": { zh: "发送询盘", en: "Send an Inquiry" },
+  "mobile_cta_inquiry": { zh: "发送询盘", en: "Inquire" },
 
   "home_slide_heritage_title": { zh: "三十余年专注天然大理石", en: "OVER 30 YEARS DEDICATED TO NATURAL MARBLE" },
   "home_slide_heritage_desc": { zh: "始于1992年 · 全球矿山直采 · 源头大板供应", en: "Established in 1992 · Global quarry sourcing · Direct slab supply" },
