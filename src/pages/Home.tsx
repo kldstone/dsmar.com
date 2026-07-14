@@ -30,6 +30,14 @@ export default function Home() {
   }, [isPaused, next, prefersReducedMotion]);
 
   useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    slides.forEach((slide) => {
+      const image = new Image();
+      image.src = isMobile ? slide.mobileImg : optimizedImage(slide.img);
+    });
+  }, []);
+
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") prev();
       if (e.key === "ArrowRight") next();
@@ -42,7 +50,7 @@ export default function Home() {
     <div>
       {/* Hero Carousel */}
       <div className="relative w-full h-screen overflow-hidden bg-black" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
-        <div key={active} className="absolute inset-0" style={{ animation: "heroImageIn 700ms ease-out" }}>
+        <div key={active} className="absolute inset-0">
           <Link to={currentSlide.href} className="block w-full h-full relative">
             <picture className="block w-full h-full">
               <source media="(max-width: 767px)" srcSet={currentSlide.mobileImg} />
@@ -91,7 +99,6 @@ export default function Home() {
         </div>
         <style>{`
           @keyframes slideFadeIn { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:translateY(0) } }
-          @keyframes heroImageIn { from { opacity:0 } to { opacity:1 } }
           @keyframes heroScale { from { transform:scale(1.04) } to { transform:scale(1) } }
         `}</style>
       </div>
