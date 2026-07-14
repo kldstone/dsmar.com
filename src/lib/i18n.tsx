@@ -37,6 +37,7 @@ const translations: Record<string, { zh: string; en: string }> = {
   "topbar_phone": { zh: "+86 139 5994 8672", en: "+86 139 5994 8672" },
   "topbar_social": { zh: "微信", en: "WhatsApp" },
   "mobile_cta_call": { zh: "电话咨询", en: "Call Us" },
+  "mobile_cta_whatsapp": { zh: "WhatsApp", en: "WhatsApp" },
   "mobile_cta_inquiry": { zh: "发送询盘", en: "Send an Inquiry" },
 
   "home_slide_heritage_title": { zh: "三十余年专注天然大理石", en: "OVER 30 YEARS DEDICATED TO NATURAL MARBLE" },
