@@ -15,7 +15,7 @@ const LangContext = createContext<{
 
 const translations: Record<string, { zh: string; en: string }> = {
   "nav_home": { zh: "首页", en: "HOME" },
-  "nav_stone_market": { zh: "东升石材超市", en: "DONGSHENG STONE MARKET" },
+  "nav_stone_market": { zh: "东升石材案例", en: "DONGSHENG STONE PROJECTS" },
   "nav_mine_direct": { zh: "矿山直供", en: "MINE DIRECT" },
   "nav_white_series": { zh: "白色系", en: "WHITE SERIES" },
   "nav_beige_series": { zh: "米黄系", en: "BEIGE SERIES" },
