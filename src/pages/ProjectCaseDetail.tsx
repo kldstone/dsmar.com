@@ -20,7 +20,7 @@ export default function ProjectCaseDetail() {
     );
   }
 
-  const title = lang === "zh" ? projectCase.name : projectCase.en;
+  const title = lang === "zh" ? projectCase.name : projectCase.en.toUpperCase();
 
   return (
     <main className="bg-white">

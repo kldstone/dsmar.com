@@ -129,7 +129,7 @@ export default function Home() {
               <img src={projectCase.cover} alt={lang === "zh" ? projectCase.name : projectCase.en} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <div className="absolute left-0 right-0 bottom-0 px-4 py-3">
-                <p className="text-white text-[13px] font-semibold">{lang === "zh" ? projectCase.name : projectCase.en}</p>
+                <p className="text-white text-[13px] font-semibold">{lang === "zh" ? projectCase.name : projectCase.en.toUpperCase()}</p>
                 {lang === "zh" && <p className="text-white/65 text-[10px] font-medium mt-0.5">{projectCase.en}</p>}
               </div>
             </Link>

@@ -302,9 +302,9 @@ export default function Collections({ filter }: CollectionsProps) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <div className="absolute left-0 right-0 bottom-0 px-4 py-3">
                 <p className="text-white text-[13px] font-semibold tracking-[0.04em] leading-tight">
-                  {lang === "en" ? (p.en || t("collections_custom_stone")) : p.name}
+                  {lang === "en" ? (p.en || t("collections_custom_stone")).toUpperCase() : p.name}
                 </p>
-                {p.en && (
+                {lang === "zh" && p.en && (
                   <p className="text-white/65 text-[10px] font-medium tracking-[0.08em] mt-0.5">
                     {p.en}
                   </p>
