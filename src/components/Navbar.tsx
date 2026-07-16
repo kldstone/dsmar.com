@@ -80,7 +80,7 @@ export default function Navbar() {
       <nav className={`sticky top-0 z-50 transition-[background-color,border-color,box-shadow] duration-400 border-b ${scrolled ? "bg-white/97 border-black/8 backdrop-blur-[20px] shadow-sm" : "bg-white/95 border-black/5 backdrop-blur-[20px]"}`}>
         <div className="max-w-[1280px] mx-auto px-6 flex items-center justify-between min-h-[78px] gap-6">
           <Link to="/" className="flex items-center gap-3 shrink-0">
-            <img src={lang === "zh" ? "/logo-cn.png" : "/logo-en.png"} alt={lang === "zh" ? "东升石业" : "DONGSHENG STONE"} width="509" height="447" className="h-[126px] w-auto object-contain md:h-[126px] max-md:h-[70px]" />
+            <img src={lang === "zh" ? "/logo-cn.png" : "/logo-en.png"} alt={lang === "zh" ? "东升石业" : "DONGSHENG STONE"} width="509" height="447" className={`h-[126px] w-auto object-contain md:h-[126px] max-md:h-[70px] ${lang === "en" ? "scale-[1.22] origin-left" : ""}`} />
             <span className="hidden lg:block text-[#111111]/60 text-[12px] tracking-[0.06em] font-medium">{t("topbar_location")}</span>
           </Link>
 

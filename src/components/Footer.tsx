@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="py-16 border-b border-black/6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="md:col-span-1">
-              <img src={lang === "zh" ? "/logo-cn.png" : "/logo-en.png"} alt={lang === "zh" ? "东升石业" : "DONGSHENG STONE"} width="509" height="447" className="h-[72px] w-auto mb-5" loading="lazy" decoding="async" />
+              <img src={lang === "zh" ? "/logo-cn.png" : "/logo-en.png"} alt={lang === "zh" ? "东升石业" : "DONGSHENG STONE"} width="509" height="447" className={`h-[72px] w-auto mb-5 ${lang === "en" ? "scale-[1.22] origin-left" : ""}`} loading="lazy" decoding="async" />
               <p className="text-[#111111]/45 text-[13px] leading-relaxed max-w-[240px]">{t("footer_tagline")}</p>
             </div>
             <div>
