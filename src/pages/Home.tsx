@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { optimizedImage } from "@/lib/images";
 import { useLang } from "@/lib/i18n";
+import { projectCases } from "@/data/projectCases";
 import LazyCatalogSection from "./CatalogSection";
 
 const slides = [
   { img: "/hero-slides/desktop-hero-1.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-1.webp", titEn: "DONGSHENG MARBLE", titleKey: "home_slide_heritage_title", descriptionKey: "home_slide_heritage_desc", href: "/about" },
-  { img: "/hero-slides/微信图片_20260713143648_181_45.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-2.webp", titEn: "STONE SUPERMARKET", titleKey: "home_stone_market_title", descriptionKey: "home_stone_market_desc", href: "/collections/marble" },
+  { img: "/optimized/project-cases/ziqi-donglai.webp", mobileImg: "/optimized/project-cases/ziqi-donglai.webp", titEn: "PROJECT CASES", titleKey: "home_project_cases_title", descriptionKey: "home_project_cases_desc", href: "/collections/marble" },
   { img: "/hero-slides/微信图片_20260713143654_187_45.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-3.webp", titEn: "GLOBAL SOURCING", titleKey: "home_slide_sourcing_title", descriptionKey: "home_slide_sourcing_desc", href: "/catalog" },
   { img: "/hero-slides/微信图片_20260713143655_188_45.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-4.webp", titEn: "COMPLETE CHAIN", titleKey: "home_slide_chain_title", descriptionKey: "home_slide_chain_desc", href: "/catalog" },
   { img: "/hero-slides/微信图片_20260713143653_186_45.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-5.webp", titEn: "TOP 100 TAXPAYER", titleKey: "home_slide_taxpayer_title", descriptionKey: "home_slide_taxpayer_desc", href: "/about" },
@@ -115,37 +116,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stone Market */}
+      {/* Project Cases */}
       <section className="max-w-[1400px] mx-auto px-6 pt-20 pb-10">
         <div className="text-center mb-12">
-          <span className="text-[#111111] text-[11px] font-bold tracking-[0.18em] uppercase block mb-4">STONE MARKET</span>
-          <h2 className="text-[#111111] text-[clamp(1.4rem,2.5vw,1.8rem)] font-black tracking-[0.03em] mb-3">{t("home_stone_market_title")}</h2>
-          <p className="text-[#111111]/45 text-[14px] max-w-[520px] mx-auto leading-relaxed">{t("home_stone_market_desc")}</p>
+          <span className="text-[#111111] text-[11px] font-bold tracking-[0.18em] uppercase block mb-4">PROJECT CASES</span>
+          <h2 className="text-[#111111] text-[clamp(1.4rem,2.5vw,1.8rem)] font-black tracking-[0.03em] mb-3">{t("home_project_cases_title")}</h2>
+          <p className="text-[#111111]/45 text-[14px] max-w-[520px] mx-auto leading-relaxed">{t("home_project_cases_desc")}</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-10">
-          {[
-            { name: "蓝水晶", en: "Calcite Blue", id: "12", img: "/gani-products/gani_013_蓝水晶.webp" },
-            { name: "云朵拉灰", en: "New Castle Grey", id: "75", img: "/gani-products/gani_076_云朵拉灰.webp" },
-            { name: "劳伦斯金", en: "Laurent Black", id: "90", img: "/gani-products/gani_091_劳伦斯金.webp" },
-            { name: "阿玛尼棕", en: "Amani Brown", id: "101", img: "/gani-products/gani_102_阿玛尼棕.webp" },
-            { name: "经典宝石蓝", en: "Brazil Blue Sodalite", id: "4", img: "/gani-products/gani_005_经典宝石蓝.webp" },
-            { name: "亚马逊绿", en: "Amazon Green", id: "95", img: "/gani-products/gani_096_亚马逊绿.webp" },
-            { name: "桃李春风", en: "Cristallo Pink", id: "0", img: "/gani-products/gani_001_桃李春风.webp" },
-            { name: "卡拉拉金", en: "Oro Carrara", id: "40", img: "/gani-products/gani_041_卡拉拉金.webp" },
-          ].map((p, i) => (
-            <Link key={i} to={`/collections/product/${p.id}`} className="group relative block overflow-hidden bg-[#f5f5f5] aspect-[3/4]">
-              <img src={optimizedImage(p.img)} alt={lang === "zh" ? p.name : p.en} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          {projectCases.slice(0, 8).map((projectCase) => (
+            <Link key={projectCase.slug} to={`/cases/${projectCase.slug}`} className="group relative block overflow-hidden bg-[#f5f5f5] aspect-[3/4]">
+              <img src={projectCase.cover} alt={lang === "zh" ? projectCase.name : projectCase.en} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <div className="absolute left-0 right-0 bottom-0 px-4 py-3">
-                <p className="text-white text-[13px] font-semibold">{lang === "zh" ? p.name : p.en}</p>
-                {lang === "zh" && <p className="text-white/65 text-[10px] font-medium mt-0.5">{p.en}</p>}
+                <p className="text-white text-[13px] font-semibold">{lang === "zh" ? projectCase.name : projectCase.en}</p>
+                {lang === "zh" && <p className="text-white/65 text-[10px] font-medium mt-0.5">{projectCase.en}</p>}
               </div>
             </Link>
           ))}
         </div>
         <div className="text-center">
           <Link to="/collections/marble" className="inline-flex items-center gap-2 text-[#111111] text-[12px] font-bold tracking-[0.10em] uppercase border-b-2 border-[#dc2626] pb-1 hover:text-[#dc2626] transition-colors">
-            {t("home_view_all_products")}<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L12 8L6 14" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            {t("home_view_all_cases")}<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L12 8L6 14" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </Link>
         </div>
       </section>

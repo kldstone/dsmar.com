@@ -19,8 +19,8 @@ const pageMeta: Record<string, LocalizedMeta> = {
     en: { title: "Natural Marble Collection | Slabs for Architecture & Interiors", description: "Explore natural marble by colour for hotel lobbies, villas, commercial interiors, feature walls, flooring, and custom countertops.", keywords: "natural marble,marble slabs,marble supplier,white marble,grey marble" },
   },
   "/collections/marble": {
-    zh: { title: "天然大理石系列｜大理石大板与工程选材", description: "按色系浏览天然大理石系列，适用于酒店大堂、别墅会所、商业空间、背景墙、地面和台面定制。", keywords: "天然大理石,大理石大板,大理石供应商,白色大理石,灰色大理石" },
-    en: { title: "Natural Marble Collection | Slabs for Architecture & Interiors", description: "Explore natural marble by colour for hotel lobbies, villas, commercial interiors, feature walls, flooring, and custom countertops.", keywords: "natural marble,marble slabs,marble supplier,white marble,grey marble" },
+    zh: { title: "工程案例｜天然石材空间应用", description: "浏览东升石业精选工程案例，查看天然大理石与奢石在住宅、酒店及商业空间中的应用图集。", keywords: "石材工程案例,大理石案例,天然石材应用,奢石空间,东升石业" },
+    en: { title: "Project Cases | Natural Stone Applications", description: "Explore selected Dongsheng project galleries featuring natural marble and luxury stone in residential, hospitality, and commercial spaces.", keywords: "stone project cases,marble projects,natural stone applications,luxury stone interiors,Dongsheng Stone" },
   },
   "/about": {
     zh: { title: "关于东升｜福建南安水头石材源头工厂", description: "东升大理石扎根中国石都南安水头，服务设计师、建筑商、工程客户和全球高端石材项目。", keywords: "关于东升,南安石材工厂,水头石材,福建石材企业" },
