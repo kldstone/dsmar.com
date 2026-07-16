@@ -3,14 +3,14 @@ import { trackConversion } from "@/lib/analytics";
 import { useLang } from "@/lib/i18n";
 
 export default function Footer() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   return (
     <footer className="relative bg-[#f8f8f8] text-[#111111]/65 border-t border-black/8">
       <div className="relative max-w-[1280px] mx-auto px-6">
         <div className="py-16 border-b border-black/6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="md:col-span-1">
-              <img src="/optimized/logo.webp" alt="东升大理石" width="108" height="72" className="h-[72px] w-auto mb-5" loading="lazy" decoding="async" />
+              <img src={lang === "zh" ? "/logo-cn.png" : "/logo-en.png"} alt={lang === "zh" ? "东升石业" : "DONGSHENG STONE"} width="509" height="447" className="h-[72px] w-auto mb-5" loading="lazy" decoding="async" />
               <p className="text-[#111111]/45 text-[13px] leading-relaxed max-w-[240px]">{t("footer_tagline")}</p>
             </div>
             <div>

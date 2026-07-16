@@ -77,7 +77,7 @@ export default function Contact() {
 
               {/* Factory image */}
               <div className="overflow-hidden img-hover">
-                <img src={optimizedImage("/brand-gallery/blog-care.jpg")} alt={t("contact_factory_alt")} className="w-full aspect-[16/9] object-cover" loading="lazy" decoding="async" />
+                <img src={optimizedImage("/brand-gallery/contact-exhibition-team-2025-07-22.jpg")} alt={t("contact_factory_alt")} className="w-full aspect-[16/9] object-cover" loading="lazy" decoding="async" />
               </div>
             </div>
           </div>

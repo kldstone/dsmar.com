@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { optimizedImage } from "@/lib/images";
 import { useLang } from "@/lib/i18n";
+import { projectCases } from "@/data/projectCases";
 
 // ============================================================
 // 产品一览：gani.com.cn 风格
@@ -14,6 +15,7 @@ type Product = {
   en: string;
   img: string;
   color: string;
+  href?: string;
 };
 
 type CollectionsProps = {
@@ -182,6 +184,14 @@ const products: Product[] = [
   { name: "中旅白金沙拼花", en: "工程定制产品", img: "/gani-products/gani_148_中旅白金沙拼花.webp", color: "水刀拼花" }
 ];
 
+const projectCaseProducts: Product[] = projectCases.map((projectCase) => ({
+  name: projectCase.name,
+  en: projectCase.en,
+  img: projectCase.cover,
+  color: "工程案例",
+  href: `/cases/${projectCase.slug}`,
+}));
+
 // 天然大理石 tab（不含水刀拼花）
 const MARBLE_TABS = [
   { key: "全部", label: "全部" }, { key: "白色系", label: "白色系" }, { key: "灰色系", label: "灰色系" }, { key: "黑色系", label: "黑色系" }, { key: "米色系", label: "米色系" }, { key: "棕色系", label: "棕色系" }, { key: "蓝色系", label: "蓝色系" }, { key: "绿色系", label: "绿色系" }, { key: "红色系", label: "红色系" }, { key: "金色系", label: "金色系" }
@@ -194,23 +204,28 @@ export default function Collections({ filter }: CollectionsProps) {
   const [active, setActive] = useState("全部");
 
   const isMosaic = filter === "mosaic";
+  const isProjectCases = filter === "marble";
 
-  const TABS = isMosaic ? [] : filter === "marble" ? MARBLE_TABS : ALL_TABS;
+  const TABS = isMosaic || isProjectCases ? [] : ALL_TABS;
 
   // 基础产品列表
   const baseProducts = useMemo(() => {
     if (isMosaic) return products.filter((p) => p.color === "水刀拼花");
-    if (filter === "marble") return products.filter((p) => p.color !== "水刀拼花");
+    if (isProjectCases) return projectCaseProducts;
     return products;
-  }, [filter, isMosaic]);
+  }, [isMosaic, isProjectCases]);
 
   const filtered = useMemo(() => {
     if (active === "全部" || isMosaic) return baseProducts;
     return baseProducts.filter((p) => p.color === active);
   }, [active, baseProducts, isMosaic]);
 
-  const pageTitle = isMosaic ? t("collections_mosaic") : t("collections_natural_marble");
-  const pageSub = isMosaic
+  const pageTitle = isProjectCases
+    ? (lang === "zh" ? "工程案例" : "PROJECT CASES")
+    : isMosaic ? t("collections_mosaic") : t("collections_natural_marble");
+  const pageSub = isProjectCases
+    ? (lang === "zh" ? "精选天然石材应用项目，点击查看完整案例图集。" : "Selected natural stone applications. Open a case to view the complete gallery.")
+    : isMosaic
     ? t("collections_mosaic_subtitle")
     : t("collections_marble_subtitle");
   const labelForColor = (color: string) => t(`collections_color_${color}`);
@@ -274,7 +289,7 @@ export default function Collections({ filter }: CollectionsProps) {
             return (
             <Link
               key={`${p.name}-${i}`}
-              to={`/collections/product/${productId}`}
+              to={p.href || `/collections/product/${productId}`}
               className="group relative block overflow-hidden bg-[#f5f5f5] aspect-[3/4]"
             >
               <img

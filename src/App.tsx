@@ -6,6 +6,7 @@ import { Suspense, lazy } from "react";
 const Home = lazy(() => import("./pages/Home"));
 const Collections = lazy(() => import("./pages/Collections"));
 const CollectionDetail = lazy(() => import("./pages/CollectionDetail"));
+const ProjectCaseDetail = lazy(() => import("./pages/ProjectCaseDetail"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const FAQ = lazy(() => import("./pages/FAQ"));
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/collections" element={<Collections />} />
             <Route path="/collections/marble" element={<Collections filter="marble" />} />
             <Route path="/collections/product/:id" element={<CollectionDetail />} />
+            <Route path="/cases/:slug" element={<ProjectCaseDetail />} />
             <Route path="/about" element={<About />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/blog" element={<BlogList />} />
