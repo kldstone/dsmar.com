@@ -9,7 +9,7 @@ export default function About() {
     <div>
       {/* Hero — 画册封面 */}
       <section className="relative h-[55vh] min-h-[400px] bg-[#0f0f0f] overflow-hidden">
-        <img src={optimizedImage("/catalog-products/dongsheng-about/page-00.jpg")} alt={t("about_hero_alt")} className="w-full h-full object-cover opacity-70" fetchPriority="high" decoding="async" />
+        <img src="/optimized/brand-gallery/about-hero-interior.webp" alt={t("about_hero_alt")} className="w-full h-full object-cover opacity-70" fetchPriority="high" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         <div className="absolute inset-0 flex items-center justify-center text-center px-6">
           <div>

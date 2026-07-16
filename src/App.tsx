@@ -1,7 +1,17 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Layout from "./components/Layout";
 import LoadingScreen from "./components/LoadingScreen";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname]);
+
+  return null;
+}
 
 const Home = lazy(() => import("./pages/Home"));
 const Collections = lazy(() => import("./pages/Collections"));
@@ -19,6 +29,7 @@ const CatalogDetail = lazy(() => import("./pages/CatalogDetail"));
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route element={<Layout />}>
