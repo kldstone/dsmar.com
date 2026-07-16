@@ -235,8 +235,8 @@ export default function Collections({ filter }: CollectionsProps) {
       {/* Hero */}
       <section className="relative h-[55vh] min-h-[420px] bg-[#e5e5e5] overflow-hidden">
         <img
-          src={optimizedImage("/brand-gallery/hero-marble.jpg")}
-          alt="水头石材产业基地"
+          src="/optimized/brand-gallery/project-cases-hero.webp"
+          alt={lang === "zh" ? "东升石业展厅工程案例" : "Dongsheng Stone project showroom"}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/35" />
