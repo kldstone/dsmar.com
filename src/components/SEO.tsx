@@ -101,7 +101,7 @@ export default function SEO() {
     const address = lang === "zh"
       ? { streetAddress: "水头镇奎峰工业区", addressLocality: "南安市", addressRegion: "福建省" }
       : { streetAddress: "Kuifeng Industrial Zone, Shuitou Town", addressLocality: "Nan'an", addressRegion: "Fujian" };
-    setJsonLd("schema-organization", { "@context": "https://schema.org", "@type": "Organization", name: siteName, url: siteUrl, email: "262034042@qq.com", telephone: "+86 139 5994 8672", address: { "@type": "PostalAddress", ...address, addressCountry: "CN" } });
+    setJsonLd("schema-organization", { "@context": "https://schema.org", "@type": "Organization", name: siteName, url: siteUrl, email: "dongshengmarble@gmail.com", telephone: "+86 139 5994 8672", address: { "@type": "PostalAddress", ...address, addressCountry: "CN" } });
     setJsonLd("schema-website", { "@context": "https://schema.org", "@type": "WebSite", name: siteName, url: siteUrl, inLanguage: lang === "zh" ? "zh-CN" : "en" });
 
     const segments = canonicalPath.split("/").filter(Boolean);

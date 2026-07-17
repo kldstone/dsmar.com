@@ -53,8 +53,8 @@ export default function Contact() {
               {/* Email */}
               <div>
                 <span className="text-[#111111] text-[10px] font-bold tracking-[0.16em] uppercase block mb-2">{t("contact_email_label")}</span>
-                <a href="mailto:262034042@qq.com" className="text-[#111111] text-[15px] font-semibold hover:opacity-60 transition-colors">
-                  262034042@qq.com
+                <a href="mailto:dongshengmarble@gmail.com" className="text-[#111111] text-[15px] font-semibold hover:opacity-60 transition-colors">
+                  dongshengmarble@gmail.com
                 </a>
               </div>
 
@@ -105,7 +105,7 @@ export default function Contact() {
                 </button>
               </div>
             ) : (
-              <form action="https://formsubmit.co/262034042@qq.com" method="POST" onSubmit={() => trackConversion("form_submit", { source: "contact_page" })} className="space-y-6">
+              <form action="https://formsubmit.co/dongshengmarble@gmail.com" method="POST" onSubmit={() => trackConversion("form_submit", { source: "contact_page" })} className="space-y-6">
                 <input type="hidden" name="_subject" value={t("contact_form_subject")} />
                 <input type="hidden" name="_captcha" value="true" />
                 <input type="hidden" name="_next" value={typeof window !== 'undefined' ? window.location.href : ''} />
