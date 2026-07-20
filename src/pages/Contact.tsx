@@ -198,7 +198,7 @@ export default function Contact() {
                       type="text"
                       name="name"
                       required
-                      className="w-full bg-white border border-[#dc2626]/20 px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#111111] focus:outline-none focus:border-[#111111] transition-colors"
+                      className="w-full bg-white border border-[#dc2626]/20 px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#111111]/40 focus:outline-none focus:border-[#111111] transition-colors"
                       placeholder={t("contact_name_placeholder")}
                     />
                   </div>
@@ -208,8 +208,29 @@ export default function Contact() {
                       type="email"
                       name="email"
                       required
-                      className="w-full bg-white border border-[#dc2626]/20 px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#111111] focus:outline-none focus:border-[#111111] transition-colors"
+                      className="w-full bg-white border border-[#dc2626]/20 px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#111111]/40 focus:outline-none focus:border-[#111111] transition-colors"
                       placeholder="your@email.com"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-[#111111] text-[12px] font-bold tracking-[0.06em] mb-2">{t("contact_phone_label")}</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      className="w-full bg-white border border-[#dc2626]/20 px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#111111]/40 focus:outline-none focus:border-[#111111] transition-colors"
+                      placeholder={t("contact_phone_placeholder")}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[#111111] text-[12px] font-bold tracking-[0.06em] mb-2">{t("contact_country_label")}</label>
+                    <input
+                      type="text"
+                      name="country"
+                      className="w-full bg-white border border-[#dc2626]/20 px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#111111]/40 focus:outline-none focus:border-[#111111] transition-colors"
+                      placeholder={t("contact_country_placeholder")}
                     />
                   </div>
                 </div>
@@ -219,9 +240,24 @@ export default function Contact() {
                   <input
                     type="text"
                     name="company"
-                    className="w-full bg-white border border-[#dc2626]/20 px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#111111] focus:outline-none focus:border-[#111111] transition-colors"
+                    className="w-full bg-white border border-[#dc2626]/20 px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#111111]/40 focus:outline-none focus:border-[#111111] transition-colors"
                     placeholder={t("contact_company_placeholder")}
                   />
+                </div>
+
+                <div>
+                  <label className="block text-[#111111] text-[12px] font-bold tracking-[0.06em] mb-2">{t("contact_project_type_label")}</label>
+                  <select
+                    name="project_type"
+                    className="w-full bg-white border border-[#dc2626]/20 px-4 py-3 text-[14px] text-[#111111] focus:outline-none focus:border-[#111111] transition-colors"
+                  >
+                    <option value="">{t("contact_project_type_placeholder")}</option>
+                    <option value="slab">{t("contact_pt_slab")}</option>
+                    <option value="countertop">{t("contact_pt_countertop")}</option>
+                    <option value="waterjet">{t("contact_pt_waterjet")}</option>
+                    <option value="project">{t("contact_pt_project")}</option>
+                    <option value="other">{t("contact_pt_other")}</option>
+                  </select>
                 </div>
 
                 <div>

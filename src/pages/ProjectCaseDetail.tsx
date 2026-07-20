@@ -46,9 +46,15 @@ export default function ProjectCaseDetail() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {projectCase.images.map((image, index) => (
-            <a key={image} href={image} target="_blank" rel="noreferrer" className="group block overflow-hidden bg-[#f3f3f3]">
+            <button
+              key={image}
+              type="button"
+              onClick={() => window.open(image, "_blank")}
+              className="group block overflow-hidden bg-[#f3f3f3] w-full text-left cursor-pointer"
+              aria-label={`${title} ${index + 1} ${lang === "zh" ? "查看大图" : "view full size"}`}
+            >
               <img src={image} alt={`${title} ${index + 1}`} loading={index < 3 ? "eager" : "lazy"} decoding="async" className="aspect-[4/3] h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-            </a>
+            </button>
           ))}
         </div>
 

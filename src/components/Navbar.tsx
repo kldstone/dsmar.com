@@ -71,9 +71,9 @@ export default function Navbar() {
               <span className="text-black/20">|</span>
             </span>
             <div className="flex items-center gap-1 text-[11px] font-semibold tracking-[0.06em]">
-              <button onClick={() => setLang("zh")} className={`transition-colors ${lang === "zh" ? "text-[#dc2626]" : "text-[#111111]/40 hover:text-[#111111]"}`}>简</button>
+              <button onClick={() => setLang("zh")} aria-label={lang === "zh" ? "当前语言：中文" : "切换到中文"} className={`transition-colors ${lang === "zh" ? "text-[#dc2626]" : "text-[#111111]/40 hover:text-[#111111]"}`}>简</button>
               <span className="text-black/20">/</span>
-              <button onClick={() => setLang("en")} className={`transition-colors ${lang === "en" ? "text-[#dc2626]" : "text-[#111111]/40 hover:text-[#111111]"}`}>EN</button>
+              <button onClick={() => setLang("en")} aria-label={lang === "en" ? "Current language: English" : "Switch to English"} className={`transition-colors ${lang === "en" ? "text-[#dc2626]" : "text-[#111111]/40 hover:text-[#111111]"}`}>EN</button>
             </div>
           </span>
         </div>
