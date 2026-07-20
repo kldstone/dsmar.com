@@ -243,6 +243,8 @@ const translations: Record<string, { zh: string; en: string }> = {
   "contact_message_label": { zh: "询盘内容 *", en: "Inquiry Details *" },
   "contact_message_placeholder": { zh: "请描述您的需求：产品类型、规格尺寸、数量、交货时间等……", en: "Please describe your requirements, including product type, dimensions, quantity, and delivery schedule..." },
   "contact_submit": { zh: "发送询盘", en: "Send Inquiry" },
+  "contact_sending": { zh: "发送中...", en: "Sending..." },
+  "contact_error_desc": { zh: "提交失败，请稍后重试或直接拨打电话联系我们。", en: "Submission failed. Please try again later or call us directly." },
 
   "catalog_title": { zh: "矿山直供 · 品种展示", en: "QUARRY DIRECT · MARBLE COLLECTIONS" },
   "catalog_desc": { zh: "按色系浏览东升大理石全系列品种", en: "Browse the complete Dongsheng Marble collection by color." },

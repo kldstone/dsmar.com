@@ -1,11 +1,90 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { optimizedImage } from "@/lib/images";
 import { trackConversion } from "@/lib/analytics";
 import { useLang } from "@/lib/i18n";
 
+function getUtmParams(): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  const params = new URLSearchParams(window.location.search);
+  const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+  const utm: Record<string, string> = {};
+  for (const key of utmKeys) {
+    const val = params.get(key);
+    if (val) utm[key] = val;
+  }
+  return utm;
+}
+
 export default function Contact() {
   const { t } = useLang();
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const utmParams = getUtmParams();
+
+  // Detect return from FormSubmit captcha
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("submitted") === "true") {
+      window.history.replaceState({}, "", window.location.pathname);
+      setSubmitted("success");
+    }
+  }, []);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (submitted === "sending") return;
+
+    const form = e.currentTarget;
+
+    // Append UTM hidden fields
+    const utm = getUtmParams();
+    for (const [key, val] of Object.entries(utm)) {
+      let input = form.querySelector(`input[name="${key}"]`) as HTMLInputElement | null;
+      if (!input) {
+        input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        form.appendChild(input);
+      }
+      input.value = val;
+    }
+
+    // Append landing_page
+    let lp = form.querySelector('input[name="landing_page"]') as HTMLInputElement | null;
+    if (!lp) {
+      lp = document.createElement("input");
+      lp.type = "hidden";
+      lp.name = "landing_page";
+      form.appendChild(lp);
+    }
+    lp.value = window.location.origin + window.location.pathname;
+
+    // Append referrer
+    let ref = form.querySelector('input[name="referrer"]') as HTMLInputElement | null;
+    if (!ref) {
+      ref = document.createElement("input");
+      ref.type = "hidden";
+      ref.name = "referrer";
+      form.appendChild(ref);
+    }
+    ref.value = document.referrer || "";
+
+    // Point _next back with submitted flag
+    const next = form.querySelector('input[name="_next"]') as HTMLInputElement | null;
+    if (next) {
+      next.value = window.location.origin + window.location.pathname + "?submitted=true";
+    }
+
+    setSubmitted("sending");
+    trackConversion("form_submit", { source: "contact_page", ...utm, landing_page: lp.value, referrer: ref.value });
+
+    // Native form submit — FormSubmit handles captcha in a separate page
+    try {
+      form.submit();
+    } catch {
+      setSubmitted("error");
+    }
+  }
 
   return (
     <div>
@@ -86,7 +165,7 @@ export default function Contact() {
           <div>
             <h2 className="text-[#111111] text-[1.6rem] font-black tracking-[0.02em] mb-8">{t("contact_form_title")}</h2>
 
-            {submitted ? (
+            {submitted === "success" ? (
               <div className="bg-white border border-black/10 p-12 text-center">
                 <div className="w-16 h-16 mx-auto mb-6 bg-[#dc2626]/5 rounded-full flex items-center justify-center">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -98,14 +177,14 @@ export default function Contact() {
                   {t("contact_success_desc")}
                 </p>
                 <button
-                  onClick={() => { setSubmitted(false); }}
+                  onClick={() => { setSubmitted("idle"); }}
                   className="mt-8 text-[#111111] text-[13px] font-bold tracking-[0.06em] hover:opacity-60 transition-colors"
                 >
                   {t("contact_send_another")}
                 </button>
               </div>
             ) : (
-              <form action="https://formsubmit.co/dongshengmarble@gmail.com" method="POST" onSubmit={() => trackConversion("form_submit", { source: "contact_page" })} className="space-y-6">
+              <form action="https://formsubmit.co/dongshengmarble@gmail.com" method="POST" onSubmit={handleSubmit} className="space-y-6">
                 <input type="hidden" name="_subject" value={t("contact_form_subject")} />
                 <input type="hidden" name="_captcha" value="true" />
                 <input type="hidden" name="_next" value={typeof window !== 'undefined' ? window.location.href : ''} />
@@ -157,10 +236,30 @@ export default function Contact() {
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 bg-[#dc2626] text-white text-[12px] font-bold tracking-[0.10em] uppercase hover:bg-[#dc2626]/80 transition-colors"
+                  disabled={submitted === "sending"}
+                  className={`w-full py-3.5 text-[12px] font-bold tracking-[0.10em] uppercase transition-colors ${
+                    submitted === "sending"
+                      ? "bg-[#111111]/30 text-white/60 cursor-not-allowed"
+                      : submitted === "error"
+                        ? "bg-[#dc2626] text-white hover:bg-[#dc2626]/80"
+                        : "bg-[#dc2626] text-white hover:bg-[#dc2626]/80"
+                  }`}
                 >
-                  {t("contact_submit")}
+                  {submitted === "sending" ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      {t("contact_sending")}
+                    </span>
+                  ) : (
+                    t("contact_submit")
+                  )}
                 </button>
+                {submitted === "error" && (
+                  <p className="text-[#dc2626] text-[13px] text-center">{t("contact_error_desc")}</p>
+                )}
               </form>
             )}
           </div>
