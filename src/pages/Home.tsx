@@ -154,7 +154,7 @@ export default function Home() {
           </div>
           <div className="relative aspect-video overflow-hidden bg-black">
             {isFilmPlaying ? (
-              <video className="w-full h-full" controls autoPlay preload="metadata">
+              <video className="w-full h-full" controls autoPlay preload="none">
                 <source src="/videos/dongsheng-brand-film.mp4" type="video/mp4" />
                 {t("home_brand_film_unsupported")}
               </video>
