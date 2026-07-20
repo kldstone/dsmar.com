@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { optimizedImage } from "@/lib/images";
 import { trackConversion } from "@/lib/analytics";
 import { useLang } from "@/lib/i18n";
@@ -18,17 +18,18 @@ function getUtmParams(): Record<string, string> {
 export default function Contact() {
   const { t } = useLang();
   const [submitted, setSubmitted] = useState<"idle" | "sending" | "success" | "error">("idle");
-  const utmParams = getUtmParams();
 
-  // Detect return from FormSubmit captcha
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  // Check URL for FormSubmit return on mount (single render check)
+  if (typeof window !== "undefined" && submitted === "idle") {
     const params = new URLSearchParams(window.location.search);
     if (params.get("submitted") === "true") {
-      window.history.replaceState({}, "", window.location.pathname);
-      setSubmitted("success");
+      // Can't setState during render, so defer
+      queueMicrotask(() => {
+        window.history.replaceState({}, "", window.location.pathname);
+        setSubmitted("success");
+      });
     }
-  }, []);
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

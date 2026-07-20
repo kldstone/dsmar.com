@@ -5,6 +5,8 @@ export type CatalogProduct = {
   tagline: string;
   images?: string[];
   styles?: string[];
+  description?: string;
+  specs?: string;
 };
 
 export type CatalogCategory = {

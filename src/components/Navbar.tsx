@@ -14,21 +14,23 @@ function prefetchCatalog() {
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
   const { t, lang, setLang } = useLang();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const prevPathname = location.pathname;
+
+  // Close menu on route change
+  if (prevPathname !== location.pathname) {
+    // setMenuOpen will be called inline; the render bails and React re-runs
+    setTimeout(() => setMenuOpen(false), 0);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    setMenuOpen(false);
-    setActiveDropdown(null);
-  }, [location]);
 
   const isActive = (href: string) => {
     if (href === "/") return location.pathname === "/";
@@ -88,8 +90,8 @@ export default function Navbar() {
             {navLinks.map((link) => (
               <div key={link.href} className="relative group/dropdown" onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setActiveDropdown(null); }}>
                 <Link to={link.href} className={`inline-flex items-center justify-center min-h-[44px] px-[12px] text-[12.5px] font-semibold tracking-[0.05em] transition-colors whitespace-nowrap ${isActive(link.href) ? "text-[#dc2626] font-bold" : "text-[#111111]/60 hover:text-[#111111]"}`}
-                  onFocus={() => { link.children && setActiveDropdown(link.href); if (link.href === "/catalog") prefetchCatalog(); }}
-                  onMouseEnter={() => { link.children && setActiveDropdown(link.href); if (link.href === "/catalog") prefetchCatalog(); }}
+                  onFocus={() => { if (link.children) setActiveDropdown(link.href); if (link.href === "/catalog") prefetchCatalog(); }}
+                  onMouseEnter={() => { if (link.children) setActiveDropdown(link.href); if (link.href === "/catalog") prefetchCatalog(); }}
                   onMouseLeave={() => link.children && setActiveDropdown(null)}>
                   {link.label}
                   {link.children && <svg className="ml-1 w-3 h-3 transition-transform group-hover/dropdown:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>}
