@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_r0GgwN1sT2GBZ65z9UY1ljZ3uA2J",
+  "orgId": "team_TeC1ZULF8lMOCCWorEyxR1rA",
+  "projectName": "dsmar.com",
+  "settings": {
+    "createdAt": 1783733843897,
+    "framework": "vite",
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}

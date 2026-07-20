@@ -1,0 +1,1 @@
+function t(e){return/^\/(brand-gallery|gani-home|gani-products|catalog-images|catalog-products|real-photos|hero-slides)\/.+\.(jpe?g|png)$/i.test(e)?`/optimized${e.replace(/\.(jpe?g|png)$/i,".webp")}`:/^\/gani-products\/.+\.webp$/i.test(e)?`/optimized${e}`:e}export{t as o};
