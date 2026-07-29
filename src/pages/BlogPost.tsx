@@ -12,7 +12,7 @@ export default function BlogPost() {
     return (
       <div className="max-w-[800px] mx-auto px-6 py-20 text-center">
         <h1 className="text-[var(--ink)] text-[1.6rem] font-black mb-4">{t("blog_not_found")}</h1>
-        <Link to="/blog" className="text-[#dc2626] text-[14px] font-bold">← {t("blog_back")}</Link>
+        <Link to="/blog" className="text-[#e60012] text-[14px] font-bold">← {t("blog_back")}</Link>
       </div>
     );
   }
@@ -47,7 +47,7 @@ export default function BlogPost() {
 
       {/* Back */}
       <section className="max-w-[760px] mx-auto px-6 py-10 text-center">
-        <Link to="/blog" className="text-[#dc2626] text-[13px] font-bold tracking-[0.06em] hover:opacity-70 transition-opacity">← {t("blog_back")}</Link>
+        <Link to="/blog" className="text-[#e60012] text-[13px] font-bold tracking-[0.06em] hover:opacity-70 transition-opacity">← {t("blog_back")}</Link>
       </section>
     </div>
   );

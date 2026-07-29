@@ -30,22 +30,22 @@ export default function MobileStickyCTA() {
     <div className="mobile-sticky-actions fixed bottom-0 left-0 right-0 z-[90] md:hidden bg-white border-t border-black/10 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-3 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] flex items-center gap-2">
       {currentProduct ? (
         <>
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackConversion("whatsapp_click", { product_id: currentProduct.id, source: "mobile_sticky" })} className="flex-1 min-h-[48px] px-1 flex items-center justify-center bg-[#1f5f45] text-white text-center text-[11px] font-bold leading-tight">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackConversion("whatsapp_click", { product_id: currentProduct.id, source: "mobile_sticky" })} className="flex-1 min-h-[48px] px-1 flex items-center justify-center bg-[#e60012] text-white text-center text-[11px] font-bold leading-tight">
             {lang === "zh" ? "WhatsApp咨询" : "Chat on WhatsApp"}
           </a>
-          <button type="button" onClick={() => addCurrent(false)} className="flex-1 min-h-[48px] px-1 border-2 border-[#9f1d1d] text-[#7f1717] text-[11px] font-bold leading-tight">
+          <button type="button" onClick={() => addCurrent(false)} className="flex-1 min-h-[48px] px-1 border-2 border-[#e60012] text-[#e60012] text-[11px] font-bold leading-tight">
             {lang === "zh" ? "加入询价" : "Add to inquiry"}
           </button>
-          <button type="button" onClick={() => addCurrent(true)} className="flex-1 min-h-[48px] px-1 bg-[#9f1d1d] text-white text-[11px] font-bold leading-tight">
+          <button type="button" onClick={() => addCurrent(true)} className="flex-1 min-h-[48px] px-1 bg-[#e60012] text-white text-[11px] font-bold leading-tight">
             {lang === "zh" ? "获取报价" : "Request a Quote"}
           </button>
         </>
       ) : (
         <>
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackConversion("whatsapp_click", { source: "mobile_sticky" })} className="flex-1 min-h-[48px] flex items-center justify-center bg-[#1f5f45] text-white text-[12px] font-bold">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackConversion("whatsapp_click", { source: "mobile_sticky" })} className="flex-1 min-h-[48px] flex items-center justify-center bg-[#e60012] text-white text-[12px] font-bold">
             {lang === "zh" ? "WhatsApp咨询" : "Chat on WhatsApp"}
           </a>
-          <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "mobile_sticky" })} className="flex-1 min-h-[48px] flex items-center justify-center bg-[#9f1d1d] text-white text-[12px] font-bold">
+          <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "mobile_sticky" })} className="flex-1 min-h-[48px] flex items-center justify-center bg-[#e60012] text-white text-[12px] font-bold">
             {lang === "zh" ? "获取报价" : "Request a Quote"}
           </Link>
         </>

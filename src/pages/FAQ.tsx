@@ -160,7 +160,7 @@ export default function FAQ() {
         </p>
         <Link
           to="/contact"
-          className="inline-block px-10 py-3.5 bg-[#dc2626] text-white text-[12px] font-bold tracking-[0.08em] uppercase hover:bg-[#dc2626]/80 transition-colors"
+          className="inline-block px-10 py-3.5 bg-[#e60012] text-white text-[12px] font-bold tracking-[0.08em] uppercase hover:bg-[#e60012]/80 transition-colors"
         >
           {t("faq_cta_contact")}
         </Link>

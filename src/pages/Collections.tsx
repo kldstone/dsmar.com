@@ -306,7 +306,7 @@ export default function Collections({ filter }: CollectionsProps) {
                     addInquiryProduct({ id: productId, name: productName, code: `DS-${productId}`, category: labelForColor(p.color), thumbnail: p.img, url: `${window.location.origin}${productUrl}` });
                     trackConversion("product_inquiry_add", { product_id: productId, source: "collection_card" });
                     navigate("/contact");
-                  }} className="w-full min-h-[48px] px-2 bg-white border border-t-0 border-black/10 text-[#7f1717] text-[12px] font-bold hover:bg-red-50">
+                  }} className="w-full min-h-[48px] px-2 bg-white border border-t-0 border-black/10 text-[#e60012] text-[12px] font-bold hover:bg-red-50">
                     {lang === "zh" ? `询价：${productName}` : `Request a Quote for ${productName}`}
                   </button>
                 )}

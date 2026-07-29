@@ -25,7 +25,7 @@ export default function CookieConsent() {
           <button type="button" onClick={() => choose(false)} className="min-h-[44px] px-4 border-2 border-[#222] bg-white text-[#222] text-[13px] font-bold focus-visible:outline-offset-2">
             {lang === "zh" ? "仅必要" : "Essential only"}
           </button>
-          <button type="button" onClick={() => choose(true)} className="min-h-[44px] px-4 border-2 border-[#9f1d1d] bg-[#9f1d1d] text-white text-[13px] font-bold focus-visible:outline-offset-2">
+          <button type="button" onClick={() => choose(true)} className="min-h-[44px] px-4 border-2 border-[#e60012] bg-[#e60012] text-white text-[13px] font-bold focus-visible:outline-offset-2">
             {lang === "zh" ? "接受" : "Accept"}
           </button>
         </div>

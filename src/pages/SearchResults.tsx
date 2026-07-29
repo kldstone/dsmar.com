@@ -60,7 +60,7 @@ export default function SearchResults() {
         </form>
 
         <p aria-live="polite" className="mt-8 text-[14px] text-[#444]">{lang === "zh" ? `找到 ${filtered.length} 个产品` : `${filtered.length} products found`}</p>
-        {loadError && <p role="alert" className="mt-6 p-4 bg-red-50 text-[#7f1d1d]">{lang === "zh" ? "产品搜索载入失败，请稍后重试。" : "Product search failed to load. Please try again later."}</p>}
+        {loadError && <p role="alert" className="mt-6 p-4 bg-red-50 text-[#e60012]">{lang === "zh" ? "产品搜索载入失败，请稍后重试。" : "Product search failed to load. Please try again later."}</p>}
         {!loadError && filtered.length === 0 && <div className="py-20 text-center"><p className="text-[#444]">{lang === "zh" ? "没有匹配结果。" : "No matching products."}</p><button type="button" onClick={() => setSearchParams({})} className="mt-5 min-h-[44px] px-6 border border-[#222] font-bold">{lang === "zh" ? "返回全部产品" : "Return to all products"}</button></div>}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-6">
           {filtered.map((product) => (

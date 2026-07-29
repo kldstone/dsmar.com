@@ -111,15 +111,15 @@ export default function Navbar() {
           <span className="truncate">{t("topbar_company")}</span>
           <span className="flex items-center ml-4 shrink-0">
             <span className="hidden sm:flex items-center gap-4 mr-3">
-              <a href="tel:+8613959948672" className="inline-flex min-h-[44px] items-center hover:text-[#9f1d1d]">+86 139 5994 8672</a>
+              <a href="tel:+8613959948672" className="inline-flex min-h-[44px] items-center hover:text-[#e60012]">+86 139 5994 8672</a>
               <span aria-hidden="true" className="text-black/20">|</span>
               <span>{t("topbar_social")}</span>
               <span aria-hidden="true" className="text-black/20">|</span>
             </span>
             <span className="flex items-center text-[12px] font-semibold">
-              <button onClick={() => setLang("zh")} aria-label={lang === "zh" ? "当前语言：中文" : "切换到中文"} className={`min-w-[44px] min-h-[44px] ${lang === "zh" ? "text-[#9f1d1d]" : "text-[#444]"}`}>简</button>
+              <button onClick={() => setLang("zh")} aria-label={lang === "zh" ? "当前语言：中文" : "切换到中文"} className={`min-w-[44px] min-h-[44px] ${lang === "zh" ? "text-[#e60012]" : "text-[#444]"}`}>简</button>
               <span aria-hidden="true" className="text-black/20">/</span>
-              <button onClick={() => setLang("en")} aria-label={lang === "en" ? "Current language: English" : "Switch to English"} className={`min-w-[44px] min-h-[44px] ${lang === "en" ? "text-[#9f1d1d]" : "text-[#444]"}`}>EN</button>
+              <button onClick={() => setLang("en")} aria-label={lang === "en" ? "Current language: English" : "Switch to English"} className={`min-w-[44px] min-h-[44px] ${lang === "en" ? "text-[#e60012]" : "text-[#444]"}`}>EN</button>
             </span>
           </span>
         </div>
@@ -137,7 +137,7 @@ export default function Navbar() {
               <div key={link.href} className="relative" onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setActiveDropdown(null); }} onMouseLeave={() => setActiveDropdown(null)}>
                 <Link
                   to={link.href}
-                  className={`inline-flex items-center justify-center min-h-[44px] px-[11px] text-[13px] font-semibold whitespace-nowrap ${isActive(link.href) ? "text-[#9f1d1d]" : "text-[#444] hover:text-[#111]"}`}
+                  className={`inline-flex items-center justify-center min-h-[44px] px-[11px] text-[13px] font-semibold whitespace-nowrap ${isActive(link.href) ? "text-[#e60012]" : "text-[#444] hover:text-[#111]"}`}
                   aria-haspopup={link.children ? "menu" : undefined}
                   aria-expanded={link.children ? activeDropdown === link.href : undefined}
                   onFocus={() => { if (link.children) setActiveDropdown(link.href); if (link.href === "/catalog") prefetchCatalog(); }}
@@ -168,7 +168,7 @@ export default function Navbar() {
               <svg aria-hidden="true" className="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
             </button>
 
-            <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "navbar" })} className="hidden md:inline-flex min-h-[44px] items-center justify-center px-5 bg-[#9f1d1d] text-white text-[13px] font-bold hover:bg-[#7f1717]">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
+            <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "navbar" })} className="hidden md:inline-flex min-h-[44px] items-center justify-center px-5 bg-[#e60012] text-white text-[13px] font-bold hover:bg-[#e60012]">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
 
             <button
               ref={menuButtonRef}
@@ -197,7 +197,7 @@ export default function Navbar() {
           <div className="px-5 py-3">
             {navLinks.map((link) => (
               <div key={link.href}>
-                <Link to={link.href} className={`flex min-h-[48px] items-center text-[14px] font-semibold border-b border-black/5 ${isActive(link.href) ? "text-[#9f1d1d]" : "text-[#333]"}`}>{link.label}</Link>
+                <Link to={link.href} className={`flex min-h-[48px] items-center text-[14px] font-semibold border-b border-black/5 ${isActive(link.href) ? "text-[#e60012]" : "text-[#333]"}`}>{link.label}</Link>
                 {link.children && (
                   <div className="pl-5 pb-2">
                     {link.children.map((child) => <Link key={child.href} to={child.href} className="flex min-h-[44px] items-center text-[13px] text-[#444] border-b border-black/5">{child.label}</Link>)}
@@ -205,7 +205,7 @@ export default function Navbar() {
                 )}
               </div>
             ))}
-            <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "navbar_mobile" })} className="mt-4 flex min-h-[48px] items-center justify-center bg-[#9f1d1d] text-white text-[14px] font-bold">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
+            <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "navbar_mobile" })} className="mt-4 flex min-h-[48px] items-center justify-center bg-[#e60012] text-white text-[14px] font-bold">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
           </div>
         </div>
       </nav>

@@ -60,7 +60,7 @@ export default function Home() {
               <h1 className="text-white text-[clamp(2rem,5vw,4rem)] font-light tracking-[0.08em] leading-[1.2] mb-4 md:mb-6 uppercase">{t(currentSlide.titleKey)}</h1>
               <p className="text-white/80 text-[clamp(0.85rem,1.4vw,1.1rem)] font-light tracking-[0.06em] leading-relaxed">{t(currentSlide.descriptionKey)}</p>
               <div className="flex flex-wrap gap-3 mt-8 md:mt-10">
-                <Link to="/contact" className="inline-flex min-h-[48px] items-center gap-2 px-6 bg-[#9f1d1d] text-white text-[13px] font-bold hover:bg-[#7f1717]">
+                <Link to="/contact" className="inline-flex min-h-[48px] items-center gap-2 px-6 bg-[#e60012] text-white text-[13px] font-bold hover:bg-[#e60012]">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                   {t("nav_quote")}
                 </Link>
@@ -76,7 +76,7 @@ export default function Home() {
                 {slides.map((_, i) => (
                   <button key={i} onClick={() => setActive(i)} aria-label={t("home_carousel_slide_label", { number: String(i + 1) })} aria-current={i === active}
                     className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center">
-                    <span aria-hidden="true" className="block h-[3px] transition-all duration-500" style={{ width: i === active ? "40px" : "24px", backgroundColor: i === active ? "#f87171" : "rgba(255,255,255,0.65)" }} />
+                    <span aria-hidden="true" className="block h-[3px] transition-all duration-500" style={{ width: i === active ? "40px" : "24px", backgroundColor: i === active ? "#e60012" : "rgba(255,255,255,0.65)" }} />
                   </button>
                 ))}
               </div>
@@ -109,7 +109,7 @@ export default function Home() {
               { num: "30+", label: t("home_stat_countries") },
             ].map((s, i) => (
               <div key={i} className="text-center">
-                <div className="text-[#dc2626] text-[clamp(1.8rem,3vw,2.5rem)] font-black tracking-[0.02em] leading-none mb-2">{s.num}</div>
+                <div className="text-[#e60012] text-[clamp(1.8rem,3vw,2.5rem)] font-black tracking-[0.02em] leading-none mb-2">{s.num}</div>
                 <div className="text-[#111111]/50 text-[13px] tracking-[0.06em]">{s.label}</div>
               </div>
             ))}
@@ -137,7 +137,7 @@ export default function Home() {
           ))}
         </div>
         <div className="text-center">
-          <Link to="/collections/marble" className="inline-flex items-center gap-2 text-[#111111] text-[12px] font-bold tracking-[0.10em] uppercase border-b-2 border-[#dc2626] pb-1 hover:text-[#dc2626] transition-colors">
+          <Link to="/collections/marble" className="inline-flex items-center gap-2 text-[#111111] text-[12px] font-bold tracking-[0.10em] uppercase border-b-2 border-[#e60012] pb-1 hover:text-[#e60012] transition-colors">
             {t("home_view_all_cases")}<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L12 8L6 14" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </Link>
         </div>
@@ -149,7 +149,7 @@ export default function Home() {
       <section className="bg-[#111111] py-20 px-6">
         <div className="max-w-[1180px] mx-auto grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16 items-center">
           <div>
-            <span className="text-[#dc2626] text-[11px] font-bold tracking-[0.20em] uppercase">Brand Film</span>
+            <span className="text-[#e60012] text-[11px] font-bold tracking-[0.20em] uppercase">Brand Film</span>
             <h2 className="text-white text-[clamp(1.6rem,3vw,2.4rem)] font-black tracking-[0.03em] mt-4 mb-5">{t("home_brand_film_title")}</h2>
             <p className="text-white/60 text-[15px] leading-relaxed max-w-[440px]">{t("home_brand_film_desc")}</p>
           </div>
@@ -194,8 +194,8 @@ export default function Home() {
                   { title: t("home_strength_trust_title"), desc: t("home_strength_trust_desc") },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-4">
-                    <div className="w-10 h-10 bg-[#dc2626]/10 rounded-full flex items-center justify-center shrink-0">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <div className="w-10 h-10 bg-[#e60012]/10 rounded-full flex items-center justify-center shrink-0">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e60012" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                     <div>
                       <h3 className="text-[#111111] text-[14px] font-bold tracking-[0.04em] mb-1">{item.title}</h3>
@@ -204,7 +204,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <Link to="/about" className="inline-flex items-center gap-2 mt-8 text-[#111111] text-[12px] font-bold tracking-[0.10em] uppercase border-b-2 border-[#dc2626] pb-1 hover:text-[#dc2626] transition-colors">
+              <Link to="/about" className="inline-flex items-center gap-2 mt-8 text-[#111111] text-[12px] font-bold tracking-[0.10em] uppercase border-b-2 border-[#e60012] pb-1 hover:text-[#e60012] transition-colors">
                 {t("home_learn_more")}<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L12 8L6 14" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </Link>
             </div>
@@ -216,12 +216,12 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="bg-[#dc2626] py-16 px-6 text-center">
+      <section className="bg-[#e60012] py-16 px-6 text-center">
         <div className="max-w-[680px] mx-auto">
           <h2 className="text-white text-[clamp(1.4rem,2.5vw,1.8rem)] font-black tracking-[0.03em] mb-3">{t("home_cta_title")}</h2>
           <p className="text-white/70 text-[15px] mb-8 max-w-[460px] mx-auto leading-relaxed">{t("home_cta_desc")}</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/contact" className="inline-flex items-center gap-2 px-10 py-3.5 bg-white text-[#dc2626] text-[13px] font-bold tracking-[0.08em] uppercase hover:bg-white/90 transition-colors">
+            <Link to="/contact" className="inline-flex items-center gap-2 px-10 py-3.5 bg-white text-[#e60012] text-[13px] font-bold tracking-[0.08em] uppercase hover:bg-white/90 transition-colors">
               {t("home_cta_inquiry")}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </Link>
             <a href="tel:+8613959948672" className="inline-flex items-center gap-2 px-10 py-3.5 bg-transparent border-2 border-white/30 text-white text-[13px] font-bold tracking-[0.08em] uppercase hover:bg-white/10 transition-colors">

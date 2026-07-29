@@ -34,7 +34,7 @@ export default function CatalogDetail() {
       <div className="bg-white min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-[#111]/40 text-[20px] font-bold">{t("catalog_product_not_found")}</h1>
-          <Link to={cat ? `/catalog/${cat.key}` : "/catalog"} className="mt-4 inline-block text-[#dc2626] text-[14px]">{t("catalog_back")}</Link>
+          <Link to={cat ? `/catalog/${cat.key}` : "/catalog"} className="mt-4 inline-block text-[#e60012] text-[14px]">{t("catalog_back")}</Link>
         </div>
       </div>
     );
@@ -63,9 +63,9 @@ export default function CatalogDetail() {
       {/* 面包屑 */}
       <div className="max-w-[1280px] mx-auto px-6 pt-6 pb-2">
         <div className="flex items-center gap-2 text-[12px] tracking-[0.04em] text-[#111]/40">
-          <Link to="/catalog" className="hover:text-[#dc2626] transition-colors">{t("catalog_breadcrumb")}</Link>
+          <Link to="/catalog" className="hover:text-[#e60012] transition-colors">{t("catalog_breadcrumb")}</Link>
           <span>/</span>
-          <Link to={`/catalog/${cat.key}`} className="hover:text-[#dc2626] transition-colors">{categoryName}</Link>
+          <Link to={`/catalog/${cat.key}`} className="hover:text-[#e60012] transition-colors">{categoryName}</Link>
           <span>/</span>
           <span className="text-[#111]/70">{productName}</span>
         </div>
@@ -78,7 +78,7 @@ export default function CatalogDetail() {
             <img src={optimizedImage(coverImg)} alt={productName} className="w-full h-auto object-cover" loading="eager" decoding="async" />
           </div>
           <div className="md:sticky md:top-[100px] self-start">
-            <span className="text-[#dc2626] text-[11px] font-bold tracking-[0.20em] uppercase">{categoryName}</span>
+            <span className="text-[#e60012] text-[11px] font-bold tracking-[0.20em] uppercase">{categoryName}</span>
             <h1 className="text-[#111] text-[clamp(1.8rem,3vw,2.6rem)] font-black tracking-[0.02em] mt-3 mb-4 uppercase">{productName}</h1>
             <p className="text-[#111]/60 text-[15px] leading-relaxed mb-6">{t(`catalog_product_${product.id}_tagline`)}</p>
 
@@ -100,10 +100,10 @@ export default function CatalogDetail() {
 
             <div className="border-t border-black/5 pt-8">
               <div className="flex flex-wrap gap-3">
-                <button type="button" onClick={() => addToInquiry(false)} className="inline-flex items-center justify-center min-h-[48px] px-7 border-2 border-[#9f1d1d] text-[#7f1717] text-[13px] font-bold hover:bg-red-50">
+                <button type="button" onClick={() => addToInquiry(false)} className="inline-flex items-center justify-center min-h-[48px] px-7 border-2 border-[#e60012] text-[#e60012] text-[13px] font-bold hover:bg-red-50">
                   {lang === "zh" ? "加入询价" : "Add to inquiry"}
                 </button>
-                <button type="button" onClick={() => addToInquiry(true)} className="inline-flex items-center justify-center min-h-[48px] px-7 bg-[#9f1d1d] text-white text-[13px] font-bold hover:bg-[#7f1717]">
+                <button type="button" onClick={() => addToInquiry(true)} className="inline-flex items-center justify-center min-h-[48px] px-7 bg-[#e60012] text-white text-[13px] font-bold hover:bg-[#e60012]">
                   {lang === "zh" ? `询价：${productName}` : `Request a Quote for ${productName}`}
                 </button>
               </div>
@@ -132,7 +132,7 @@ export default function CatalogDetail() {
 
             {catalogImages.length > 5 && (
               <div className="text-center mt-8">
-                <button onClick={() => setShowAll(!showAll)} className="inline-flex items-center gap-2 text-[#111] text-[12px] font-bold tracking-[0.10em] uppercase border-b-2 border-[#dc2626] pb-1 hover:text-[#dc2626] transition-colors">
+                <button onClick={() => setShowAll(!showAll)} className="inline-flex items-center gap-2 text-[#111] text-[12px] font-bold tracking-[0.10em] uppercase border-b-2 border-[#e60012] pb-1 hover:text-[#e60012] transition-colors">
                   {showAll ? t("catalog_collapse") : t("catalog_view_all_pages", { count: String(catalogImages.length) })}
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" className={`transition-transform ${showAll ? "rotate-180" : ""}`}><polyline points="4 6 8 10 12 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
@@ -146,7 +146,7 @@ export default function CatalogDetail() {
       <section className="bg-[#f8f8f8] py-16 px-6 text-center border-t border-black/5">
         <h2 className="text-[#111] text-[1.3rem] font-black tracking-[0.02em] mb-3 uppercase">{t("catalog_interest_title", { product: productName })}</h2>
         <p className="text-[#111]/45 text-[14px] mb-8 max-w-[460px] mx-auto leading-relaxed">{t("catalog_interest_desc")}</p>
-        <button type="button" onClick={() => addToInquiry(true)} className="inline-flex items-center justify-center min-h-[48px] px-10 bg-[#9f1d1d] text-white text-[13px] font-bold hover:bg-[#7f1717]">{lang === "zh" ? "获取报价" : "Request a Quote"}</button>
+        <button type="button" onClick={() => addToInquiry(true)} className="inline-flex items-center justify-center min-h-[48px] px-10 bg-[#e60012] text-white text-[13px] font-bold hover:bg-[#e60012]">{lang === "zh" ? "获取报价" : "Request a Quote"}</button>
       </section>
     </div>
   );

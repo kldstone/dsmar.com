@@ -220,7 +220,7 @@ export default function Contact() {
     }
   }
 
-  const fieldClass = "w-full min-h-[48px] bg-white border border-black/20 px-4 py-3 text-[15px] text-[#111] placeholder:text-[#666] focus:border-[#9f1d1d] transition-colors";
+  const fieldClass = "w-full min-h-[48px] bg-white border border-black/20 px-4 py-3 text-[15px] text-[#111] placeholder:text-[#666] focus:border-[#e60012] transition-colors";
   const labelClass = "block text-[#222] text-[13px] font-bold tracking-[0.02em] mb-2";
 
   return (
@@ -243,12 +243,12 @@ export default function Contact() {
             <h2 className="text-[#111] text-[1.6rem] font-black tracking-[0.02em] mb-8">{t("contact_info_title")}</h2>
             <div className="space-y-8">
               <div><span className={labelClass}>{t("contact_address_label")}</span><p className="text-[#222] text-[15px] font-semibold leading-relaxed">{t("contact_address")}</p></div>
-              <div><span className={labelClass}>{t("contact_phone_label")}</span><a href="tel:+8613959948672" onClick={() => trackConversion("phone_click", { source: "contact_page" })} className="inline-flex min-h-[44px] items-center text-[#111] text-[18px] font-black hover:text-[#9f1d1d]">+86 139 5994 8672</a></div>
-              <div><span className={labelClass}>{t("contact_email_label")}</span><a href="mailto:dongshengmarble@gmail.com" className="inline-flex min-h-[44px] items-center text-[#222] text-[15px] font-semibold hover:text-[#9f1d1d]">dongshengmarble@gmail.com</a></div>
+              <div><span className={labelClass}>{t("contact_phone_label")}</span><a href="tel:+8613959948672" onClick={() => trackConversion("phone_click", { source: "contact_page" })} className="inline-flex min-h-[44px] items-center text-[#111] text-[18px] font-black hover:text-[#e60012]">+86 139 5994 8672</a></div>
+              <div><span className={labelClass}>{t("contact_email_label")}</span><a href="mailto:dongshengmarble@gmail.com" className="inline-flex min-h-[44px] items-center text-[#222] text-[15px] font-semibold hover:text-[#e60012]">dongshengmarble@gmail.com</a></div>
               <div>
                 <span className={labelClass}>{t("contact_social_label")}</span>
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 bg-[#9f1d1d] rounded-full flex items-center justify-center" aria-hidden="true">
+                  <div className="w-11 h-11 bg-[#e60012] rounded-full flex items-center justify-center" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348z"/></svg>
                   </div>
                   <div><p className="text-[#222] text-[14px] font-semibold">{t("contact_social_title")}</p><p className="text-[#555] text-[13px]">{t("contact_social_desc")}</p><p className="text-[#333] text-[13px] font-medium">{t("contact_social_account")}</p></div>
@@ -282,7 +282,7 @@ export default function Contact() {
                         <div key={`${product.id}-${product.url}`} className="grid grid-cols-[64px_1fr_auto] gap-3 items-center bg-white p-2 border border-black/5">
                           <img src={optimizedImage(product.thumbnail)} alt="" className="w-16 h-16 object-cover" loading="lazy" decoding="async" />
                           <div className="min-w-0"><p className="font-bold text-[14px] text-[#111] truncate">{product.name}</p><p className="text-[12px] text-[#555]">{product.code} · {product.category}</p></div>
-                          <button type="button" onClick={() => removeInquiryProduct(product.id, product.url)} aria-label={`${copy.removeProduct}: ${product.name}`} className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-[20px] text-[#333] hover:text-[#9f1d1d]">×</button>
+                          <button type="button" onClick={() => removeInquiryProduct(product.id, product.url)} aria-label={`${copy.removeProduct}: ${product.name}`} className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-[20px] text-[#333] hover:text-[#e60012]">×</button>
                         </div>
                       ))}
                     </div>
@@ -290,12 +290,12 @@ export default function Contact() {
                 )}
 
                 <div>
-                  <label htmlFor="inquiry-name" className={labelClass}>{copy.name} <span className="text-[#9f1d1d]">({copy.required})</span></label>
+                  <label htmlFor="inquiry-name" className={labelClass}>{copy.name} <span className="text-[#e60012]">({copy.required})</span></label>
                   <input id="inquiry-name" required maxLength={100} autoComplete="name" className={fieldClass} value={values.name} onChange={(event) => updateValue("name", event.target.value)} />
                 </div>
 
                 <fieldset>
-                  <legend className={labelClass}>{copy.contact} <span className="text-[#9f1d1d]">({copy.required})</span></legend>
+                  <legend className={labelClass}>{copy.contact} <span className="text-[#e60012]">({copy.required})</span></legend>
                   <p id="contact-choice-hint" className="text-[#555] text-[13px] mb-3">{copy.contactHint}</p>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div><label htmlFor="inquiry-email" className={labelClass}>{copy.email} ({copy.optional})</label><input id="inquiry-email" type="email" maxLength={160} autoComplete="email" aria-describedby="contact-choice-hint" className={fieldClass} value={values.email} onChange={(event) => updateValue("email", event.target.value)} /></div>
@@ -304,12 +304,12 @@ export default function Contact() {
                 </fieldset>
 
                 <div>
-                  <label htmlFor="inquiry-country" className={labelClass}>{copy.country} <span className="text-[#9f1d1d]">({copy.required})</span></label>
+                  <label htmlFor="inquiry-country" className={labelClass}>{copy.country} <span className="text-[#e60012]">({copy.required})</span></label>
                   <input id="inquiry-country" required maxLength={100} autoComplete="country-name" className={fieldClass} value={values.country} onChange={(event) => updateValue("country", event.target.value)} />
                 </div>
 
                 <div>
-                  <label htmlFor="inquiry-requirement" className={labelClass}>{copy.requirement} <span className="text-[#9f1d1d]">({copy.required})</span></label>
+                  <label htmlFor="inquiry-requirement" className={labelClass}>{copy.requirement} <span className="text-[#e60012]">({copy.required})</span></label>
                   <textarea id="inquiry-requirement" required maxLength={3000} rows={4} className={`${fieldClass} resize-y`} placeholder={copy.requirementPlaceholder} value={values.requirement} onChange={(event) => updateValue("requirement", event.target.value)} />
                   <p className="mt-2 text-[#444] text-[13px] leading-relaxed">{copy.materialHelp}</p>
                 </div>
@@ -320,10 +320,10 @@ export default function Contact() {
                   <p className="mt-2 text-[#555] text-[12px]">{copy.fileHint}</p>
                   <div aria-live="polite" className="mt-2 text-[13px]">
                     {fileState === "reading" && <p>{copy.choosing}</p>}
-                    {fileState === "ready" && attachment && <p className="flex items-center justify-between gap-3"><span className="truncate">{attachment.name}</span><button type="button" onClick={() => { setAttachment(null); setFileState("idle"); }} className="min-h-[44px] px-3 font-bold text-[#9f1d1d]">{copy.removeFile}</button></p>}
-                    {fileState === "format-error" && <p role="alert" className="text-[#9f1d1d]">{copy.formatError}</p>}
-                    {fileState === "size-error" && <p role="alert" className="text-[#9f1d1d]">{copy.sizeError}</p>}
-                    {fileState === "read-error" && <p role="alert" className="text-[#9f1d1d]">{copy.readError}</p>}
+                    {fileState === "ready" && attachment && <p className="flex items-center justify-between gap-3"><span className="truncate">{attachment.name}</span><button type="button" onClick={() => { setAttachment(null); setFileState("idle"); }} className="min-h-[44px] px-3 font-bold text-[#e60012]">{copy.removeFile}</button></p>}
+                    {fileState === "format-error" && <p role="alert" className="text-[#e60012]">{copy.formatError}</p>}
+                    {fileState === "size-error" && <p role="alert" className="text-[#e60012]">{copy.sizeError}</p>}
+                    {fileState === "read-error" && <p role="alert" className="text-[#e60012]">{copy.readError}</p>}
                   </div>
                 </div>
 
@@ -342,9 +342,9 @@ export default function Contact() {
                   </div>
                 </details>
 
-                {(submitted === "server-error" || submitted === "network-error") && <p role="alert" aria-live="assertive" className="border-l-4 border-[#9f1d1d] bg-red-50 p-4 text-[#7f1d1d] text-[14px]">{errorMessage || (submitted === "network-error" ? copy.networkError : copy.serverError)}</p>}
+                {(submitted === "server-error" || submitted === "network-error") && <p role="alert" aria-live="assertive" className="border-l-4 border-[#e60012] bg-red-50 p-4 text-[#e60012] text-[14px]">{errorMessage || (submitted === "network-error" ? copy.networkError : copy.serverError)}</p>}
 
-                <button type="submit" disabled={submitted === "sending" || fileState === "reading"} className="w-full min-h-[52px] px-6 bg-[#9f1d1d] text-white text-[14px] font-black hover:bg-[#7f1717] active:bg-[#681212] disabled:bg-[#777] disabled:cursor-not-allowed">
+                <button type="submit" disabled={submitted === "sending" || fileState === "reading"} className="w-full min-h-[52px] px-6 bg-[#e60012] text-white text-[14px] font-black hover:bg-[#e60012] active:bg-[#e60012] disabled:bg-[#777] disabled:cursor-not-allowed">
                   {submitted === "sending" ? copy.sending : copy.submit}
                 </button>
                 <p className="text-center text-[#333] text-[13px] font-semibold">{copy.reply}</p>
@@ -354,7 +354,7 @@ export default function Contact() {
             <section className="mt-12 border-t border-black/10 pt-8" aria-labelledby="inquiry-process-title">
               <h3 id="inquiry-process-title" className="text-[#111] text-[1.1rem] font-black mb-5">{copy.processTitle}</h3>
               <ol className="grid sm:grid-cols-2 gap-3">
-                {copy.process.map((step, index) => <li key={step} className="flex gap-3 text-[14px] text-[#333]"><span className="font-black text-[#9f1d1d]">{index + 1}.</span><span>{step}</span></li>)}
+                {copy.process.map((step, index) => <li key={step} className="flex gap-3 text-[14px] text-[#333]"><span className="font-black text-[#e60012]">{index + 1}.</span><span>{step}</span></li>)}
               </ol>
             </section>
           </div>

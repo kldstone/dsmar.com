@@ -40,7 +40,7 @@ export default function ProjectCaseDetail() {
     return (
       <section className="max-w-[800px] mx-auto px-6 py-24 text-center">
         <h1 className="text-[1.6rem] font-black text-[var(--ink)]">{lang === "zh" ? "案例不存在" : "Case not found"}</h1>
-        <Link to="/collections/marble" className="inline-flex min-h-[48px] items-center mt-6 text-[#7f1717] text-[13px] font-bold">{lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
+        <Link to="/collections/marble" className="inline-flex min-h-[48px] items-center mt-6 text-[#e60012] text-[13px] font-bold">{lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
       </section>
     );
   }
@@ -62,7 +62,7 @@ export default function ProjectCaseDetail() {
       <section className="max-w-[1400px] mx-auto px-6 py-14 md:py-20">
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8 md:mb-10">
           <div>
-            <p className="text-[12px] font-bold text-[#7f1717] uppercase">{lang === "zh" ? "案例图集" : "Case gallery"}</p>
+            <p className="text-[12px] font-bold text-[#e60012] uppercase">{lang === "zh" ? "案例图集" : "Case gallery"}</p>
             <h2 className="mt-2 text-[1.5rem] md:text-[2rem] font-black text-[var(--ink)]">{lang === "zh" ? "全部项目照片" : "All project photos"}</h2>
           </div>
           <p className="text-[13px] text-[#555]">{lang === "zh" ? `共 ${projectCase.images.length} 张` : `${projectCase.images.length} photos`}</p>
@@ -84,7 +84,7 @@ export default function ProjectCaseDetail() {
         </div>
 
         <div className="pt-12 text-center">
-          <Link to="/collections/marble" className="inline-flex min-h-[44px] items-center text-[#7f1717] text-[13px] font-bold">← {lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
+          <Link to="/collections/marble" className="inline-flex min-h-[44px] items-center text-[#e60012] text-[13px] font-bold">← {lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
         </div>
       </section>
 

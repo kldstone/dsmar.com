@@ -8,8 +8,8 @@
   --muted: #737373;
   --paper: #f8f8f8;
   --panel: #ffffff;
-  --red: #dc2626;
-  --red-light: #f87171;
+  --red: #e60012;
+  --red-light: #e60012;
   --red-bg: rgba(220, 38, 38, 0.08);
   --line: rgba(0, 0, 0, 0.08);
   --line-dark: rgba(0, 0, 0, 0.05);
@@ -22,7 +22,7 @@
 }
 
 *:focus-visible {
-  outline: 3px solid #9f1d1d;
+  outline: 3px solid #e60012;
   outline-offset: 3px;
 }
 

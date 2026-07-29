@@ -108,7 +108,7 @@ export default function ProductSearch({ onClose, triggerRef }: Props) {
 
         <div id={listId} role="listbox" className="mt-3 max-h-[min(60dvh,460px)] overflow-y-auto overscroll-contain">
           {status === "loading" && <p role="status" className="p-4 text-[14px] text-[#555]">{lang === "zh" ? "正在载入产品目录……" : "Loading product catalogue…"}</p>}
-          {status === "error" && <p role="alert" className="p-4 text-[14px] text-[#7f1d1d]">{lang === "zh" ? "搜索暂时无法载入，网站其他页面仍可正常使用。" : "Search could not load. The rest of the website remains available."}</p>}
+          {status === "error" && <p role="alert" className="p-4 text-[14px] text-[#e60012]">{lang === "zh" ? "搜索暂时无法载入，网站其他页面仍可正常使用。" : "Search could not load. The rest of the website remains available."}</p>}
           {status === "ready" && query.trim().length === 1 && <p className="p-4 text-[13px] text-[#555]">{lang === "zh" ? "请至少输入两个字符。" : "Enter at least two characters."}</p>}
           {status === "ready" && query.trim().length >= 2 && results.length === 0 && <p className="p-4 text-[14px] text-[#555]">{lang === "zh" ? "没有找到匹配产品。" : "No matching products found."}</p>}
           {results.map((product, index) => (
@@ -120,14 +120,14 @@ export default function ProductSearch({ onClose, triggerRef }: Props) {
               aria-selected={index === activeIndex}
               onMouseEnter={() => setActiveIndex(index)}
               onClick={() => openProduct(product)}
-              className={`w-full min-h-[68px] grid grid-cols-[52px_1fr] gap-3 items-center p-2 text-left ${index === activeIndex ? "bg-red-50 outline outline-2 outline-[#9f1d1d] outline-offset-[-2px]" : "hover:bg-[#f5f5f5]"}`}
+              className={`w-full min-h-[68px] grid grid-cols-[52px_1fr] gap-3 items-center p-2 text-left ${index === activeIndex ? "bg-red-50 outline outline-2 outline-[#e60012] outline-offset-[-2px]" : "hover:bg-[#f5f5f5]"}`}
             >
               <img src={optimizedImage(product.thumbnail)} alt="" loading="lazy" decoding="async" className="w-[52px] h-[52px] object-cover bg-[#eee]" />
               <span className="min-w-0"><strong className="block text-[14px] text-[#111] truncate">{lang === "zh" ? product.nameZh : product.nameEn}</strong><small className="block text-[12px] text-[#555] truncate">{lang === "zh" ? product.categoryZh : product.categoryEn} · {product.code}</small></span>
             </button>
           ))}
         </div>
-        {query.trim().length >= 2 && <button type="button" onClick={searchAll} className="mt-3 min-h-[44px] w-full text-[13px] font-bold text-[#7f1717] border border-[#9f1d1d]">{lang === "zh" ? "查看全部搜索结果" : "View all search results"}</button>}
+        {query.trim().length >= 2 && <button type="button" onClick={searchAll} className="mt-3 min-h-[44px] w-full text-[13px] font-bold text-[#e60012] border border-[#e60012]">{lang === "zh" ? "查看全部搜索结果" : "View all search results"}</button>}
       </div>
     </div>
   );

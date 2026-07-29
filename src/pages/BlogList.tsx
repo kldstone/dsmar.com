@@ -33,7 +33,7 @@ export default function BlogList() {
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
             <Link key={category.key} to={category.key === "all" ? "/blog" : `/blog?cat=${category.key}`}
-              className="px-4 py-2 text-[12px] font-bold tracking-[0.06em] border border-black/10 hover:border-[#dc2626] hover:text-[#dc2626] transition-colors">
+              className="px-4 py-2 text-[12px] font-bold tracking-[0.06em] border border-black/10 hover:border-[#e60012] hover:text-[#e60012] transition-colors">
               {category.label}
             </Link>
           ))}
@@ -49,9 +49,9 @@ export default function BlogList() {
                 <img src={optimizedImage(post.image)} alt={post.title[lang]} className="w-full aspect-[4/3] object-cover img-hover" loading="lazy" decoding="async" />
               </Link>
               <div className="md:col-span-2">
-                <span className="text-[#dc2626] text-[10px] font-bold tracking-[0.12em] uppercase">{post.category[lang]}</span>
+                <span className="text-[#e60012] text-[10px] font-bold tracking-[0.12em] uppercase">{post.category[lang]}</span>
                 <Link to={`/blog/${post.slug}`} className="block mt-1 mb-2">
-                  <h2 className="text-[var(--ink)] text-[1.2rem] font-black tracking-[0.02em] hover:text-[#dc2626] transition-colors">{post.title[lang]}</h2>
+                  <h2 className="text-[var(--ink)] text-[1.2rem] font-black tracking-[0.02em] hover:text-[#e60012] transition-colors">{post.title[lang]}</h2>
                 </Link>
                 <p className="text-[var(--muted)] text-[13px] leading-relaxed mb-3">{post.summary[lang]}</p>
                 <div className="flex items-center gap-3 text-[var(--muted)] text-[11px]">

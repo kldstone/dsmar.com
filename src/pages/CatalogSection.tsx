@@ -30,7 +30,7 @@ export default function LazyCatalogSection() {
     <section ref={sectionRef} className="bg-white py-20 px-6">
       <div className="max-w-[1280px] mx-auto">
         <div className="text-center mb-12">
-          <span className="text-[#dc2626] text-[11px] font-bold tracking-[0.20em] uppercase">SERIES</span>
+          <span className="text-[#e60012] text-[11px] font-bold tracking-[0.20em] uppercase">SERIES</span>
           <h2 className="text-[#111] text-[clamp(1.5rem,3vw,2.4rem)] font-black tracking-[0.02em] mt-3">{t("home_catalog_title")}</h2>
           <p className="text-[#111]/50 text-[15px] mt-3 max-w-[560px] mx-auto">{t("home_catalog_desc")}</p>
         </div>

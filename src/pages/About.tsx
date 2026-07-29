@@ -57,9 +57,9 @@ export default function About() {
             { year: "2025", title: t("about_milestone_2025_title"), desc: t("about_milestone_2025_desc") },
           ].map((item, i) => (
             <div key={i} className={`relative flex items-start gap-6 mb-10 md:mb-14 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
-              <div className="absolute left-4 md:left-1/2 w-3 h-3 bg-[#dc2626] rounded-full -translate-x-1/2 mt-1.5 z-10" />
+              <div className="absolute left-4 md:left-1/2 w-3 h-3 bg-[#e60012] rounded-full -translate-x-1/2 mt-1.5 z-10" />
               <div className={`ml-10 md:ml-0 md:w-[calc(50%-30px)] ${i % 2 === 0 ? "md:text-right md:pr-10" : "md:text-left md:pl-10"}`}>
-                <span className="text-[#dc2626] text-[1.1rem] font-black tracking-[0.02em]">{item.year}</span>
+                <span className="text-[#e60012] text-[1.1rem] font-black tracking-[0.02em]">{item.year}</span>
                 <h3 className="text-[#111111] text-[1rem] font-bold tracking-[0.03em] mt-1">{item.title}</h3>
                 <p className="text-[#737373] text-[13px] mt-1">{item.desc}</p>
               </div>
@@ -84,8 +84,8 @@ export default function About() {
               { num: "05", title: t("about_advantage_5_title"), desc: t("about_advantage_5_desc") },
               { num: "06", title: t("about_advantage_6_title"), desc: t("about_advantage_6_desc") },
             ].map((item, i) => (
-              <div key={i} className="bg-white border border-black/5 p-8 hover:border-[#dc2626]/30 transition-colors">
-                <span className="text-[#dc2626] text-[2rem] font-black">{item.num}</span>
+              <div key={i} className="bg-white border border-black/5 p-8 hover:border-[#e60012]/30 transition-colors">
+                <span className="text-[#e60012] text-[2rem] font-black">{item.num}</span>
                 <h3 className="text-[#111111] text-[16px] font-bold mt-4 mb-3">{item.title}</h3>
                 <p className="text-[#737373] text-[13px]">{item.desc}</p>
               </div>
@@ -102,7 +102,7 @@ export default function About() {
             <h2 className="text-[#111111] text-[1.4rem] font-black tracking-[0.03em] mb-6">{t("about_honors_title")}</h2>
             <ul className="space-y-3">
               {[t("about_honor_1"), t("about_honor_2"), t("about_honor_3"), t("about_honor_4"), t("about_honor_5")].map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-[#737373] text-[14px]"><span className="w-1.5 h-1.5 bg-[#dc2626] rounded-full mt-2 shrink-0" />{item}</li>
+                <li key={i} className="flex items-start gap-3 text-[#737373] text-[14px]"><span className="w-1.5 h-1.5 bg-[#e60012] rounded-full mt-2 shrink-0" />{item}</li>
               ))}
             </ul>
           </div>
@@ -110,7 +110,7 @@ export default function About() {
             <span className="text-[#111111] text-[11px] font-bold tracking-[0.18em] uppercase block mb-4">TAX CONTRIBUTION</span>
             <h2 className="text-[#111111] text-[1.4rem] font-black tracking-[0.03em] mb-6">{t("about_operations_title")}</h2>
             <div className="bg-[#f8f8f8] p-6 border border-black/5">
-              <div className="flex items-baseline gap-2 mb-6"><span className="text-[#dc2626] text-[2.5rem] font-black">{t("about_tax_total")}</span><span className="text-[#737373] text-[13px]">{t("about_tax_label")}</span></div>
+              <div className="flex items-baseline gap-2 mb-6"><span className="text-[#e60012] text-[2.5rem] font-black">{t("about_tax_total")}</span><span className="text-[#737373] text-[13px]">{t("about_tax_label")}</span></div>
               <div className="space-y-2">
                 {[{year:"2020",amount:t("about_tax_2020")},{year:"2021",amount:t("about_tax_2021")},{year:"2022",amount:t("about_tax_2022")},{year:"2023",amount:t("about_tax_2023")},{year:"2024",amount:t("about_tax_2024")},{year:"2025",amount:t("about_tax_2025")}].map((item,i) => (
                   <div key={i} className="flex items-center justify-between py-2 border-b border-black/5 last:border-0"><span className="text-[#111111] text-[14px] font-semibold">{item.year}</span><span className="text-[#737373] text-[14px]">{item.amount}</span></div>
@@ -137,10 +137,10 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="bg-[#dc2626] py-16 px-6 text-center">
+      <section className="bg-[#e60012] py-16 px-6 text-center">
         <h2 className="text-white text-[1.5rem] font-black tracking-[0.02em] mb-3">{t("about_cta_title")}</h2>
         <p className="text-white/70 text-[14px] mb-8 max-w-[460px] mx-auto leading-relaxed">{t("about_cta_desc")}</p>
-        <Link to="/contact" className="inline-block px-10 py-3.5 bg-white text-[#dc2626] text-[12px] font-bold tracking-[0.08em] uppercase hover:bg-white/90 transition-colors">{t("about_cta_contact")}</Link>
+        <Link to="/contact" className="inline-block px-10 py-3.5 bg-white text-[#e60012] text-[12px] font-bold tracking-[0.08em] uppercase hover:bg-white/90 transition-colors">{t("about_cta_contact")}</Link>
       </section>
     </div>
   );

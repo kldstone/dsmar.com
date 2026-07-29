@@ -16,7 +16,7 @@ export default function CatalogCategory() {
       <div className="bg-white min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-[#111]/40 text-[20px] font-bold">{t("catalog_category_not_found")}</h1>
-          <Link to="/catalog" className="mt-4 inline-block text-[#dc2626] text-[14px]">
+          <Link to="/catalog" className="mt-4 inline-block text-[#e60012] text-[14px]">
             {t("catalog_back_to_categories")}
           </Link>
         </div>
@@ -89,7 +89,7 @@ export default function CatalogCategory() {
                     addInquiryProduct({ id: p.id, name: productName, code: p.id, category: t(`catalog_category_${cat.key}_name`), thumbnail: p.cover, url: `${window.location.origin}${productUrl}` });
                     trackConversion("product_inquiry_add", { product_id: p.id, source: "catalog_card" });
                     navigate("/contact");
-                  }} className="w-full min-h-[48px] px-3 bg-white border border-t-0 border-black/10 text-[#7f1717] text-[12px] font-bold hover:bg-red-50">
+                  }} className="w-full min-h-[48px] px-3 bg-white border border-t-0 border-black/10 text-[#e60012] text-[12px] font-bold hover:bg-red-50">
                     {lang === "zh" ? `询价：${productName}` : `Request a Quote for ${productName}`}
                   </button>
                 </article>
