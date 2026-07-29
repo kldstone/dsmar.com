@@ -1,10 +1,13 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import categories from "@/data/catalog";
-import { optimizedImage } from "@/lib/images";
+import { optimizedImage, responsiveImage } from "@/lib/images";
+import { addInquiryProduct } from "@/lib/inquiry";
+import { trackConversion } from "@/lib/analytics";
 import { useLang } from "@/lib/i18n";
 
 export default function CatalogCategory() {
   const { t, lang } = useLang();
+  const navigate = useNavigate();
   const { category } = useParams<{ category: string }>();
   const cat = categories.find((c) => c.key === category);
 
@@ -27,7 +30,7 @@ export default function CatalogCategory() {
       <section className="relative h-[50vh] min-h-[380px] bg-[#e5e5e5] overflow-hidden">
         {cat.heroImg && (
           <img
-            src={optimizedImage(cat.heroImg)}
+            {...responsiveImage(cat.heroImg)}
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
             loading="eager"
@@ -69,32 +72,29 @@ export default function CatalogCategory() {
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {cat.products.map((p) => (
-              <Link
-                key={p.id}
-                to={`/catalog/${cat.key}/${p.id}`}
-                className="group relative block overflow-hidden bg-[#f5f5f5] aspect-[3/4]"
-              >
-                <img
-                  src={optimizedImage(p.cover)}
-                  alt={t(`catalog_product_${p.id}_name`)}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                <div className="absolute left-0 right-0 bottom-0 px-4 py-3">
-                  <p className="text-white text-[13px] font-semibold tracking-[0.04em] leading-tight">
-                    {t(`catalog_product_${p.id}_name`)}
-                  </p>
-                  {p.styles && p.styles.length > 0 && (
-                    <p className="text-white/60 text-[10px] font-medium mt-1">
-                      {p.styles.join(" / ")}
-                    </p>
-                  )}
-                </div>
-              </Link>
-            ))}
+            {cat.products.map((p) => {
+              const productName = t(`catalog_product_${p.id}_name`);
+              const productUrl = `/catalog/${cat.key}/${p.id}`;
+              return (
+                <article key={p.id} className="bg-[#f5f5f5]">
+                  <Link to={productUrl} className="group relative block overflow-hidden aspect-[3/4]">
+                    <img src={optimizedImage(p.cover)} alt={productName} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                    <div className="absolute left-0 right-0 bottom-0 px-4 py-3">
+                      <h2 className="text-white text-[14px] font-semibold leading-tight">{productName}</h2>
+                      {p.styles && p.styles.length > 0 && <p className="text-white/80 text-[12px] font-medium mt-1">{p.styles.join(" / ")}</p>}
+                    </div>
+                  </Link>
+                  <button type="button" onClick={() => {
+                    addInquiryProduct({ id: p.id, name: productName, code: p.id, category: t(`catalog_category_${cat.key}_name`), thumbnail: p.cover, url: `${window.location.origin}${productUrl}` });
+                    trackConversion("product_inquiry_add", { product_id: p.id, source: "catalog_card" });
+                    navigate("/contact");
+                  }} className="w-full min-h-[48px] px-3 bg-white border border-t-0 border-black/10 text-[#7f1717] text-[12px] font-bold hover:bg-red-50">
+                    {lang === "zh" ? `询价：${productName}` : `Request a Quote for ${productName}`}
+                  </button>
+                </article>
+              );
+            })}
           </div>
         )}
       </section>

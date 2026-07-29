@@ -21,6 +21,11 @@
   padding: 0;
 }
 
+*:focus-visible {
+  outline: 3px solid #9f1d1d;
+  outline-offset: 3px;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -104,3 +109,20 @@ a {
   transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .img-hover:hover img { transform: scale(1.05); }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .img-hover:hover img {
+    transform: none;
+  }
+}

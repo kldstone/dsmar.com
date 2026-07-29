@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { optimizedImage } from "@/lib/images";
+import { optimizedImage, responsiveImage } from "@/lib/images";
 import { useLang } from "@/lib/i18n";
 import { projectCases } from "@/data/projectCases";
 import LazyCatalogSection from "./CatalogSection";
@@ -47,7 +47,7 @@ export default function Home() {
           <Link to={currentSlide.href} className="block w-full h-full relative">
             <picture className="block w-full h-full">
               <source media="(max-width: 767px)" srcSet={currentSlide.mobileImg} />
-              <img src={optimizedImage(currentSlide.img)} alt="" loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" style={{ animation: "heroScale 6s ease-out both" }} />
+              <img {...responsiveImage(currentSlide.img)} alt="" loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" style={{ animation: "heroScale 6s ease-out both" }} />
             </picture>
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
@@ -60,7 +60,7 @@ export default function Home() {
               <h1 className="text-white text-[clamp(2rem,5vw,4rem)] font-light tracking-[0.08em] leading-[1.2] mb-4 md:mb-6 uppercase">{t(currentSlide.titleKey)}</h1>
               <p className="text-white/80 text-[clamp(0.85rem,1.4vw,1.1rem)] font-light tracking-[0.06em] leading-relaxed">{t(currentSlide.descriptionKey)}</p>
               <div className="flex flex-wrap gap-3 mt-8 md:mt-10">
-                <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-[#dc2626] text-white text-[12px] font-bold tracking-[0.08em] uppercase hover:bg-[#dc2626]/80 transition-colors">
+                <Link to="/contact" className="inline-flex min-h-[48px] items-center gap-2 px-6 bg-[#9f1d1d] text-white text-[13px] font-bold hover:bg-[#7f1717]">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                   {t("nav_quote")}
                 </Link>
@@ -72,18 +72,19 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 z-20">
           <div className="max-w-[1280px] mx-auto px-6 md:px-12 lg:px-16 pb-8 md:pb-10">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-0">
                 {slides.map((_, i) => (
-                  <button key={i} onClick={() => setActive(i)} aria-label={t("home_carousel_slide_label", { number: String(i + 1) })}
-                    className="group relative h-[3px] transition-all duration-500"
-                    style={{ width: i === active ? "48px" : "24px", backgroundColor: i === active ? "#dc2626" : "rgba(255,255,255,0.3)" }} />
+                  <button key={i} onClick={() => setActive(i)} aria-label={t("home_carousel_slide_label", { number: String(i + 1) })} aria-current={i === active}
+                    className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center">
+                    <span aria-hidden="true" className="block h-[3px] transition-all duration-500" style={{ width: i === active ? "40px" : "24px", backgroundColor: i === active ? "#f87171" : "rgba(255,255,255,0.65)" }} />
+                  </button>
                 ))}
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={prev} aria-label={t("home_carousel_prev")} className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center border border-white/20 hover:border-white/50 hover:bg-white/10 transition-all duration-300 group">
+                <button onClick={prev} aria-label={t("home_carousel_prev")} className="min-w-[48px] min-h-[48px] flex items-center justify-center border border-white/60 hover:border-white hover:bg-white/10 transition-all duration-300 group">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-white/60 group-hover:text-white" aria-hidden="true"><path d="M10 2L4 8L10 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
-                <button onClick={next} aria-label={t("home_carousel_next")} className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center border border-white/20 hover:border-white/50 hover:bg-white/10 transition-all duration-300 group">
+                <button onClick={next} aria-label={t("home_carousel_next")} className="min-w-[48px] min-h-[48px] flex items-center justify-center border border-white/60 hover:border-white hover:bg-white/10 transition-all duration-300 group">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-white/60 group-hover:text-white" aria-hidden="true"><path d="M6 2L12 8L6 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
               </div>

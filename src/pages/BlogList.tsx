@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { blogPosts } from "../content/blog-cn";
 import { useLang } from "@/lib/i18n";
-import { optimizedImage } from "@/lib/images";
+import { optimizedImage, responsiveImage } from "@/lib/images";
 
 export default function BlogList() {
   const { lang, t } = useLang();
@@ -17,7 +17,7 @@ export default function BlogList() {
     <div>
       {/* Hero */}
       <section className="relative h-[40vh] min-h-[300px] bg-[#0f0f0f] overflow-hidden">
-        <img src={optimizedImage("/brand-gallery/hero-blog.jpg")} alt="" className="w-full h-full object-cover opacity-50" fetchPriority="high" decoding="async" />
+        <img {...responsiveImage("/brand-gallery/hero-blog.jpg")} alt="" className="w-full h-full object-cover opacity-50" fetchPriority="high" decoding="async" />
         <div className="absolute inset-0 bg-black/45" />
         <div className="absolute inset-0 flex items-center justify-center text-center px-6">
           <div>

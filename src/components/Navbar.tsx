@@ -1,30 +1,31 @@
-import { useState, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { trackConversion } from "@/lib/analytics";
 import { useLang } from "@/lib/i18n";
+
+const ProductSearch = lazy(() => import("./ProductSearch"));
 
 let catalogPrefetched = false;
 function prefetchCatalog() {
   if (catalogPrefetched) return;
   catalogPrefetched = true;
-  import("@/pages/Catalog");
-  import("@/pages/CatalogCategory");
-  import("@/pages/CatalogDetail");
+  void Promise.all([
+    import("@/pages/Catalog"),
+    import("@/pages/CatalogCategory"),
+    import("@/pages/CatalogDetail"),
+  ]);
 }
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
   const { t, lang, setLang } = useLang();
+  const [scrolled, setScrolled] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const prevPathname = location.pathname;
-
-  // Close menu on route change
-  if (prevPathname !== location.pathname) {
-    // setMenuOpen will be called inline; the render bails and React re-runs
-    setTimeout(() => setMenuOpen(false), 0);
-  }
+  const [searchOpen, setSearchOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const searchButtonRef = useRef<HTMLButtonElement>(null);
+  const lockedScrollY = useRef(0);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -32,11 +33,46 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const isActive = (href: string) => {
-    if (href === "/") return location.pathname === "/";
-    return location.pathname.startsWith(href);
-  };
+  useEffect(() => {
+    if (!menuOpen) return;
+    lockedScrollY.current = window.scrollY;
+    const body = document.body;
+    const previous = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      overflow: body.style.overflow,
+    };
+    body.style.position = "fixed";
+    body.style.top = `-${lockedScrollY.current}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+    return () => {
+      body.style.position = previous.position;
+      body.style.top = previous.top;
+      body.style.width = previous.width;
+      body.style.overflow = previous.overflow;
+      window.scrollTo(0, lockedScrollY.current);
+    };
+  }, [menuOpen]);
 
+  useEffect(() => {
+    if (!menuOpen && !searchOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (menuOpen) {
+        setMenuOpen(false);
+        requestAnimationFrame(() => menuButtonRef.current?.focus());
+      } else if (searchOpen) {
+        setSearchOpen(false);
+        requestAnimationFrame(() => searchButtonRef.current?.focus());
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen, searchOpen]);
+
+  const isActive = (href: string) => href === "/" ? location.pathname === "/" : location.pathname.startsWith(href);
   const navLinks = [
     { label: t("nav_home"), href: "/" },
     { label: t("nav_stone_market"), href: "/collections/marble" },
@@ -58,88 +94,118 @@ export default function Navbar() {
     { label: t("nav_contact"), href: "/contact" },
   ];
 
+  function toggleSearch() {
+    setMenuOpen(false);
+    setSearchOpen((open) => !open);
+  }
+
+  function toggleMenu() {
+    setSearchOpen(false);
+    setMenuOpen((open) => !open);
+  }
+
   return (
     <>
-      <div className="w-full bg-white border-b border-black/5 text-[#111111]/50 text-[12px] tracking-[0.04em]">
-        <div className="max-w-[1280px] mx-auto px-6 flex items-center justify-between min-h-[34px]">
+      <div className="w-full bg-white border-b border-black/5 text-[#444] text-[12px]">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6 flex items-center justify-between min-h-[36px]">
           <span className="truncate">{t("topbar_company")}</span>
-          <span className="flex items-center gap-4 ml-4 shrink-0">
-            <span className="hidden sm:flex items-center gap-4">
-              <a href="tel:+8613959948672" className="hover:text-[#dc2626] transition-colors">+86 139 5994 8672</a>
-              <span className="text-black/20">|</span>
-              <span className="flex items-center gap-1.5 text-[#111111]/50">{t("topbar_social")}</span>
-              <span className="text-black/20">|</span>
+          <span className="flex items-center ml-4 shrink-0">
+            <span className="hidden sm:flex items-center gap-4 mr-3">
+              <a href="tel:+8613959948672" className="inline-flex min-h-[44px] items-center hover:text-[#9f1d1d]">+86 139 5994 8672</a>
+              <span aria-hidden="true" className="text-black/20">|</span>
+              <span>{t("topbar_social")}</span>
+              <span aria-hidden="true" className="text-black/20">|</span>
             </span>
-            <div className="flex items-center gap-1 text-[11px] font-semibold tracking-[0.06em]">
-              <button onClick={() => setLang("zh")} aria-label={lang === "zh" ? "当前语言：中文" : "切换到中文"} className={`transition-colors ${lang === "zh" ? "text-[#dc2626]" : "text-[#111111]/40 hover:text-[#111111]"}`}>简</button>
-              <span className="text-black/20">/</span>
-              <button onClick={() => setLang("en")} aria-label={lang === "en" ? "Current language: English" : "Switch to English"} className={`transition-colors ${lang === "en" ? "text-[#dc2626]" : "text-[#111111]/40 hover:text-[#111111]"}`}>EN</button>
-            </div>
+            <span className="flex items-center text-[12px] font-semibold">
+              <button onClick={() => setLang("zh")} aria-label={lang === "zh" ? "当前语言：中文" : "切换到中文"} className={`min-w-[44px] min-h-[44px] ${lang === "zh" ? "text-[#9f1d1d]" : "text-[#444]"}`}>简</button>
+              <span aria-hidden="true" className="text-black/20">/</span>
+              <button onClick={() => setLang("en")} aria-label={lang === "en" ? "Current language: English" : "Switch to English"} className={`min-w-[44px] min-h-[44px] ${lang === "en" ? "text-[#9f1d1d]" : "text-[#444]"}`}>EN</button>
+            </span>
           </span>
         </div>
       </div>
 
-      <nav className={`sticky top-0 z-50 transition-[background-color,border-color,box-shadow] duration-400 border-b ${scrolled ? "bg-white/97 border-black/8 backdrop-blur-[20px] shadow-sm" : "bg-white/95 border-black/5 backdrop-blur-[20px]"}`}>
-        <div className="max-w-[1280px] mx-auto px-6 flex items-center justify-between min-h-[78px] gap-6">
-          <Link to="/" className="flex items-center gap-3 shrink-0">
-            <img src={lang === "zh" ? "/logo-cn.png" : "/logo-en.png"} alt={lang === "zh" ? "东升石业" : "DONGSHENG STONE"} width="509" height="447" className={`h-[126px] w-auto object-contain md:h-[126px] max-md:h-[70px] ${lang === "en" ? "scale-[1.22] origin-left" : ""}`} />
-            <span className="hidden lg:block text-[#111111]/60 text-[12px] tracking-[0.06em] font-medium">{t("topbar_location")}</span>
+      <nav aria-label={lang === "zh" ? "主导航" : "Primary navigation"} className={`sticky top-0 z-50 border-b transition-[background-color,box-shadow] ${scrolled ? "bg-white/98 shadow-sm" : "bg-white/95"} backdrop-blur-[20px]`}>
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6 flex items-center justify-between min-h-[78px] gap-3">
+          <Link to="/" className="flex items-center gap-3 shrink-0 min-h-[44px]">
+            <img src={lang === "zh" ? "/logo-cn.png" : "/logo-en.png"} alt={lang === "zh" ? "东升石业" : "DONGSHENG STONE"} width="509" height="447" className={`h-[66px] md:h-[72px] w-auto object-contain ${lang === "en" ? "scale-[1.12] origin-left" : ""}`} />
+            <span className="hidden xl:block text-[#555] text-[12px] font-medium">{t("topbar_location")}</span>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-0">
+          <div className="hidden lg:flex items-center">
             {navLinks.map((link) => (
-              <div key={link.href} className="relative group/dropdown" onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setActiveDropdown(null); }}>
-                <Link to={link.href} className={`inline-flex items-center justify-center min-h-[44px] px-[12px] text-[12.5px] font-semibold tracking-[0.05em] transition-colors whitespace-nowrap ${isActive(link.href) ? "text-[#dc2626] font-bold" : "text-[#111111]/60 hover:text-[#111111]"}`}
+              <div key={link.href} className="relative" onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setActiveDropdown(null); }} onMouseLeave={() => setActiveDropdown(null)}>
+                <Link
+                  to={link.href}
+                  className={`inline-flex items-center justify-center min-h-[44px] px-[11px] text-[13px] font-semibold whitespace-nowrap ${isActive(link.href) ? "text-[#9f1d1d]" : "text-[#444] hover:text-[#111]"}`}
+                  aria-haspopup={link.children ? "menu" : undefined}
+                  aria-expanded={link.children ? activeDropdown === link.href : undefined}
                   onFocus={() => { if (link.children) setActiveDropdown(link.href); if (link.href === "/catalog") prefetchCatalog(); }}
                   onMouseEnter={() => { if (link.children) setActiveDropdown(link.href); if (link.href === "/catalog") prefetchCatalog(); }}
-                  onMouseLeave={() => link.children && setActiveDropdown(null)}>
+                >
                   {link.label}
-                  {link.children && <svg className="ml-1 w-3 h-3 transition-transform group-hover/dropdown:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>}
+                  {link.children && <svg aria-hidden="true" className="ml-1 w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>}
                 </Link>
                 {link.children && activeDropdown === link.href && (
-                  <div className="absolute top-full left-0 min-w-[190px] bg-white shadow-lg border border-black/5 py-2 animate-fadeInDown"
-                    onMouseEnter={() => setActiveDropdown(link.href)} onMouseLeave={() => setActiveDropdown(null)}>
-                    {link.children.map((child) => (
-                      <Link key={child.href} to={child.href} className={`block px-5 py-3 text-[12px] font-medium tracking-[0.04em] transition-colors ${location.pathname === child.href ? "text-[#dc2626] font-bold" : "text-[#111111]/60 hover:text-[#111111] hover:bg-[#dc2626]/5"}`}>{child.label}</Link>
-                    ))}
+                  <div role="menu" className="absolute top-full left-0 min-w-[210px] bg-white shadow-lg border border-black/10 py-2">
+                    {link.children.map((child) => <Link role="menuitem" key={child.href} to={child.href} className="flex min-h-[44px] items-center px-5 text-[13px] text-[#444] hover:text-[#111] hover:bg-red-50">{child.label}</Link>)}
                   </div>
                 )}
               </div>
             ))}
           </div>
 
-          <div className="hidden md:flex lg:hidden items-center gap-0">
-            {navLinks.slice(0, 5).map((link) => (
-              <Link key={link.href} to={link.href} className={`inline-flex items-center justify-center min-h-[44px] px-[9px] text-[11px] font-semibold tracking-[0.03em] transition-colors whitespace-nowrap ${isActive(link.href) ? "text-[#dc2626] font-bold" : "text-[#111111]/60 hover:text-[#111111]"}`}>{link.label}</Link>
-            ))}
-            <span className="text-black/20 text-[11px] px-1">···</span>
+          <div className="ml-auto flex items-center gap-1">
+            <button
+              ref={searchButtonRef}
+              type="button"
+              aria-label={searchOpen ? (lang === "zh" ? "关闭搜索" : "Close search") : (lang === "zh" ? "搜索产品" : "Search products")}
+              aria-expanded={searchOpen}
+              aria-controls="global-product-search"
+              onClick={toggleSearch}
+              className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-[#222]"
+            >
+              <svg aria-hidden="true" className="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            </button>
+
+            <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "navbar" })} className="hidden md:inline-flex min-h-[44px] items-center justify-center px-5 bg-[#9f1d1d] text-white text-[13px] font-bold hover:bg-[#7f1717]">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
+
+            <button
+              ref={menuButtonRef}
+              type="button"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
+              onClick={toggleMenu}
+              className="lg:hidden relative min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-[#222]"
+            >
+              <span aria-hidden="true" className={`absolute w-6 h-0.5 bg-current transition-transform motion-reduce:transition-none ${menuOpen ? "rotate-45" : "-translate-y-1"}`} />
+              <span aria-hidden="true" className={`absolute w-6 h-0.5 bg-current transition-transform motion-reduce:transition-none ${menuOpen ? "-rotate-45" : "translate-y-1"}`} />
+            </button>
           </div>
-
-          <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "navbar" })}
-            className="hidden md:inline-flex items-center justify-center min-h-[40px] px-5 bg-[#dc2626] text-white text-[12px] font-bold tracking-[0.06em] hover:bg-[#dc2626]/80 transition-colors whitespace-nowrap shrink-0">{t("nav_quote")}</Link>
-
-          <button aria-label="Toggle navigation menu" aria-expanded={menuOpen}
-            className="md:hidden border border-black/15 bg-transparent text-[#111111]/80 px-3 py-2 text-[12px] font-bold tracking-[0.08em]" onClick={() => setMenuOpen(!menuOpen)}>
-            {menuOpen ? t("nav_mobile_close") : t("nav_mobile_menu")}
-          </button>
         </div>
 
-        <div className={`md:hidden overflow-hidden transition-[max-height,border-color] duration-300 ${menuOpen ? "max-h-[700px] border-t border-black/5" : "max-h-0"}`}>
-          <div className="bg-white px-6 py-3 border-b border-black/5">
+        {searchOpen && (
+          <div id="global-product-search">
+            <Suspense fallback={<div className="absolute top-full left-0 right-0 bg-white p-6 text-center text-[14px]" role="status">{lang === "zh" ? "载入搜索……" : "Loading search…"}</div>}>
+              <ProductSearch onClose={() => setSearchOpen(false)} triggerRef={searchButtonRef} />
+            </Suspense>
+          </div>
+        )}
+
+        <div id="mobile-navigation" hidden={!menuOpen} className="lg:hidden border-t border-black/10 bg-white max-h-[calc(100dvh-114px)] overflow-y-auto overscroll-contain touch-pan-y">
+          <div className="px-5 py-3">
             {navLinks.map((link) => (
               <div key={link.href}>
-                <Link to={link.href} className={`block py-3.5 text-[13px] font-semibold tracking-[0.06em] border-b border-black/5 transition-colors ${isActive(link.href) ? "text-[#dc2626] font-bold" : "text-[#111111]/60 hover:text-[#111111]"}`}>{link.label}</Link>
-                {link.children && menuOpen && (
+                <Link to={link.href} className={`flex min-h-[48px] items-center text-[14px] font-semibold border-b border-black/5 ${isActive(link.href) ? "text-[#9f1d1d]" : "text-[#333]"}`}>{link.label}</Link>
+                {link.children && (
                   <div className="pl-5 pb-2">
-                    {link.children.map((child) => (
-                      <Link key={child.href} to={child.href} className="block py-2.5 text-[12px] tracking-[0.04em] text-[#111111]/40 hover:text-[#dc2626] transition-colors border-b border-black/3">{child.label}</Link>
-                    ))}
+                    {link.children.map((child) => <Link key={child.href} to={child.href} className="flex min-h-[44px] items-center text-[13px] text-[#444] border-b border-black/5">{child.label}</Link>)}
                   </div>
                 )}
               </div>
             ))}
-            <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "navbar_mobile" })}
-              className="mt-3 block text-center bg-[#dc2626] text-white py-3 text-[12px] font-bold tracking-[0.06em]">{t("nav_quote")}</Link>
+            <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "navbar_mobile" })} className="mt-4 flex min-h-[48px] items-center justify-center bg-[#9f1d1d] text-white text-[14px] font-bold">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
           </div>
         </div>
       </nav>

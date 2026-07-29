@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import categories from "@/data/catalog";
-import { optimizedImage } from "@/lib/images";
+import { optimizedImage, responsiveImage } from "@/lib/images";
 import { useLang } from "@/lib/i18n";
 
 export default function Catalog() {
@@ -11,7 +11,7 @@ export default function Catalog() {
       {/* Hero */}
       <section className="relative h-[55vh] min-h-[420px] bg-[#e5e5e5] overflow-hidden">
         <img
-          src={optimizedImage("/brand-gallery/hero-catalog.jpg")}
+          {...responsiveImage("/brand-gallery/hero-catalog.jpg")}
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
           loading="eager"

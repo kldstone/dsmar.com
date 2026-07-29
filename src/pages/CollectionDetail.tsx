@@ -1,5 +1,8 @@
-import { useParams, Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { optimizedImage } from "@/lib/images";
+import { addInquiryProduct, setCurrentInquiryProduct } from "@/lib/inquiry";
+import { trackConversion } from "@/lib/analytics";
 import { useLang } from "@/lib/i18n";
 
 // ============================================================
@@ -1215,6 +1218,7 @@ const productCopy: Record<string, string[]> = {
 
 export default function CollectionDetail() {
   const { lang, t } = useLang();
+  const navigate = useNavigate();
   const { id } = useParams<{
     id: string;
   }>();
@@ -1229,6 +1233,34 @@ export default function CollectionDetail() {
   const intro = lang === "en"
     ? [t("collection_detail_description", { product: englishTitle, color: displayColor })]
     : (productCopy[id!] || [t("collection_detail_missing_description")]);
+  const productUrl = `/collections/product/${id || "0"}`;
+  const inquiryProduct = {
+    id: id || "0",
+    name: displayTitle,
+    code: `DS-${id || "0"}`,
+    category: displayColor,
+    thumbnail: data.heroImg,
+    url: typeof window === "undefined" ? productUrl : `${window.location.origin}${productUrl}`,
+  };
+
+  useEffect(() => {
+    if (!id || !productData[id]) return;
+    setCurrentInquiryProduct({
+      id,
+      name: displayTitle,
+      code: `DS-${id}`,
+      category: displayColor,
+      thumbnail: data.heroImg,
+      url: `${window.location.origin}/collections/product/${id}`,
+    });
+    return () => setCurrentInquiryProduct(null);
+  }, [id, displayTitle, displayColor, data.heroImg]);
+
+  function requestQuote() {
+    addInquiryProduct(inquiryProduct);
+    trackConversion("product_inquiry_add", { product_id: id, source: "collection_detail" });
+    navigate("/contact");
+  }
 
   if (!id || !productData[id]) {
     return (
@@ -1296,12 +1328,9 @@ export default function CollectionDetail() {
         <div className="max-w-[820px] mx-auto text-center">
           <h2 className="text-[#111] text-[1.5rem] font-black tracking-[0.03em] mb-4">{t("collection_detail_interested")}</h2>
           <p className="text-[#111]/50 text-[14px] mb-8">{t("collection_detail_cta_subtitle")}</p>
-          <Link
-            to="/contact"
-            className="inline-block px-10 py-3.5 bg-[#111] text-white text-[12px] font-bold tracking-[0.08em] uppercase hover:bg-[#333] transition-colors"
-          >
-            {t("collection_detail_cta")}
-          </Link>
+          <button type="button" onClick={requestQuote} className="inline-flex min-h-[48px] items-center justify-center px-10 bg-[#9f1d1d] text-white text-[13px] font-bold hover:bg-[#7f1717]">
+            {lang === "zh" ? `询价：${displayTitle}` : `Request a Quote for ${displayTitle}`}
+          </button>
         </div>
       </section>
     </div>

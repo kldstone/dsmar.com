@@ -1,15 +1,33 @@
-import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import categories from "@/data/catalog";
 import { optimizedImage } from "@/lib/images";
+import { addInquiryProduct, setCurrentInquiryProduct } from "@/lib/inquiry";
+import { trackConversion } from "@/lib/analytics";
 import { useLang } from "@/lib/i18n";
 
 export default function CatalogDetail() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const navigate = useNavigate();
   const { category, id } = useParams<{ category: string; id: string }>();
   const cat = categories.find((c) => c.key === category);
   const product = cat?.products.find((p) => p.id === id);
   const [showAll, setShowAll] = useState(false);
+  const categoryName = cat ? t(`catalog_category_${cat.key}_name`) : "";
+  const productName = product ? t(`catalog_product_${product.id}_name`) : "";
+
+  useEffect(() => {
+    if (!cat || !product) return;
+    setCurrentInquiryProduct({
+      id: product.id,
+      name: productName,
+      code: product.id,
+      category: categoryName,
+      thumbnail: product.cover,
+      url: `${window.location.origin}/catalog/${cat.key}/${product.id}`,
+    });
+    return () => setCurrentInquiryProduct(null);
+  }, [cat, product, productName, categoryName]);
 
   if (!cat || !product) {
     return (
@@ -25,8 +43,20 @@ export default function CatalogDetail() {
   const allImages = product.images && product.images.length > 0 ? product.images : [product.cover];
   const coverImg = product.cover || allImages[0];
   const catalogImages = allImages.length > 1 ? allImages.slice(1) : allImages;
-  const categoryName = t(`catalog_category_${cat.key}_name`);
-  const productName = t(`catalog_product_${product.id}_name`);
+  const inquiryProduct = {
+    id: product.id,
+    name: productName,
+    code: product.id,
+    category: categoryName,
+    thumbnail: product.cover,
+    url: typeof window === "undefined" ? `/catalog/${cat.key}/${product.id}` : window.location.href,
+  };
+
+  function addToInquiry(goToContact: boolean) {
+    addInquiryProduct(inquiryProduct);
+    trackConversion("product_inquiry_add", { product_id: inquiryProduct.id, source: "catalog_detail" });
+    if (goToContact) navigate("/contact");
+  }
 
   return (
     <div className="bg-white">
@@ -69,7 +99,14 @@ export default function CatalogDetail() {
             </div>
 
             <div className="border-t border-black/5 pt-8">
-              <Link to="/contact" className="inline-flex items-center justify-center min-h-[48px] px-8 bg-[#dc2626] text-white text-[13px] font-bold tracking-[0.06em] hover:bg-[#dc2626]/80 transition-colors">{t("catalog_inquire_product")}</Link>
+              <div className="flex flex-wrap gap-3">
+                <button type="button" onClick={() => addToInquiry(false)} className="inline-flex items-center justify-center min-h-[48px] px-7 border-2 border-[#9f1d1d] text-[#7f1717] text-[13px] font-bold hover:bg-red-50">
+                  {lang === "zh" ? "加入询价" : "Add to inquiry"}
+                </button>
+                <button type="button" onClick={() => addToInquiry(true)} className="inline-flex items-center justify-center min-h-[48px] px-7 bg-[#9f1d1d] text-white text-[13px] font-bold hover:bg-[#7f1717]">
+                  {lang === "zh" ? `询价：${productName}` : `Request a Quote for ${productName}`}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -109,7 +146,7 @@ export default function CatalogDetail() {
       <section className="bg-[#f8f8f8] py-16 px-6 text-center border-t border-black/5">
         <h2 className="text-[#111] text-[1.3rem] font-black tracking-[0.02em] mb-3 uppercase">{t("catalog_interest_title", { product: productName })}</h2>
         <p className="text-[#111]/45 text-[14px] mb-8 max-w-[460px] mx-auto leading-relaxed">{t("catalog_interest_desc")}</p>
-        <Link to="/contact" className="inline-flex items-center justify-center min-h-[48px] px-10 bg-[#dc2626] text-white text-[12px] font-bold tracking-[0.08em] uppercase hover:bg-[#dc2626]/80 transition-colors">{t("catalog_contact_now")}</Link>
+        <button type="button" onClick={() => addToInquiry(true)} className="inline-flex items-center justify-center min-h-[48px] px-10 bg-[#9f1d1d] text-white text-[13px] font-bold hover:bg-[#7f1717]">{lang === "zh" ? "获取报价" : "Request a Quote"}</button>
       </section>
     </div>
   );

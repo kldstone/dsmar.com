@@ -104,6 +104,11 @@ const pageMeta: Record<string, LocalizedMeta> = {
 };
 
 function resolveMeta(pathname: string, lang: Lang): PageMeta {
+  if (pathname === "/search") {
+    return lang === "zh"
+      ? { title: "产品搜索｜东升大理石", description: "按名称、编号、类别和石材类型搜索东升大理石产品目录。", keywords: "大理石产品搜索,石材编号,石材目录" }
+      : { title: "Product Search | DONGSHENG MARBLE", description: "Search Dongsheng Marble products by name, code, category, and stone type.", keywords: "marble product search,stone codes,stone catalogue" };
+  }
   const caseMatch = pathname.match(/^\/cases\/([^/]+)/);
   if (caseMatch) {
     const caseMeta = projectCaseMeta[caseMatch[1]];

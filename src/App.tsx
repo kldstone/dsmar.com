@@ -53,6 +53,8 @@ const BlogPost = lazy(() => import("./pages/BlogPost"));
 const Catalog = lazy(() => import("./pages/Catalog"));
 const CatalogCategory = lazy(() => import("./pages/CatalogCategory"));
 const CatalogDetail = lazy(() => import("./pages/CatalogDetail"));
+const SearchResults = lazy(() => import("./pages/SearchResults"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 export default function App() {
   return (
@@ -74,6 +76,8 @@ export default function App() {
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/catalog/:category" element={<CatalogCategory />} />
             <Route path="/catalog/:category/:id" element={<CatalogDetail />} />
+            <Route path="/search" element={<SearchResults />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </Suspense>

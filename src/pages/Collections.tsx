@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
-import { optimizedImage } from "@/lib/images";
+import { Link, useNavigate } from "react-router-dom";
+import { optimizedImage, responsiveImage } from "@/lib/images";
+import { addInquiryProduct } from "@/lib/inquiry";
+import { trackConversion } from "@/lib/analytics";
 import { useLang } from "@/lib/i18n";
 import { projectCases } from "@/data/projectCases";
 
@@ -10,7 +12,7 @@ import { projectCases } from "@/data/projectCases";
 // 图片来源：gani.com.cn 产品图
 // ============================================================
 
-type Product = {
+export type Product = {
   name: string;
   en: string;
   img: string;
@@ -22,7 +24,7 @@ type CollectionsProps = {
   filter?: "marble" | "mosaic";
 };
 
-const products: Product[] = [
+export const products: Product[] = [
   // ===== 白色系 =====,
   { name: "安第斯雪景", en: "Avalanche", img: "/gani-products/gani_003_安第斯雪景.webp", color: "白色系" },
   { name: "天山暮雪", en: "Patagonia", img: "/gani-products/gani_004_天山暮雪.webp", color: "白色系" },
@@ -201,6 +203,7 @@ const ALL_TABS = [...MARBLE_TABS, { key: "水刀拼花", label: "水刀拼花" }
 
 export default function Collections({ filter }: CollectionsProps) {
   const { lang, t } = useLang();
+  const navigate = useNavigate();
   const [active, setActive] = useState("全部");
 
   const isMosaic = filter === "mosaic";
@@ -235,7 +238,7 @@ export default function Collections({ filter }: CollectionsProps) {
       {/* Hero */}
       <section className="relative h-[55vh] min-h-[420px] bg-[#e5e5e5] overflow-hidden">
         <img
-          src="/optimized/brand-gallery/project-cases-hero.webp"
+          {...responsiveImage("/brand-gallery/project-cases-hero.jpg")}
           alt={lang === "zh" ? "东升石业展厅工程案例" : "Dongsheng Stone project showroom"}
           className="w-full h-full object-cover"
         />
@@ -286,31 +289,28 @@ export default function Collections({ filter }: CollectionsProps) {
             // 从图片路径提取 gani 编号作为详情页 id（gani_003 → "2"）
             const match = p.img.match(/gani_(\d+)/);
             const productId = match ? String(parseInt(match[1], 10) - 1) : "0";
+            const productUrl = p.href || `/collections/product/${productId}`;
+            const productName = lang === "en" ? (p.en || t("collections_custom_stone")) : p.name;
             return (
-            <Link
-              key={`${p.name}-${i}`}
-              to={p.href || `/collections/product/${productId}`}
-              className="group relative block overflow-hidden bg-[#f5f5f5] aspect-[3/4]"
-            >
-              <img
-                src={optimizedImage(p.img)}
-                alt={lang === "en" ? (p.en || p.name) : p.name}
-                loading="lazy" decoding="async"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              {/* 左下角半透明黑蒙层 + 白字 */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="absolute left-0 right-0 bottom-0 px-4 py-3">
-                <p className="text-white text-[13px] font-semibold tracking-[0.04em] leading-tight">
-                  {lang === "en" ? (p.en || t("collections_custom_stone")).toUpperCase() : p.name}
-                </p>
-                {lang === "zh" && p.en && (
-                  <p className="text-white/65 text-[10px] font-medium tracking-[0.08em] mt-0.5">
-                    {p.en}
-                  </p>
+              <article key={`${p.name}-${i}`} className="bg-[#f5f5f5]">
+                <Link to={productUrl} className="group relative block overflow-hidden aspect-[3/4]">
+                  <img src={optimizedImage(p.img)} alt={productName} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                  <div className="absolute left-0 right-0 bottom-0 px-4 py-3">
+                    <h2 className="text-white text-[14px] font-semibold leading-tight">{lang === "en" ? productName.toUpperCase() : productName}</h2>
+                    {lang === "zh" && p.en && <p className="text-white/80 text-[12px] font-medium mt-1">{p.en}</p>}
+                  </div>
+                </Link>
+                {!isProjectCases && (
+                  <button type="button" onClick={() => {
+                    addInquiryProduct({ id: productId, name: productName, code: `DS-${productId}`, category: labelForColor(p.color), thumbnail: p.img, url: `${window.location.origin}${productUrl}` });
+                    trackConversion("product_inquiry_add", { product_id: productId, source: "collection_card" });
+                    navigate("/contact");
+                  }} className="w-full min-h-[48px] px-2 bg-white border border-t-0 border-black/10 text-[#7f1717] text-[12px] font-bold hover:bg-red-50">
+                    {lang === "zh" ? `询价：${productName}` : `Request a Quote for ${productName}`}
+                  </button>
                 )}
-              </div>
-            </Link>
+              </article>
             );
           })}
         </div>
