@@ -43,16 +43,31 @@ export default function Home() {
     <div>
       {/* Hero Carousel */}
       <div className="relative w-full h-screen overflow-hidden bg-black" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
-        <div key={active} className="absolute inset-0" style={{ animation: "heroImageIn 700ms ease-out" }}>
-          <Link to={currentSlide.href} className="block w-full h-full relative">
-            <picture className="block w-full h-full">
-              <source media="(max-width: 767px)" srcSet={currentSlide.mobileImg} />
-              <img {...responsiveImage(currentSlide.img)} alt="" loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" style={{ animation: "heroScale 6s ease-out both" }} />
-            </picture>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
-          </Link>
-        </div>
+        {slides.map((slide, index) => (
+          <div
+            key={slide.img}
+            aria-hidden={index !== active}
+            className={`absolute inset-0 transition-opacity duration-700 ease-out ${
+              index === active ? "z-[1] opacity-100" : "z-0 opacity-0 pointer-events-none"
+            }`}
+          >
+            <Link to={slide.href} tabIndex={index === active ? 0 : -1} className="block w-full h-full relative">
+              <picture className="block w-full h-full">
+                <source media="(max-width: 767px)" srcSet={slide.mobileImg} />
+                <img
+                  {...responsiveImage(slide.img)}
+                  alt=""
+                  loading="eager"
+                  fetchPriority={index === 0 ? "high" : "auto"}
+                  decoding="async"
+                  className="w-full h-full object-cover"
+                />
+              </picture>
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+            </Link>
+          </div>
+        ))}
         <div className="absolute inset-0 z-10 flex items-center">
           <div className="w-full max-w-[1280px] mx-auto px-6 md:px-12 lg:px-16">
             <div key={active} className="max-w-[640px]" style={{ animation: "slideFadeIn 1.2s ease-out" }}>
@@ -93,8 +108,6 @@ export default function Home() {
         </div>
         <style>{`
           @keyframes slideFadeIn { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:translateY(0) } }
-          @keyframes heroImageIn { from { opacity:0 } to { opacity:1 } }
-          @keyframes heroScale { from { transform:scale(1.04) } to { transform:scale(1) } }
         `}</style>
       </div>
 
