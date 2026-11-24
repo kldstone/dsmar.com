@@ -43,6 +43,7 @@ export function initializeConsentMode() {
 export function setAnalyticsConsent(accepted: boolean) {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(CONSENT_KEY, accepted ? "accepted" : "essential");
+  window.dispatchEvent(new Event("dsmar-consent-change"));
   if (!GA_ID) return;
   ensureGtagQueue();
   window.gtag("consent", "update", {

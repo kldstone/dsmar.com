@@ -16,7 +16,7 @@ export default function Footer() {
             <div>
               <h4 className="text-[#111111]/90 text-[12px] font-bold tracking-[0.10em] uppercase mb-5">{t("footer_explore")}</h4>
               <div className="flex flex-col gap-3">
-                <Link to="/collections/marble" className="text-[#111111]/45 text-[13px] hover:text-[#e60012] transition-colors">{t("nav_stone_market")}</Link>
+                <Link to="/cases" className="text-[#111111]/45 text-[13px] hover:text-[#e60012] transition-colors">{t("nav_stone_market")}</Link>
                 <Link to="/catalog" className="text-[#111111]/45 text-[13px] hover:text-[#e60012] transition-colors">{t("nav_mine_direct")}</Link>
                 <Link to="/about" className="text-[#111111]/45 text-[13px] hover:text-[#e60012] transition-colors">{t("nav_about")}</Link>
                 <Link to="/contact" className="text-[#111111]/45 text-[13px] hover:text-[#e60012] transition-colors">{t("nav_contact")}</Link>
@@ -25,7 +25,7 @@ export default function Footer() {
             <div>
               <h4 className="text-[#111111]/90 text-[12px] font-bold tracking-[0.10em] uppercase mb-5">{t("footer_products")}</h4>
               <div className="flex flex-col gap-3">
-                <Link to="/collections/marble" className="text-[#111111]/45 text-[13px] hover:text-[#e60012] transition-colors">{t("footer_natural_stone")}</Link>
+                <Link to="/catalog" className="text-[#111111]/45 text-[13px] hover:text-[#e60012] transition-colors">{t("footer_natural_stone")}</Link>
                 <Link to="/catalog" className="text-[#111111]/45 text-[13px] hover:text-[#e60012] transition-colors">{t("footer_catalog")}</Link>
               </div>
             </div>

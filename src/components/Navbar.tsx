@@ -75,7 +75,7 @@ export default function Navbar() {
   const isActive = (href: string) => href === "/" ? location.pathname === "/" : location.pathname.startsWith(href);
   const navLinks = [
     { label: t("nav_home"), href: "/" },
-    { label: t("nav_stone_market"), href: "/collections/marble" },
+    { label: t("nav_stone_market"), href: "/cases" },
     {
       label: t("nav_mine_direct"),
       href: "/catalog",
