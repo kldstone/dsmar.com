@@ -40,7 +40,7 @@ export default function ProjectCaseDetail() {
     return (
       <section className="max-w-[800px] mx-auto px-6 py-24 text-center">
         <h1 className="text-[1.6rem] font-black text-[var(--ink)]">{lang === "zh" ? "案例不存在" : "Case not found"}</h1>
-        <Link to="/collections/marble" className="inline-flex min-h-[48px] items-center mt-6 text-[#e60012] text-[13px] font-bold">{lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
+        <Link to="/cases" className="inline-flex min-h-[48px] items-center mt-6 text-[#e60012] text-[13px] font-bold">{lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
       </section>
     );
   }
@@ -84,7 +84,7 @@ export default function ProjectCaseDetail() {
         </div>
 
         <div className="pt-12 text-center">
-          <Link to="/collections/marble" className="inline-flex min-h-[44px] items-center text-[#e60012] text-[13px] font-bold">← {lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
+          <Link to="/cases" className="inline-flex min-h-[44px] items-center text-[#e60012] text-[13px] font-bold">← {lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
         </div>
       </section>
 
