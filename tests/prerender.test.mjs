@@ -73,6 +73,34 @@ test("product and article pages include the matching structured data type", asyn
   }
 });
 
+test("FAQ copy and FAQPage data avoid unverified business commitments", async () => {
+  const route = routeByPath.get("/faq");
+  assert.ok(route, "FAQ route must be prerendered");
+  const html = await readFile(htmlPath(route), "utf8");
+  const schemas = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
+    .map((match) => JSON.parse(match[1]));
+  const faqSchema = schemas.find((schema) => schema["@type"] === "FAQPage");
+
+  assert.ok(faqSchema, "FAQ page must include FAQPage structured data");
+  assert.ok(faqSchema.mainEntity.length > 10, "FAQPage must retain useful customer questions");
+  for (const unverifiedClaim of [
+    /RMB\s*300/i,
+    /RMB\s*180,?000/i,
+    /±\s*1\s*mm/i,
+    /one to two business days/i,
+    /30 countries/i,
+    /four steel straps/i,
+    /exclusive luxury stones/i,
+    /六面渗透型防护处理/,
+    /独家奢石/,
+    /无最低起订量/,
+    /全球30多个国家/,
+    /售价可达18万元/,
+  ]) {
+    assert.doesNotMatch(html, unverifiedClaim, `FAQ must not assert ${unverifiedClaim}`);
+  }
+});
+
 test("organization structured data uses the published company identity and contact details", async () => {
   const html = await readFile(htmlPath({ path: "/" }), "utf8");
   const organizationScript = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
