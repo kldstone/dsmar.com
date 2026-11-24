@@ -8,6 +8,7 @@ const manifest = JSON.parse(await readFile(path.join(dist, "prerender-manifest.j
 const routeByPath = new Map(manifest.routes.map((route) => [route.path, route]));
 const sitemap = await readFile(path.join(dist, "sitemap.xml"), "utf8");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+const sitemapUrlSet = new Set(sitemapUrls);
 
 function htmlPath(route) {
   return route.path === "/"
@@ -58,6 +59,28 @@ test("sitemap contains exactly the indexable prerendered routes and no unverifie
   assert.ok(expectedUrls.some((url) => url.includes("/blog/") && url !== "https://www.dsmar.com/blog"));
   assert.ok(!sitemap.includes("/collections"), "GANI-sourced collection routes must stay out of Dongsheng sitemap");
   assert.ok(!sitemap.includes("/search"), "search must stay out of sitemap");
+});
+
+test("LLM index is served as plain text and links only to published canonical pages", async () => {
+  const llms = await readFile(path.join(dist, "llms.txt"), "utf8");
+  const links = [...llms.matchAll(/\[[^\]]+\]\((https:\/\/www\.dsmar\.com\/[^)]+)\)/g)].map((match) => match[1]);
+
+  assert.match(llms, /^# Dongsheng Marble/m);
+  assert.doesNotMatch(llms, /<\/?(?:html|body|div)\b/i, "llms.txt must not fall through to the SPA HTML shell");
+  assert.ok(links.length > 5, "LLM index must link to useful site pages");
+  for (const link of links) {
+    if (link === "https://www.dsmar.com/sitemap.xml") continue;
+    assert.ok(sitemapUrlSet.has(link), `${link} must exist in the canonical sitemap`);
+  }
+  assert.match(llms, /Verify those details on the specific product page/i, "product-specific details must be verified against source pages");
+  assert.match(llms, /availability, dimensions, origin, finish, pricing/i, "the index must identify details that require item-level verification");
+});
+
+test("homepage and inquiry pages do not promise an unverified response deadline", async () => {
+  for (const pathname of ["/", "/contact"]) {
+    const html = await readFile(htmlPath(routeByPath.get(pathname)), "utf8");
+    assert.doesNotMatch(html, /24\s*hours?|24小时|one business day|一个工作日/i, `${pathname} must not promise an unverified reply time`);
+  }
 });
 
 test("product and article pages include the matching structured data type", async () => {
