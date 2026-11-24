@@ -90,12 +90,20 @@ export default function CatalogDetail() {
             </div>
 
             <div className="border-t border-black/5 pt-6 mb-8">
-              <h3 className="text-[#111] text-[13px] font-bold tracking-[0.06em] mb-3">{t("catalog_applications_title")}</h3>
-              <div className="flex flex-wrap gap-2">
-                {[t("catalog_application_hotel"), t("catalog_application_villa"), t("catalog_application_wall"), t("catalog_application_floor"), t("catalog_application_commercial"), t("catalog_application_bathroom")].map((s) => (
-                  <span key={s} className="text-[12px] text-[#111]/50 border border-black/10 px-3 py-1">{s}</span>
-                ))}
-              </div>
+              <h3 className="text-[#111] text-[13px] font-bold tracking-[0.06em] mb-3">
+                {lang === "zh" ? "产品信息与询价" : "Product information & inquiry"}
+              </h3>
+              <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-[12px]">
+                <dt className="text-[#111]/45">{lang === "zh" ? "目录编号" : "Catalog ID"}</dt>
+                <dd className="text-[#111]/75">{product.id}</dd>
+                <dt className="text-[#111]/45">{lang === "zh" ? "所属系列" : "Collection"}</dt>
+                <dd className="text-[#111]/75">{categoryName}</dd>
+              </dl>
+              <p className="text-[#111]/55 text-[13px] leading-relaxed mt-4">
+                {lang === "zh"
+                  ? "此页面展示产品名称、所属系列和图片，未公布规格尺寸、表面处理、库存或价格。点击“询价”可将本产品带入询盘；如已确定，请补充所需尺寸、表面处理、数量和交付地，以便确认具体条件。"
+                  : "This page shows the product name, collection, and catalog images; it does not publish dimensions, finish, stock, or price. Use “Request a Quote” to carry this product into your inquiry. If known, include required dimensions, finish, quantity, and delivery destination so the relevant terms can be confirmed."}
+              </p>
             </div>
 
             <div className="border-t border-black/5 pt-8">

@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
 import { getStoredConsent, setAnalyticsConsent } from "@/lib/analytics";
 import { useLang } from "@/lib/i18n";
 
 export default function CookieConsent() {
   const { lang } = useLang();
-  const [visible, setVisible] = useState(() => getStoredConsent() === null);
+  const consent = useSyncExternalStore(
+    (callback) => {
+      window.addEventListener("dsmar-consent-change", callback);
+      window.addEventListener("storage", callback);
+      return () => {
+        window.removeEventListener("dsmar-consent-change", callback);
+        window.removeEventListener("storage", callback);
+      };
+    },
+    getStoredConsent,
+    () => null,
+  );
+  const visible = consent === null;
 
   if (!visible) return null;
 
   function choose(accepted: boolean) {
     setAnalyticsConsent(accepted);
-    setVisible(false);
   }
 
   return (
