@@ -70,6 +70,15 @@ test("product and article pages include the matching structured data type", asyn
     const html = await readFile(htmlPath(route), "utf8");
     const schemaType = route.path.startsWith("/catalog/") ? "Product" : "Article";
     assert.match(html, new RegExp(`"@type":"${schemaType}"`), `${route.path} must include ${schemaType} JSON-LD`);
+    if (schemaType === "Product") {
+      const productId = route.path.split("/").at(-1);
+      assert.match(html, /Product information/, `${route.path} must expose product inquiry context in the initial HTML`);
+      assert.match(html, /Catalog ID<\/dt>\s*<dd[^>]*>/, `${route.path} must label its catalog identifier`);
+      assert.ok(html.includes(`>${productId}</dd>`), `${route.path} must render its real catalog identifier`);
+      for (const unverifiedApplication of ["Hotel Lobbies", "Villa Living Rooms", "Feature Walls", "Flooring", "Commercial Spaces", "Bathrooms"]) {
+        assert.ok(!html.includes(unverifiedApplication), `${route.path} must not claim generic applications without product-specific evidence`);
+      }
+    }
   }
 });
 
