@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": true,
   "redirects": [
     {
       "source": "/(.*)",
@@ -11,6 +12,21 @@
           "value": "dsmar.com"
         }
       ]
+    },
+    {
+      "source": "/collections/marble",
+      "destination": "/cases",
+      "permanent": true
+    },
+    {
+      "source": "/collections/product/:id",
+      "destination": "/catalog",
+      "permanent": true
+    },
+    {
+      "source": "/collections",
+      "destination": "/catalog",
+      "permanent": true
     }
   ],
   "rewrites": [

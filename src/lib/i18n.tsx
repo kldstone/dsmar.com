@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 
-type Lang = "zh" | "en";
+export type Lang = "zh" | "en";
 
 const LangContext = createContext<{
   lang: Lang;
@@ -428,18 +428,20 @@ const translations: Record<string, { zh: string; en: string }> = {
 
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>("en");
-  const t = (key: string, vars?: Record<string, string>) => {
-    const entry = translations[key];
-    if (!entry) return key;
-    return Object.entries(vars ?? {}).reduce(
-      (value, [name, replacement]) => value.replaceAll(`{${name}}`, replacement),
-      entry[lang],
-    );
-  };
+  const t = (key: string, vars?: Record<string, string>) => getTranslation(lang, key, vars);
   return (
     <LangContext.Provider value={{ lang, setLang, t }}>
       {children}
     </LangContext.Provider>
+  );
+}
+
+export function getTranslation(lang: Lang, key: string, vars?: Record<string, string>) {
+  const entry = translations[key];
+  if (!entry) return key;
+  return Object.entries(vars ?? {}).reduce(
+    (value, [name, replacement]) => value.replaceAll(`{${name}}`, replacement),
+    entry[lang],
   );
 }
 
