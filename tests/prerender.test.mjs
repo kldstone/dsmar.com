@@ -191,6 +191,12 @@ test("project case index is discoverable and uses only real case data", async ()
 test("legacy collection URLs permanently redirect to current catalog and case pages", async () => {
   const config = JSON.parse(await readFile(path.resolve("vercel.json"), "utf8"));
   const redirects = new Map(config.redirects.map(({ source, destination, permanent }) => [source, { destination, permanent }]));
+  const apexRedirect = config.redirects.find(({ source, destination, has }) =>
+    source === "/(.*)"
+      && destination === "https://www.dsmar.com/$1"
+      && has?.some(({ type, value }) => type === "host" && value === "dsmar.com"));
+
+  assert.ok(apexRedirect?.permanent, "apex domain must permanently redirect to the canonical www host");
 
   for (const [source, destination] of [
     ["/collections", "/catalog"],
