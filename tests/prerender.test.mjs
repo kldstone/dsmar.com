@@ -41,7 +41,7 @@ test("prerenders every declared route with unique SEO metadata and real page con
     assert.ok(!titles.has(title), `${route.path} title must be unique`);
     titles.add(title);
     assert.ok(attribute(descriptionTag, "content"), `${route.path} must have a description`);
-    assert.equal(attribute(canonicalTag, "href"), `https://www.dsmar.com${route.path === "/" ? "/" : `${route.path}/`}`, `${route.path} canonical`);
+    assert.equal(attribute(canonicalTag, "href"), `https://dsmar.com${route.path === "/" ? "/" : `${route.path}/`}`, `${route.path} canonical`);
     assert.equal(h1Count, 1, `${route.path} must have exactly one H1`);
     assert.ok(rootContent.replace(/<[^>]+>/g, " ").trim().length > 60, `${route.path} must contain server-rendered page copy`);
   }
@@ -50,12 +50,12 @@ test("prerenders every declared route with unique SEO metadata and real page con
 test("sitemap contains exactly the indexable prerendered routes and no unverified collections", () => {
   const expectedUrls = manifest.routes
     .filter((route) => route.indexable)
-    .map((route) => `https://www.dsmar.com${route.path === "/" ? "/" : `${route.path}/`}`)
+    .map((route) => `https://dsmar.com${route.path === "/" ? "/" : `${route.path}/`}`)
     .sort();
 
   assert.deepEqual([...sitemapUrls].sort(), expectedUrls);
   assert.ok(expectedUrls.some((url) => url.includes("/catalog/") && !url.match(/\/catalog\/[^/]+$/)));
-  assert.ok(expectedUrls.some((url) => url.includes("/blog/") && url !== "https://www.dsmar.com/blog"));
+  assert.ok(expectedUrls.some((url) => url.includes("/blog/") && url !== "https://dsmar.com/blog"));
   assert.ok(!sitemap.includes("/collections"), "GANI-sourced collection routes must stay out of Dongsheng sitemap");
   assert.ok(!sitemap.includes("/search"), "search must stay out of sitemap");
 });

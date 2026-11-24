@@ -3,17 +3,6 @@
   "trailingSlash": true,
   "redirects": [
     {
-      "source": "/(.*)",
-      "destination": "https://www.dsmar.com/$1",
-      "permanent": true,
-      "has": [
-        {
-          "type": "host",
-          "value": "dsmar.com"
-        }
-      ]
-    },
-    {
       "source": "/collections/marble",
       "destination": "/cases",
       "permanent": true

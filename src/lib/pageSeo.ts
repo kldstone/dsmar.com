@@ -5,7 +5,7 @@ import { getProjectCase, projectCases } from "@/data/projectCases";
 import { getTranslation } from "@/lib/i18n";
 import type { Lang } from "@/lib/i18n";
 
-export const siteUrl = "https://www.dsmar.com";
+export const siteUrl = "https://dsmar.com";
 const brand = "DONGSHENG MARBLE";
 
 export type PageSeo = {

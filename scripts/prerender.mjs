@@ -4,7 +4,7 @@ import { createServer } from "vite";
 
 const root = process.cwd();
 const dist = path.join(root, "dist");
-const siteUrl = "https://www.dsmar.com";
+const siteUrl = "https://dsmar.com";
 const escapeHtml = (value) => value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const escapeJsonForHtml = (value) => JSON.stringify(value).replaceAll("<", "\\u003c");
 
