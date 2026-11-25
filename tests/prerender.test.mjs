@@ -112,7 +112,7 @@ test("homepage prerender includes real catalog links and matching inquiry guidan
     .find((schema) => schema["@type"] === "FAQPage");
 
   assert.ok(homeSchema, "homepage must include its visible FAQPage guidance");
-  assert.equal(homeSchema.mainEntity.length, 4);
+  assert.equal(homeSchema.mainEntity.length, 6);
   for (const collection of ["white-series", "beige-series", "grey-series", "dark-series", "color-series", "pattern-series"]) {
     assert.match(html, new RegExp(`href="/catalog/${collection}"`), `${collection} must be linked in initial HTML`);
   }
@@ -120,6 +120,8 @@ test("homepage prerender includes real catalog links and matching inquiry guidan
   assert.match(html, /Do product images confirm dimensions, finish, and stock\?/);
   assert.match(html, /Can I inquire if I am not sure about the material or dimensions\?/);
   assert.match(html, /How many products are listed in Dongsheng(?:&#39;|')s online catalog\?/);
+  assert.ok(homeSchema.mainEntity.some((item) => item.name === "Do product names always identify a stone's geological classification?"));
+  assert.ok(homeSchema.mainEntity.some((item) => item.name === "How can I confirm care instructions for natural stone?"));
   assert.match(html, /<h3[^>]*>How can I request a quote for a catalog product\?<\/h3>/);
   assert.match(html, /They do not by themselves confirm a specific lot, dimensions, finish, or current stock\./);
   assert.match(html, /company profile says its stone business began in 1992/);

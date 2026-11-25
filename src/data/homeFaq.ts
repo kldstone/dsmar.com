@@ -31,6 +31,26 @@ export const homeFaq = [
       en: "Yes. Project details on the contact form are optional. If you have not settled on a material or dimensions, the form invites you to send a reference image for help with selection.",
     },
   },
+  {
+    question: {
+      zh: "产品名称能准确说明石材的地质分类吗？",
+      en: "Do product names always identify a stone's geological classification?",
+    },
+    answer: {
+      zh: "不一定。石材的商业名称可能与地质学分类不同。官网名称和图片用于初步浏览；正式选材前，请向东升核实具体材料分类及项目所需信息。",
+      en: "Not always. Commercial stone names may differ from scientific geological classifications. Use catalog names and photos for initial browsing, then ask Dongsheng to confirm the material classification and project details before specifying a product.",
+    },
+  },
+  {
+    question: {
+      zh: "怎样确认天然石材的清洁养护方式？",
+      en: "How can I confirm care instructions for natural stone?",
+    },
+    answer: {
+      zh: "天然石材的养护方式取决于其地质分类和组成。Natural Stone Institute 指出，柠檬汁、醋等酸性产品可能使含碳酸盐的石材失去光泽或被蚀刻。请结合具体材料和使用场景向供应商或养护专业人员确认。",
+      en: "Care depends on a stone's geological classification and composition. The Natural Stone Institute notes that acidic products such as lemon or vinegar may dull or etch calcareous stones. Confirm care for the exact material and application with your supplier or a stone-care professional.",
+    },
+  },
 ] as const;
 
 export function getHomeFaq(lang: Lang, catalog: { productCount: number; collectionCount: number }) {
