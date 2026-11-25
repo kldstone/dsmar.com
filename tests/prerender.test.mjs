@@ -48,6 +48,17 @@ test("prerenders every declared route with unique SEO metadata and real page con
   }
 });
 
+test("every prerendered route has one main landmark and a keyboard skip link", async () => {
+  for (const route of manifest.routes) {
+    const html = await readFile(htmlPath(route), "utf8");
+    const mainCount = [...html.matchAll(/<main(?:\s|>)/gi)].length;
+
+    assert.equal(mainCount, 1, `${route.path} must expose exactly one main landmark`);
+    assert.match(html, /<a\b[^>]*href="#main-content"[^>]*>\s*(?:Skip to main content|跳转到主要内容)/i, `${route.path} must offer a skip link`);
+    assert.match(html, /<main\b[^>]*id="main-content"[^>]*>/i, `${route.path} main landmark must be the skip link target`);
+  }
+});
+
 test("sitemap contains exactly the indexable prerendered routes and no unverified collections", () => {
   const expectedUrls = manifest.routes
     .filter((route) => route.indexable)
@@ -150,6 +161,21 @@ test("product and article pages include the matching structured data type", asyn
         assert.ok(!html.includes(unverifiedApplication), `${route.path} must not claim generic applications without product-specific evidence`);
       }
     }
+  }
+});
+
+test("each catalog collection states its live product count and inquiry boundary", async () => {
+  const categoryRoutes = manifest.routes.filter((route) => /^\/catalog\/[^/]+$/.test(route.path));
+
+  for (const route of categoryRoutes) {
+    const collection = route.path.split("/").at(-1);
+    const productCount = manifest.routes.filter((candidate) => candidate.path.startsWith(`${route.path}/`)).length;
+    const html = await readFile(htmlPath(route), "utf8");
+
+    assert.match(html, new RegExp(`currently lists ${productCount} catalog products`, "i"), `${route.path} must use the real catalog count`);
+    assert.match(html, /does not publish dimensions, finish, stock, or price/i, `${route.path} must state which details need confirmation`);
+    assert.ok(html.includes(`href="${route.path}/`), `${route.path} must link to its product details`);
+    assert.ok(collection, "catalog collection routes must have a slug");
   }
 });
 

@@ -7,7 +7,7 @@ export default function ProjectCases() {
   const isChinese = lang === "zh";
 
   return (
-    <main className="bg-white">
+    <div className="bg-white">
       <header className="bg-[#111] px-6 py-16 text-center text-white md:py-24">
         <p className="text-[11px] font-bold tracking-[0.2em] text-white/60">DONGSHENG MARBLE</p>
         <h1 className="mt-4 text-[clamp(2rem,5vw,3.5rem)] font-black">
@@ -44,6 +44,6 @@ export default function ProjectCases() {
           })}
         </div>
       </section>
-    </main>
+    </div>
   );
 }

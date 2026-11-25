@@ -55,6 +55,16 @@ export default function CatalogCategory() {
 
       {/* Products */}
       <section className="max-w-[1280px] mx-auto px-6 py-16">
+        <div className="max-w-3xl mb-10">
+          <h2 className="text-[#111] text-[18px] font-bold mb-3">
+            {lang === "zh" ? "系列目录信息" : "Collection catalog details"}
+          </h2>
+          <p className="text-[#111]/60 text-[14px] leading-relaxed">
+            {lang === "zh"
+              ? `${t(`catalog_category_${cat.key}_name`)}目前列出 ${cat.products.length} 个产品条目。每个产品详情页展示目录编号和图片；本目录未公布尺寸、表面处理、库存或价格。询价时请注明产品名称和项目需求，以便核实相关条件。`
+              : `The ${t(`catalog_category_${cat.key}_name`)} currently lists ${cat.products.length} catalog products. Each product page shows its catalog ID and images. This catalog does not publish dimensions, finish, stock, or price; include the product name and project requirements in an inquiry so the relevant terms can be confirmed.`}
+          </p>
+        </div>
         {cat.products.length === 0 ? (
           <div className="text-center py-24">
             <p className="text-[#111]/40 text-[18px] font-medium mb-3">
