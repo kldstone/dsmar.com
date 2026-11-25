@@ -1,7 +1,7 @@
 import categories from "@/data/catalog";
 import { blogPosts } from "@/content/blog-cn";
 import { faqData } from "@/data/faq";
-import { getHomeFaq } from "@/data/homeFaq";
+import { getHomeFaq, homeContentModified } from "@/data/homeFaq";
 import { getProjectCase, projectCases } from "@/data/projectCases";
 import { getTranslation } from "@/lib/i18n";
 import type { Lang } from "@/lib/i18n";
@@ -53,7 +53,7 @@ function breadcrumbLabel(segment: string, lang: Lang, precedingSegments: string[
   return labels[segment]?.[lang] ?? segment;
 }
 
-function makeStructuredData(pathname: string, lang: Lang, image: string) {
+function makeStructuredData(pathname: string, lang: Lang, image: string, title: string, description: string) {
   const canonical = pageUrl(pathname);
   const schemas: Record<string, unknown>[] = [
     {
@@ -110,6 +110,19 @@ function makeStructuredData(pathname: string, lang: Lang, image: string) {
         item: pageUrl(`/${segments.slice(0, index + 1).join("/")}`),
       })),
     ],
+  });
+  schemas.push({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${canonical}#webpage`,
+    url: canonical,
+    name: title,
+    description,
+    inLanguage: lang === "zh" ? "zh-CN" : "en",
+    isPartOf: { "@id": `${siteUrl}/#website` },
+    about: { "@id": `${siteUrl}/#organization` },
+    primaryImageOfPage: { "@type": "ImageObject", url: absoluteUrl(image) },
+    ...(pathname === "/" ? { dateModified: homeContentModified } : {}),
   });
 
   const categoryMatch = pathname.match(/^\/catalog\/([^/]+)$/);
@@ -340,6 +353,6 @@ export function resolvePageSeo(inputPath: string, lang: Lang = "en"): PageSeo {
     canonical,
     robots: nonIndexable ? "noindex, follow" : "index, follow",
     image,
-    structuredData: makeStructuredData(pathname, lang, image),
+    structuredData: makeStructuredData(pathname, lang, image, title, description),
   };
 }

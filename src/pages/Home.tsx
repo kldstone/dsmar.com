@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { optimizedImage, responsiveImage } from "@/lib/images";
 import { useLang } from "@/lib/i18n";
 import { projectCases } from "@/data/projectCases";
-import { getHomeFaq } from "@/data/homeFaq";
+import { getHomeFaq, homeContentModified } from "@/data/homeFaq";
 import categories from "@/data/catalog";
 import LazyCatalogSection from "./CatalogSection";
 
@@ -25,6 +25,12 @@ export default function Home() {
     productCount: categories.reduce((sum, category) => sum + category.products.length, 0),
     collectionCount: categories.length,
   };
+  const homeContentReviewed = new Intl.DateTimeFormat(lang === "zh" ? "zh-CN" : "en-GB", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${homeContentModified}T00:00:00.000Z`));
 
   const next = useCallback(() => setActive((s) => (s + 1) % slides.length), []);
   const prev = useCallback(() => setActive((s) => (s - 1 + slides.length) % slides.length), []);
@@ -297,6 +303,11 @@ export default function Home() {
             <Link to="/catalog" className="text-[#111] border-b border-[#e60012] pb-1 hover:text-[#e60012]">{lang === "zh" ? "浏览产品目录" : "Browse the product catalog"}</Link>
             <Link to="/contact" className="text-[#111] border-b border-[#e60012] pb-1 hover:text-[#e60012]">{lang === "zh" ? "提交项目询盘" : "Send a project inquiry"}</Link>
           </div>
+          <p className="mt-5 text-[11px] leading-relaxed text-[#111]/45">
+            {lang === "zh" ? "资料核对日期：" : "Information checked "}
+            <time dateTime={homeContentModified}>{homeContentReviewed}</time>
+            {lang === "zh" ? "；核对范围：官网企业介绍与产品目录。" : " against the published company profile and product catalog."}
+          </p>
         </div>
       </section>
 

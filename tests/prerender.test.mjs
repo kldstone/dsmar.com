@@ -107,11 +107,16 @@ test("homepage and inquiry pages do not promise an unverified response deadline"
 
 test("homepage prerender includes real catalog links and matching inquiry guidance", async () => {
   const html = await readFile(htmlPath(routeByPath.get("/")), "utf8");
-  const homeSchema = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
-    .map((match) => JSON.parse(match[1]))
+  const schemas = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
+    .map((match) => JSON.parse(match[1]));
+  const homeSchema = schemas
     .find((schema) => schema["@type"] === "FAQPage");
+  const webPageSchema = schemas.find((schema) => schema["@type"] === "WebPage");
 
   assert.ok(homeSchema, "homepage must include its visible FAQPage guidance");
+  assert.equal(webPageSchema?.name, "Natural Stone Product Catalog | Dongsheng Marble");
+  assert.equal(webPageSchema?.dateModified, "2026-11-25");
+  assert.match(html, /Information checked <time dateTime="2026-11-25">25 November 2026<\/time>/);
   assert.equal(homeSchema.mainEntity.length, 6);
   for (const collection of ["white-series", "beige-series", "grey-series", "dark-series", "color-series", "pattern-series"]) {
     assert.match(html, new RegExp(`href="/catalog/${collection}"`), `${collection} must be linked in initial HTML`);

@@ -1,5 +1,7 @@
 import type { Lang } from "@/lib/i18n";
 
+export const homeContentModified = "2026-11-25";
+
 export const homeFaq = [
   {
     question: {
