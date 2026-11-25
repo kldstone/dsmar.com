@@ -124,9 +124,9 @@ test("homepage prerender includes real catalog links and matching inquiry guidan
   assert.ok(homeSchema.mainEntity.some((item) => item.name === "How can I confirm care instructions for natural stone?"));
   assert.match(html, /<h3[^>]*>How can I request a quote for a catalog product\?<\/h3>/);
   assert.match(html, /They do not by themselves confirm a specific lot, dimensions, finish, or current stock\./);
-  assert.match(html, /company profile says its stone business began in 1992/);
-  assert.match(html, /The current catalog lists 40 product entries across 6 collections/);
-  assert.match(html, /This count comes from the catalog data used to render the website/);
+  assert.match(html, /published company profile records 1992 as the beginning of Dongsheng(?:&#x27;|')s stone business and 2000 as the year the company was established/);
+  assert.match(html, /We list 40 published product records across 6 collections/);
+  assert.match(html, /We count each product record once/);
   assert.match(html, /Source: Dongsheng company profile/);
 
   const catalogSchema = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
@@ -220,9 +220,9 @@ test("organization structured data uses the published company identity and conta
 
   assert.ok(organizationScript, "homepage must include Organization JSON-LD");
   assert.equal(organizationScript.name, "DONGSHENG MARBLE");
-  assert.equal(organizationScript.alternateName, "东升大理石");
-  assert.equal("legalName" in organizationScript, false, "unconfirmed legal entity spelling must not be asserted");
-  assert.equal("foundingDate" in organizationScript, false, "the site shows both 1992 and 2000 milestones; do not infer a founding date");
+  assert.deepEqual(organizationScript.alternateName, ["东升大理石", "福建省东升石业股份有限公司"]);
+  assert.equal(organizationScript.legalName, "Fujian Dongsheng Stone Industry Co., Ltd.");
+  assert.equal(organizationScript.foundingDate, "2000", "the company profile distinguishes the company's establishment from the start of its stone business");
   assert.equal(organizationScript.telephone, "+86 139 5994 8672");
   assert.equal(organizationScript.email, "dongshengmarble@gmail.com");
   assert.equal(organizationScript.address.addressLocality, "Nan'an");

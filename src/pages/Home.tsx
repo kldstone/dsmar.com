@@ -245,7 +245,7 @@ export default function Home() {
           <div className="grid sm:grid-cols-3 gap-5 border-y border-black/10 py-6 mb-8">
             <div>
               <h3 className="text-[#111] text-[13px] font-bold mb-2">{lang === "zh" ? "企业资料" : "Company profile"}</h3>
-              <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? "东升企业介绍称，石材事业始于1992年，公司于2000年成立，位于福建南安水头。" : "Dongsheng's company profile says its stone business began in 1992, the company was established in 2000, and its headquarters are in Shuitou, Nan'an, Fujian."}</p>
+              <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? "福建省东升石业股份有限公司总部位于福建南安水头。官网企业介绍记载，东升石材事业始于1992年，公司于2000年成立；两项年份分别指业务起点与公司成立。" : "Fujian Dongsheng Stone Industry Co., Ltd. is headquartered in Shuitou, Nan'an, Fujian. Its published company profile records 1992 as the beginning of Dongsheng's stone business and 2000 as the year the company was established; the dates refer to separate milestones."}</p>
               <Link to="/about" className="inline-block mt-2 text-[#111] text-[12px] font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">{lang === "zh" ? "查看企业介绍" : "Read the company profile"}</Link>
             </div>
             <div>

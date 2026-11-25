@@ -59,8 +59,8 @@ export function getHomeFaq(lang: Lang, catalog: { productCount: number; collecti
     {
       question: lang === "zh" ? "东升官网产品目录目前列出多少个产品？" : "How many products are listed in Dongsheng's online catalog?",
       answer: lang === "zh"
-        ? `官网目录目前列出 ${catalog.productCount} 个产品条目，分为 ${catalog.collectionCount} 个系列。数量按网站产品目录数据中的已发布条目计算，用于说明网站当前展示范围；这不代表相同数量的现货、独立石种数量或某款产品的实时供应情况。具体批次、尺寸、表面处理和库存请在询盘时逐项确认。`
-        : `The current catalog lists ${catalog.productCount} product entries across ${catalog.collectionCount} collections. This count comes from the catalog data used to render the website's collection and product pages; it describes published listings, not stock levels or confirmed availability. Product photos also do not establish dimensions, finish, or lot. Send an inquiry to verify the current details of a specific item.`,
+        ? `官网目录目前列出 ${catalog.productCount} 条已发布产品记录，分为 ${catalog.collectionCount} 个系列。统计时每条产品记录计为一项，系列数量按目录中的分类记录计算。这些数字只表示官网展示的目录条目，不等于独立石种数、现货数量或已确认供货。选型时请按具体产品核实批次、尺寸、表面处理及供应情况。`
+        : `We list ${catalog.productCount} published product records across ${catalog.collectionCount} collections. We count each product record once; the collection total comes from the category records in this catalog. These figures describe website listings only. They do not indicate geological variety, stock, or confirmed supply. Verify the lot, dimensions, finish, and availability of a selected item before specifying it.`,
     },
   ];
 }
