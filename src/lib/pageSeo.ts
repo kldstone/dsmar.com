@@ -61,9 +61,7 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
       name: brand,
-      alternateName: ["东升大理石", "福建省东升石业股份有限公司"],
-      legalName: "Fujian Dongsheng Stone Industry Co., Ltd.",
-      foundingDate: "2000",
+      alternateName: ["东升大理石"],
       logo: absoluteUrl("/logo-en.png"),
       description: lang === "zh"
         ? "主营大理石荒料采购、批发及大板生产加工。"
