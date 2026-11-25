@@ -4,6 +4,14 @@
 
 This index links to pages published on dsmar.com. Product availability, dimensions, origin, finish, pricing, and project details vary by item. Verify those details on the specific product page and with the company; do not infer specifications from images or category names.
 
+The company profile describes Dongsheng's stone business as beginning in 1992 and the establishment of Fujian Dongsheng Stone Industry Co., Ltd. in 2000. These are separate milestones. Use the company profile for the published company identity, business description, location, and contact information.
+
+The catalog is organized into product records and collections maintained by the website. Names, photographs, and collection labels help visitors browse; they do not establish a geological classification, quarry origin, dimensions, finish, stock, price, or suitability for a particular project. Check the individual product page, then confirm project-specific material and supply details with Dongsheng before specification or purchase.
+
+The articles section contains company news and practical guidance. Article dates and summaries come from the published article records. General care guidance is not a product warranty or a maintenance specification for every stone. Where an article links to an external technical source, consult that source directly for its scope and current recommendations.
+
+The sitemap lists the site's current canonical pages intended for indexing, including product, article, and project-case pages. Search results and unverified collection routes are excluded. The contact page provides the website's inquiry path; an inquiry does not itself confirm stock, pricing, delivery, or a supply commitment.
+
 ## Main pages
 
 - [Home](https://www.dsmar.com/)

@@ -27,7 +27,12 @@ export default function BlogPost() {
           <div className="max-w-[700px]">
             <span className="text-white/50 text-[10px] font-bold tracking-[0.16em] uppercase">{post.category[lang]}</span>
             <h1 className="text-white text-[clamp(1.4rem,3vw,2.2rem)] font-black tracking-[0.02em] mt-3 mb-3">{post.title[lang]}</h1>
-            <p className="text-white/50 text-[13px]">{post.date}</p>
+            <p className="text-white/50 text-[13px]">
+              {lang === "zh" ? "发布方：" : "Published by "}
+              <Link to="/about" className="text-white/70 hover:text-white">{lang === "zh" ? "东升石业" : "DONGSHENG MARBLE"}</Link>
+              <span aria-hidden="true"> · </span>
+              <time dateTime={post.date}>{post.date}</time>
+            </p>
           </div>
         </div>
       </section>

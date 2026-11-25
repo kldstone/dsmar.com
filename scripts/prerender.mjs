@@ -7,6 +7,7 @@ const dist = path.join(root, "dist");
 const siteUrl = "https://www.dsmar.com";
 const resourceUrl = (pathname) => new URL(pathname, siteUrl).toString();
 const escapeHtml = (value) => value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+const escapeXml = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
 const escapeJsonForHtml = (value) => JSON.stringify(value).replaceAll("<", "\\u003c");
 
 function metadataMarkup(seo, pathname, { includeCanonical = true, includeStructuredData = true } = {}) {
@@ -26,6 +27,7 @@ function metadataMarkup(seo, pathname, { includeCanonical = true, includeStructu
     `<meta name="twitter:title" content="${escapeHtml(seo.title)}" />`,
     `<meta name="twitter:description" content="${escapeHtml(seo.description)}" />`,
     `<meta name="twitter:image" content="${escapeHtml(image)}" />`,
+    `<link rel="alternate" type="application/rss+xml" title="Dongsheng Marble Articles" href="${resourceUrl("/rss.xml")}" />`,
     ...(includeStructuredData
       ? seo.structuredData.map((schema, index) => `<script type="application/ld+json" data-page-schema="${index}">${escapeJsonForHtml(schema)}</script>`)
       : []),
@@ -82,6 +84,34 @@ try {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapRoutes.join("\n")}\n</urlset>\n`;
   await writeFile(path.join(dist, "sitemap.xml"), sitemap);
+  const canonical = (pathname) => new URL(pathname.endsWith("/") ? pathname : `${pathname}/`, siteUrl).toString();
+  const feedItems = [...blogPosts]
+    .sort((first, second) => second.date.localeCompare(first.date))
+    .map((post) => {
+      const link = canonical(`/blog/${post.slug}`);
+      const pubDate = new Date(`${post.date}T00:00:00Z`).toUTCString();
+      return [
+        "  <item>",
+        `    <title>${escapeXml(post.title.en)}</title>`,
+        `    <link>${escapeXml(link)}</link>`,
+        `    <guid isPermaLink="true">${escapeXml(link)}</guid>`,
+        `    <pubDate>${escapeXml(pubDate)}</pubDate>`,
+        `    <description>${escapeXml(post.summary.en)}</description>`,
+        "  </item>",
+      ].join("\n");
+    });
+  const rss = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<rss version="2.0"><channel>',
+    "  <title>Dongsheng Marble Articles</title>",
+    `  <link>${escapeXml(canonical("/blog"))}</link>`,
+    "  <description>Articles published on the official Dongsheng Marble website.</description>",
+    "  <language>en</language>",
+    ...feedItems,
+    "</channel></rss>",
+    "",
+  ].join("\n");
+  await writeFile(path.join(dist, "rss.xml"), rss);
   const notFoundPath = "/__not_found__";
   const notFoundSeo = resolvePageSeo(notFoundPath, "en");
   const notFoundHtml = renderDocument(
@@ -94,7 +124,6 @@ try {
   await writeFile(path.join(dist, "404.html"), notFoundHtml);
   await writeFile(path.join(dist, "prerender-manifest.json"), `${JSON.stringify({ routes: prerenderRoutes }, null, 2)}\n`);
 
-  const canonical = (pathname) => new URL(pathname.endsWith("/") ? pathname : `${pathname}/`, siteUrl).toString();
   const productCount = categories.reduce((total, category) => total + category.products.length, 0);
   const faq = getHomeFaq("en", { productCount, collectionCount: categories.length });
   const faqPayload = faq.map(({ question, answer }) => ({ question, answer, source_url: canonical("/") }));

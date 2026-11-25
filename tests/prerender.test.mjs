@@ -9,6 +9,7 @@ const routeByPath = new Map(manifest.routes.map((route) => [route.path, route]))
 const sitemap = await readFile(path.join(dist, "sitemap.xml"), "utf8");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 const sitemapUrlSet = new Set(sitemapUrls);
+const rss = await readFile(path.join(dist, "rss.xml"), "utf8");
 
 function htmlPath(route) {
   return route.path === "/"
@@ -70,6 +71,30 @@ test("sitemap contains exactly the indexable prerendered routes and no unverifie
   assert.ok(expectedUrls.some((url) => url.includes("/blog/") && url !== "https://www.dsmar.com/blog"));
   assert.ok(!sitemap.includes("/collections"), "GANI-sourced collection routes must stay out of Dongsheng sitemap");
   assert.ok(!sitemap.includes("/search"), "search must stay out of sitemap");
+});
+
+test("RSS feed is generated from published article data and discoverable from the homepage", async () => {
+  const blogRoutes = manifest.routes.filter((route) => /^\/blog\/[^/]+$/.test(route.path));
+  const homepage = await readFile(htmlPath({ path: "/" }), "utf8");
+
+  assert.match(homepage, /<link rel="alternate" type="application\/rss\+xml"[^>]*href="https:\/\/www\.dsmar\.com\/rss\.xml"\s*\/>/);
+  assert.equal([...rss.matchAll(/<item>/g)].length, blogRoutes.length, "feed entry count must match published article routes");
+  for (const route of blogRoutes) {
+    const url = `https://www.dsmar.com${route.path}/`;
+    assert.ok(rss.includes(`<guid isPermaLink="true">${url}</guid>`), `${route.path} must appear as a canonical feed item`);
+  }
+});
+
+test("homepage identity and site search structured data match visible site behavior", async () => {
+  const html = await readFile(htmlPath({ path: "/" }), "utf8");
+  const schemas = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
+    .map((match) => JSON.parse(match[1]));
+  const websiteSchema = schemas.find((schema) => schema["@type"] === "WebSite");
+
+  assert.match(html, /<title>DONGSHENG MARBLE \| Natural Marble Catalog &amp; Stone Collections<\/title>/);
+  assert.match(html, /<h1[^>]*>DONGSHENG MARBLE<\/h1>/);
+  assert.equal(websiteSchema?.potentialAction?.["@type"], "SearchAction");
+  assert.equal(websiteSchema?.potentialAction?.target?.urlTemplate, "https://www.dsmar.com/search?q={search_term_string}");
 });
 
 test("unknown routes use a noindex custom 404 page without a SPA catch-all rewrite", async () => {
@@ -142,7 +167,7 @@ test("homepage prerender includes real catalog links and matching inquiry guidan
   const webPageSchema = schemas.find((schema) => schema["@type"] === "WebPage");
 
   assert.ok(homeSchema, "homepage must include its visible FAQPage guidance");
-  assert.equal(webPageSchema?.name, "Natural Marble Catalog & Stone Collections | Dongsheng Marble");
+  assert.equal(webPageSchema?.name, "DONGSHENG MARBLE | Natural Marble Catalog & Stone Collections");
   assert.equal(webPageSchema?.dateModified, "2026-11-25");
   assert.match(html, /Information checked <time dateTime="2026-11-25">25 November 2026<\/time>/);
   assert.equal(homeSchema.mainEntity.length, 6);
@@ -266,6 +291,20 @@ test("organization structured data uses the published company identity and conta
   assert.equal(organizationScript.address.addressLocality, "Nan'an");
   assert.equal(organizationScript.contactPoint.email, "dongshengmarble@gmail.com");
   assert.equal(organizationScript.logo, "https://www.dsmar.com/logo-en.png");
+});
+
+test("article pages identify the publishing organization without inventing an individual author", async () => {
+  const route = routeByPath.get("/blog/natural-marble-care-guide");
+  assert.ok(route, "article route must be prerendered");
+  const html = await readFile(htmlPath(route), "utf8");
+  const schemas = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
+    .map((match) => JSON.parse(match[1]));
+  const article = schemas.find((schema) => schema["@type"] === "Article");
+
+  assert.match(html, /Published by <a href="\/about"[^>]*>DONGSHENG MARBLE<\/a>/);
+  assert.match(html, /<time dateTime="[0-9]{4}-[0-9]{2}-[0-9]{2}">/);
+  assert.equal(article?.author?.["@id"], "https://www.dsmar.com/#organization");
+  assert.equal(article?.publisher?.["@id"], "https://www.dsmar.com/#organization");
 });
 
 test("breadcrumbs use visible category, product, and article names instead of URL slugs", async () => {

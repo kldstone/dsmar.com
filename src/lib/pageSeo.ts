@@ -94,6 +94,14 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
       url: `${siteUrl}/`,
       inLanguage: lang === "zh" ? "zh-CN" : "en",
       publisher: { "@id": `${siteUrl}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${siteUrl}/search?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
     },
   ];
 
@@ -209,6 +217,7 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
         datePublished: post.date,
         inLanguage: lang === "zh" ? "zh-CN" : "en",
         mainEntityOfPage: canonical,
+        author: { "@id": `${siteUrl}/#organization` },
         publisher: { "@id": `${siteUrl}/#organization` },
       });
     }
@@ -277,7 +286,7 @@ export function resolvePageSeo(inputPath: string, lang: Lang = "en"): PageSeo {
   let image = "/optimized/brand-gallery/2025_12_05_14_26_IMG_0505.webp";
 
   if (pathname === "/") {
-    title = lang === "zh" ? "天然大理石产品目录与石材系列 | 东升大理石" : "Natural Marble Catalog & Stone Collections | Dongsheng Marble";
+    title = lang === "zh" ? "天然大理石产品目录与石材系列 | 东升大理石" : "DONGSHENG MARBLE | Natural Marble Catalog & Stone Collections";
     description = lang === "zh"
       ? "浏览东升大理石官网发布的天然石材产品目录、系列、企业资料与文章。具体材料、批次、尺寸、表面处理和供应情况请按项目询盘确认。"
       : "Browse Dongsheng Marble's published natural stone catalog, collections, company profile, and articles. Confirm the material, lot, dimensions, finish, and availability for your project.";
