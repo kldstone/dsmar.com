@@ -61,6 +61,17 @@ test("sitemap contains exactly the indexable prerendered routes and no unverifie
   assert.ok(!sitemap.includes("/search"), "search must stay out of sitemap");
 });
 
+test("unknown routes use a noindex custom 404 page without a SPA catch-all rewrite", async () => {
+  const html = await readFile(path.join(dist, "404.html"), "utf8");
+  const config = JSON.parse(await readFile(path.resolve("vercel.json"), "utf8"));
+
+  assert.match(html, /<title>Page Not Found \| Dongsheng Marble<\/title>/);
+  assert.match(html, /<meta name="robots" content="noindex, follow"\s*\/>/);
+  assert.match(html, /<h1[^>]*>Page not found<\/h1>/);
+  assert.doesNotMatch(html, /<link rel="canonical"/i, "a 404 response must not canonicalize to a nonexistent URL");
+  assert.equal(config.rewrites, undefined, "static prerendered routes should be served directly so Vercel can return real 404 responses");
+});
+
 test("LLM index is served as plain text and links only to published canonical pages", async () => {
   const llms = await readFile(path.join(dist, "llms.txt"), "utf8");
   const links = [...llms.matchAll(/\[[^\]]+\]\((https:\/\/www\.dsmar\.com\/[^)]+)\)/g)].map((match) => match[1]);

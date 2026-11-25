@@ -29,12 +29,6 @@
       "permanent": true
     }
   ],
-  "rewrites": [
-    {
-      "source": "/((?!api/|src/|@vite/|@react-refresh).*)",
-      "destination": "/index.html"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
