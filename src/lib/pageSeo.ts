@@ -64,9 +64,6 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
       alternateName: ["东升大理石"],
       legalName: "福建省东升石业股份有限公司",
       foundingDate: "2000",
-      sameAs: [
-        "https://www.linkedin.com/company/%E7%A6%8F%E5%BB%BA%E7%9C%81%E4%B8%9C%E5%8D%87%E7%9F%B3%E4%B8%9A%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8",
-      ],
       logo: absoluteUrl("/logo-en.png"),
       description: lang === "zh"
         ? "主营大理石荒料采购、批发及大板生产加工。"

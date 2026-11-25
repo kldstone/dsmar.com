@@ -133,6 +133,10 @@ test("homepage prerender includes real catalog links and matching inquiry guidan
   assert.match(html, /We list 40 published product records across 6 collections/);
   assert.match(html, /We count each product record once/);
   assert.match(html, /Source: Dongsheng company profile/);
+  assert.match(html, /<blockquote[^>]*>Our core business covers domestic and international marble block sourcing, wholesale, slab production, and processing\./);
+  assert.match(html, /<h3[^>]*>Project details you can include in an inquiry<\/h3>/);
+  assert.match(html, /These details are optional\. Share what you know/);
+  assert.match(html, /<ul[^>]*>[\s\S]*?<li>Project type, application, and stone or material<\/li>[\s\S]*?<\/ul>/);
 
   const catalogSchema = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
     .map((match) => JSON.parse(match[1]))
@@ -228,9 +232,7 @@ test("organization structured data uses the published company identity and conta
   assert.deepEqual(organizationScript.alternateName, ["东升大理石"]);
   assert.equal(organizationScript.legalName, "福建省东升石业股份有限公司");
   assert.equal(organizationScript.foundingDate, "2000");
-  assert.deepEqual(organizationScript.sameAs, [
-    "https://www.linkedin.com/company/%E7%A6%8F%E5%BB%BA%E7%9C%81%E4%B8%9C%E5%8D%87%E7%9F%B3%E4%B8%9A%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8",
-  ]);
+  assert.equal(organizationScript.sameAs, undefined, "unconfirmed third-party profiles must not be asserted as the same entity");
   assert.equal(organizationScript.telephone, "+86 139 5994 8672");
   assert.equal(organizationScript.email, "dongshengmarble@gmail.com");
   assert.equal(organizationScript.address.addressLocality, "Nan'an");

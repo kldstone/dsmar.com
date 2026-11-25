@@ -9,8 +9,8 @@ export const homeFaq = [
       en: "How can I request a quote for a catalog product?",
     },
     answer: {
-      zh: "打开产品详情页并提交询盘。可填写产品名称或页面链接、应用位置、尺寸、数量、交付目的地、需求时间和样品需求；这些项目均为选填。东升会根据材料和技术信息确认供货情况与正式报价。",
-      en: "Open a product page and send an inquiry with its name or link. You may include the application, dimensions, quantity, delivery destination, timeline, and sample needs; these details are optional. Dongsheng confirms availability and a formal quotation after reviewing the material and technical requirements.",
+      zh: "打开产品详情页并提交询盘。项目资料不完整也可以先联系；东升会根据具体材料和技术要求确认供货情况与正式报价。",
+      en: "Open a product page and send an inquiry. You can get in touch before every project detail is settled; Dongsheng confirms availability and a formal quotation against the specific material and technical requirements.",
     },
   },
   {

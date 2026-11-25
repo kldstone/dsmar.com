@@ -256,14 +256,49 @@ export default function Home() {
             </div>
             <div>
               <h3 className="text-[#111] text-[13px] font-bold mb-2">{lang === "zh" ? "公开业务介绍" : "Published business scope"}</h3>
-              <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? "官网列出的业务包括大理石荒料采购与批发、大板生产加工及销售。" : "The company profile lists marble block sourcing and wholesale, slab production and processing, and sales."}</p>
-              <Link to="/about" className="inline-block mt-2 text-[#111] text-[12px] font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">{lang === "zh" ? "来源：东升企业介绍" : "Source: Dongsheng company profile"}</Link>
+              <blockquote className="border-l-2 border-[#e60012] pl-3 text-[#111]/65 text-[13px] leading-[1.75]">
+                {lang === "zh"
+                  ? "公司主营国内外大理石荒料采购、批发及大板生产加工业务。"
+                  : "Our core business covers domestic and international marble block sourcing, wholesale, slab production, and processing."}
+                <cite className="mt-2 block text-[12px] not-italic">
+                  <Link to="/about" className="font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">
+                    {lang === "zh" ? "来源：东升企业介绍" : "Source: Dongsheng company profile"}
+                  </Link>
+                </cite>
+              </blockquote>
             </div>
             <div>
               <h3 className="text-[#111] text-[13px] font-bold mb-2">{lang === "zh" ? "官网产品目录" : "Website product catalog"}</h3>
               <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? `当前目录列有${categories.reduce((sum, category) => sum + category.products.length, 0)}个产品条目，分为${categories.length}个系列；具体规格和供应情况需逐项确认。` : `The current catalog lists ${categories.reduce((sum, category) => sum + category.products.length, 0)} product entries across ${categories.length} collections; specifications and availability require item-by-item confirmation.`}</p>
               <Link to="/catalog" className="inline-block mt-2 text-[#111] text-[12px] font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">{lang === "zh" ? "查看产品目录" : "View the catalog"}</Link>
             </div>
+          </div>
+          <div className="mb-8">
+            <h3 className="text-[#111] text-[13px] font-bold mb-2">
+              {lang === "zh" ? "询盘时可补充的项目资料" : "Project details you can include in an inquiry"}
+            </h3>
+            <p className="mb-3 text-[#111]/65 text-[13px] leading-[1.75]">
+              {lang === "zh"
+                ? "以下信息均为选填。提供已知资料有助于核对具体材料；尚未确定的项目可以留空。"
+                : "These details are optional. Share what you know to help review the specific material; you can leave undecided items blank."}
+            </p>
+            <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-2 list-disc pl-5 text-[#111]/65 text-[13px] leading-[1.75]">
+              {lang === "zh" ? (
+                <>
+                  <li>项目类型、应用位置和石材 / 材料</li>
+                  <li>尺寸、数量和需求时间</li>
+                  <li>目的港及样品需求</li>
+                  <li>可附参考图片或图纸</li>
+                </>
+              ) : (
+                <>
+                  <li>Project type, application, and stone or material</li>
+                  <li>Dimensions, quantity, and required timeline</li>
+                  <li>Destination port and sample requirements</li>
+                  <li>Reference images or drawings, if available</li>
+                </>
+              )}
+            </ul>
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             {getHomeFaq(lang, catalogSummary).map((item) => (
