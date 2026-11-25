@@ -27,7 +27,7 @@ function breadcrumbLabel(segment: string, lang: Lang, precedingSegments: string[
     about: { zh: "关于东升", en: "About Dongsheng" },
     contact: { zh: "联系我们", en: "Contact" },
     faq: { zh: "常见问题", en: "FAQ" },
-    catalog: { zh: "大理石目录", en: "Marble Catalog" },
+    catalog: { zh: "石材目录", en: "Stone Catalog" },
     blog: { zh: "资讯", en: "Articles" },
     cases: { zh: "石材图集", en: "Stone Gallery" },
   };
@@ -62,6 +62,7 @@ function makeStructuredData(pathname: string, lang: Lang, image: string) {
       "@id": `${siteUrl}/#organization`,
       name: brand,
       alternateName: "东升大理石",
+      logo: absoluteUrl("/logo-en.png"),
       description: lang === "zh"
         ? "主营大理石荒料采购、批发及大板生产加工。"
         : "Marble block sourcing and wholesale, plus marble slab production and processing.",
@@ -214,7 +215,7 @@ function makeStructuredData(pathname: string, lang: Lang, image: string) {
     schemas.push({
       "@context": "https://schema.org",
       "@type": "ItemList",
-      name: lang === "zh" ? "东升大理石产品系列" : "Dongsheng Marble Collections",
+      name: lang === "zh" ? "东升石材产品系列" : "Dongsheng Stone Collections",
       itemListElement: categories.map((category, index) => ({
         "@type": "ListItem",
         position: index + 1,
@@ -258,7 +259,7 @@ export function resolvePageSeo(inputPath: string, lang: Lang = "en"): PageSeo {
   let image = "/optimized/brand-gallery/2025_12_05_14_26_IMG_0505.webp";
 
   if (pathname === "/") {
-    title = lang === "zh" ? "天然大理石与石材产品目录 | 东升大理石" : "Natural Marble Catalog and Stone Products | Dongsheng Marble";
+    title = lang === "zh" ? "天然石材产品目录 | 东升大理石" : "Natural Stone Product Catalog | Dongsheng Marble";
     description = lang === "zh" ? "浏览东升大理石产品分类、天然石材图集与企业信息，查看产品图片并提交项目询盘。" : "Browse Dongsheng Marble product categories, natural stone galleries, company information, and project inquiry options.";
   } else if (pathname === "/about") {
     title = lang === "zh" ? "关于东升大理石 | 企业介绍" : "About Dongsheng Marble | Company Profile";
@@ -273,7 +274,7 @@ export function resolvePageSeo(inputPath: string, lang: Lang = "en"): PageSeo {
     title = lang === "zh" ? "石材资讯与文章 | 东升大理石" : "Stone Articles and News | Dongsheng Marble";
     description = lang === "zh" ? "浏览东升大理石发布的石材知识、行业资讯与公司文章。" : "Browse stone knowledge, industry updates, and company articles published by Dongsheng Marble.";
   } else if (pathname === "/catalog") {
-    title = lang === "zh" ? "天然大理石产品目录 | 东升大理石" : "Natural Marble Product Catalog | Dongsheng Marble";
+    title = lang === "zh" ? "按色系浏览天然石材 | 东升大理石" : "Natural Stone Collections by Color | Dongsheng Marble";
     description = lang === "zh" ? "按色系浏览东升大理石目录中的产品分类与产品图片。" : "Browse Dongsheng Marble product categories and images by color collection.";
   } else if (pathname === "/cases") {
     title = lang === "zh" ? "工程案例图集 | 东升大理石" : "Stone Project Case Gallery | Dongsheng Marble";
@@ -286,12 +287,12 @@ export function resolvePageSeo(inputPath: string, lang: Lang = "en"): PageSeo {
       const name = getTranslation(lang, `catalog_product_${product.id}_name`);
       const tagline = getTranslation(lang, `catalog_product_${product.id}_tagline`);
       const categoryName = getTranslation(lang, `catalog_category_${category.key}_name`);
-      title = `${name} ${lang === "zh" ? "天然大理石" : "Marble"} | ${brand}`;
+      title = `${name} ${lang === "zh" ? "天然石材" : "Stone"} | ${brand}`;
       description = `${name} — ${tagline} ${lang === "zh" ? `东升大理石 ${categoryName}产品。` : `A ${categoryName.toLowerCase()} catalog product from Dongsheng Marble.`}`;
       image = product.cover;
     } else if (category) {
       const name = getTranslation(lang, `catalog_category_${category.key}_name`);
-      title = `${name} ${lang === "zh" ? "大理石产品" : "Marble Collection"} | ${brand}`;
+      title = `${name} ${lang === "zh" ? "石材系列" : "Stone Collection"} | ${brand}`;
       description = `${getTranslation(lang, `catalog_category_${category.key}_desc`)} ${lang === "zh" ? "浏览东升大理石产品图片与详情。" : "Browse product images and details from Dongsheng Marble."}`;
       image = category.heroImg;
     } else {

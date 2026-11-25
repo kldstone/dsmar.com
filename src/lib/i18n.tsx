@@ -81,9 +81,9 @@ const translations: Record<string, { zh: string; en: string }> = {
   "home_cta_desc": { zh: "提交材料和项目需求，我们会根据具体信息确认产品与报价。", en: "Share your material and project requirements; product availability and quotations are confirmed for each inquiry." },
   "home_cta_inquiry": { zh: "在线询盘", en: "Send an Inquiry" },
   "home_cta_call": { zh: "电话咨询", en: "Call Us" },
-  "home_catalog_title": { zh: "矿山直供 · 品种系列", en: "QUARRY DIRECT · MARBLE COLLECTIONS" },
+  "home_catalog_title": { zh: "矿山直供 · 石材系列", en: "QUARRY DIRECT · STONE COLLECTIONS" },
   "home_catalog_desc": { zh: "按色系浏览东升大理石全系列品种，源自全球优质矿山", en: "Browse Dongsheng Marble collections by color, sourced from premium quarries worldwide." },
-  "home_catalog_card_label": { zh: "品种系列", en: "Marble Collection" },
+  "home_catalog_card_label": { zh: "石材系列", en: "Stone Collection" },
   "home_catalog_count": { zh: "共 {count} 个品种", en: "{count} Varieties" },
   "home_catalog_view_all": { zh: "查看全部品种", en: "View All Collections" },
 
@@ -258,9 +258,9 @@ const translations: Record<string, { zh: string; en: string }> = {
   "contact_sending": { zh: "发送中...", en: "Sending..." },
   "contact_error_desc": { zh: "提交失败，请稍后重试或直接拨打电话联系我们。", en: "Submission failed. Please try again later or call us directly." },
 
-  "catalog_title": { zh: "矿山直供 · 品种展示", en: "QUARRY DIRECT · MARBLE COLLECTIONS" },
+  "catalog_title": { zh: "矿山直供 · 石材展示", en: "QUARRY DIRECT · STONE COLLECTIONS" },
   "catalog_desc": { zh: "按色系浏览东升大理石全系列品种", en: "Browse the complete Dongsheng Marble collection by color." },
-  "catalog_card_label": { zh: "品种系列", en: "Marble Collection" },
+  "catalog_card_label": { zh: "石材系列", en: "Stone Collection" },
   "catalog_product_count": { zh: "共 {count} 件产品", en: "{count} Products" },
   "catalog_category_not_found": { zh: "未找到该分类", en: "CATEGORY NOT FOUND" },
   "catalog_back_to_categories": { zh: "返回品种列表", en: "Back to Collections" },

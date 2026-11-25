@@ -222,11 +222,12 @@ test("organization structured data uses the published company identity and conta
   assert.equal(organizationScript.email, "dongshengmarble@gmail.com");
   assert.equal(organizationScript.address.addressLocality, "Nan'an");
   assert.equal(organizationScript.contactPoint.email, "dongshengmarble@gmail.com");
+  assert.equal(organizationScript.logo, "https://www.dsmar.com/logo-en.png");
 });
 
 test("breadcrumbs use visible category, product, and article names instead of URL slugs", async () => {
   const cases = [
-    ["/catalog/white-series/ds-baina", ["Marble Catalog", "WHITE SERIES", "Bena White"]],
+    ["/catalog/white-series/ds-baina", ["Stone Catalog", "WHITE SERIES", "Bena White"]],
     ["/blog/natural-marble-care-guide", ["Articles", "Daily Natural Marble Care Guide"]],
     ["/cases/ziqi-donglai", ["Stone Gallery", "Ziqi Donglai"]],
   ];
