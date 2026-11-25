@@ -119,6 +119,18 @@ test("homepage prerender includes real catalog links and matching inquiry guidan
   assert.equal(catalogSchema?.itemListElement.length, 6, "homepage ItemList must match its visible catalog collection links");
 });
 
+test("homepage hero image links have descriptive accessible names", async () => {
+  const html = await readFile(htmlPath(routeByPath.get("/")), "utf8");
+  const heroImageTags = [...html.matchAll(/<a\b(?=[^>]*\bhref="\/(?:about|cases|catalog)")[^>]*>\s*<picture[\s\S]*?<img\b[^>]*>/g)]
+    .slice(0, 5)
+    .map((match) => match[0].match(/<img\b[^>]*>/)?.[0] ?? "");
+
+  assert.equal(heroImageTags.length, 5, "all five homepage hero links must be present in initial HTML");
+  for (const [index, imgTag] of heroImageTags.entries()) {
+    assert.ok(attribute(imgTag, "alt").trim().length > 10, `hero image ${index + 1} must describe its linked destination`);
+  }
+});
+
 test("product and article pages include the matching structured data type", async () => {
   const productRoutes = manifest.routes.filter((route) => /^\/catalog\/[^/]+\/[^/]+$/.test(route.path));
   const articleRoutes = manifest.routes.filter((route) => /^\/blog\/[^/]+$/.test(route.path));

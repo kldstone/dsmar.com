@@ -8,11 +8,11 @@ import categories from "@/data/catalog";
 import LazyCatalogSection from "./CatalogSection";
 
 const slides = [
-  { img: "/hero-slides/desktop-hero-1.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-1.webp", titEn: "DONGSHENG MARBLE", titleKey: "home_slide_heritage_title", descriptionKey: "home_slide_heritage_desc", href: "/about" },
-  { img: "/optimized/project-cases/ziqi-donglai.webp", mobileImg: "/optimized/project-cases/ziqi-donglai.webp", titEn: "PROJECT CASES", titleKey: "home_project_cases_title", descriptionKey: "home_project_cases_desc", href: "/cases" },
-  { img: "/hero-slides/hero-desktop-2.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-3.webp", titEn: "GLOBAL SOURCING", titleKey: "home_slide_sourcing_title", descriptionKey: "home_slide_sourcing_desc", href: "/catalog" },
-  { img: "/hero-slides/hero-desktop-3.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-4.webp", titEn: "COMPLETE CHAIN", titleKey: "home_slide_chain_title", descriptionKey: "home_slide_chain_desc", href: "/catalog" },
-  { img: "/hero-slides/hero-desktop-4.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-5.webp", titEn: "TOP 100 TAXPAYER", titleKey: "home_slide_taxpayer_title", descriptionKey: "home_slide_taxpayer_desc", href: "/about" },
+  { img: "/hero-slides/desktop-hero-1.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-1.webp", altZh: "东升石材城建筑与周边街景航拍", altEn: "Aerial view of the Dongsheng Stone City building and surrounding streets", titEn: "DONGSHENG MARBLE", titleKey: "home_slide_heritage_title", descriptionKey: "home_slide_heritage_desc", href: "/about" },
+  { img: "/optimized/project-cases/ziqi-donglai.webp", mobileImg: "/optimized/project-cases/ziqi-donglai.webp", altZh: "东来紫气项目室内空间中的纹理石材背景墙", altEn: "Veined stone feature wall in the Ziqi Donglai project interior", titEn: "PROJECT CASES", titleKey: "home_project_cases_title", descriptionKey: "home_project_cases_desc", href: "/cases" },
+  { img: "/hero-slides/hero-desktop-2.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-3.webp", altZh: "东升展厅内陈列的天然石材大板", altEn: "Natural stone slabs displayed in the Dongsheng showroom", titEn: "GLOBAL SOURCING", titleKey: "home_slide_sourcing_title", descriptionKey: "home_slide_sourcing_desc", href: "/catalog" },
+  { img: "/hero-slides/hero-desktop-3.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-4.webp", altZh: "室内仓储空间中成排存放的石材大板", altEn: "Rows of stone slabs stored inside a warehouse", titEn: "COMPLETE CHAIN", titleKey: "home_slide_chain_title", descriptionKey: "home_slide_chain_desc", href: "/catalog" },
+  { img: "/hero-slides/hero-desktop-4.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-5.webp", altZh: "东升仓库内包装待运的石材大板", altEn: "Packaged stone slabs ready for transport in a Dongsheng warehouse", titEn: "TOP 100 TAXPAYER", titleKey: "home_slide_taxpayer_title", descriptionKey: "home_slide_taxpayer_desc", href: "/about" },
 ];
 
 export default function Home() {
@@ -58,7 +58,7 @@ export default function Home() {
                 <source media="(max-width: 767px)" srcSet={slide.mobileImg} />
                 <img
                   {...responsiveImage(slide.img)}
-                  alt=""
+                  alt={lang === "zh" ? slide.altZh : slide.altEn}
                   loading="eager"
                   fetchPriority={index === 0 ? "high" : "auto"}
                   decoding="async"
