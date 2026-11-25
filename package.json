@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/prerender.mjs",
+    "build": "vite build && node scripts/prerender.mjs && node --test tests/prerender.test.mjs",
     "typecheck": "tsc -b",
     "lint": "eslint .",
+    "test:prerender": "node --test tests/prerender.test.mjs",
     "preview": "vite preview",
     "optimize:web-images": "node scripts/optimize-web-images.mjs"
   },
