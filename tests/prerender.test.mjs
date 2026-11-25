@@ -112,16 +112,19 @@ test("homepage prerender includes real catalog links and matching inquiry guidan
     .find((schema) => schema["@type"] === "FAQPage");
 
   assert.ok(homeSchema, "homepage must include its visible FAQPage guidance");
-  assert.equal(homeSchema.mainEntity.length, 3);
+  assert.equal(homeSchema.mainEntity.length, 4);
   for (const collection of ["white-series", "beige-series", "grey-series", "dark-series", "color-series", "pattern-series"]) {
     assert.match(html, new RegExp(`href="/catalog/${collection}"`), `${collection} must be linked in initial HTML`);
   }
   assert.match(html, /How can I request a quote for a catalog product\?/);
   assert.match(html, /Do product images confirm dimensions, finish, and stock\?/);
   assert.match(html, /Can I inquire if I am not sure about the material or dimensions\?/);
+  assert.match(html, /How many products are listed in Dongsheng(?:&#39;|')s online catalog\?/);
+  assert.match(html, /<h3[^>]*>How can I request a quote for a catalog product\?<\/h3>/);
   assert.match(html, /They do not by themselves confirm a specific lot, dimensions, finish, or current stock\./);
   assert.match(html, /company profile says its stone business began in 1992/);
   assert.match(html, /The current catalog lists 40 product entries across 6 collections/);
+  assert.match(html, /This count comes from the catalog data used to render the website/);
   assert.match(html, /Source: Dongsheng company profile/);
 
   const catalogSchema = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]

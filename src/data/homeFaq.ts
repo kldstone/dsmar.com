@@ -33,6 +33,14 @@ export const homeFaq = [
   },
 ] as const;
 
-export function getHomeFaq(lang: Lang) {
-  return homeFaq.map(({ question, answer }) => ({ question: question[lang], answer: answer[lang] }));
+export function getHomeFaq(lang: Lang, catalog: { productCount: number; collectionCount: number }) {
+  return [
+    ...homeFaq.map(({ question, answer }) => ({ question: question[lang], answer: answer[lang] })),
+    {
+      question: lang === "zh" ? "东升官网产品目录目前列出多少个产品？" : "How many products are listed in Dongsheng's online catalog?",
+      answer: lang === "zh"
+        ? `官网目录目前列出 ${catalog.productCount} 个产品条目，分为 ${catalog.collectionCount} 个系列。数量按网站产品目录数据中的已发布条目计算，用于说明网站当前展示范围；这不代表相同数量的现货、独立石种数量或某款产品的实时供应情况。具体批次、尺寸、表面处理和库存请在询盘时逐项确认。`
+        : `The current catalog lists ${catalog.productCount} product entries across ${catalog.collectionCount} collections. This count comes from the catalog data used to render the website's collection and product pages; it describes published listings, not stock levels or confirmed availability. Product photos also do not establish dimensions, finish, or lot. Send an inquiry to verify the current details of a specific item.`,
+    },
+  ];
 }

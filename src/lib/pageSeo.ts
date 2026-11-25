@@ -226,7 +226,10 @@ function makeStructuredData(pathname: string, lang: Lang, image: string) {
     schemas.push({
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: getHomeFaq(lang).map((item) => ({
+      mainEntity: getHomeFaq(lang, {
+        productCount: categories.reduce((sum, category) => sum + category.products.length, 0),
+        collectionCount: categories.length,
+      }).map((item) => ({
         "@type": "Question",
         name: item.question,
         acceptedAnswer: { "@type": "Answer", text: item.answer },
