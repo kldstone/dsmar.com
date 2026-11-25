@@ -170,6 +170,18 @@ test("breadcrumbs use visible category, product, and article names instead of UR
   }
 });
 
+test("marble care article links to authoritative guidance without unsupported company claims or fixed schedules", async () => {
+  const route = routeByPath.get("/blog/natural-marble-care-guide");
+  assert.ok(route, "marble care article must be prerendered");
+  const html = await readFile(htmlPath(route), "utf8");
+
+  assert.match(html, /naturalstoneinstitute\.org\/consumers\/care\//i);
+  assert.match(html, /naturalstoneinstitute\.org\/consumers\/sealing-stone\//i);
+  assert.match(html, /does not make stone stain-proof/i);
+  assert.doesNotMatch(html, /Dongsheng slabs are professionally protected before delivery/i);
+  assert.doesNotMatch(html, /every 6 to 12 months|every 3 to 6 months/i);
+});
+
 test("project case index is discoverable and uses only real case data", async () => {
   const route = routeByPath.get("/cases");
   assert.ok(route, "case index must be prerendered");
