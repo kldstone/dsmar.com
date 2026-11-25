@@ -301,7 +301,7 @@ test("article pages identify the publishing organization without inventing an in
     .map((match) => JSON.parse(match[1]));
   const article = schemas.find((schema) => schema["@type"] === "Article");
 
-  assert.match(html, /Published by <a href="\/about"[^>]*>DONGSHENG MARBLE<\/a>/);
+  assert.match(html, /Published by <a[^>]*href="\/about"[^>]*>DONGSHENG MARBLE<\/a>/);
   assert.match(html, /<time dateTime="[0-9]{4}-[0-9]{2}-[0-9]{2}">/);
   assert.equal(article?.author?.["@id"], "https://www.dsmar.com/#organization");
   assert.equal(article?.publisher?.["@id"], "https://www.dsmar.com/#organization");
