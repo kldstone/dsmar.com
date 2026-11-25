@@ -277,8 +277,10 @@ export function resolvePageSeo(inputPath: string, lang: Lang = "en"): PageSeo {
   let image = "/optimized/brand-gallery/2025_12_05_14_26_IMG_0505.webp";
 
   if (pathname === "/") {
-    title = lang === "zh" ? "天然石材产品目录 | 东升大理石" : "Natural Stone Product Catalog | Dongsheng Marble";
-    description = lang === "zh" ? "浏览东升大理石产品分类、天然石材图集与企业信息，查看产品图片并提交项目询盘。" : "Browse Dongsheng Marble product categories, natural stone galleries, company information, and project inquiry options.";
+    title = lang === "zh" ? "天然大理石产品目录与石材系列 | 东升大理石" : "Natural Marble Catalog & Stone Collections | Dongsheng Marble";
+    description = lang === "zh"
+      ? "浏览东升大理石官网发布的天然石材产品目录、系列、企业资料与文章。具体材料、批次、尺寸、表面处理和供应情况请按项目询盘确认。"
+      : "Browse Dongsheng Marble's published natural stone catalog, collections, company profile, and articles. Confirm the material, lot, dimensions, finish, and availability for your project.";
   } else if (pathname === "/about") {
     title = lang === "zh" ? "关于东升大理石 | 企业介绍" : "About Dongsheng Marble | Company Profile";
     description = lang === "zh" ? "查看东升大理石官网发布的企业介绍、业务信息与发展历程。" : "Read the company profile, business information, and history published by Dongsheng Marble.";

@@ -98,6 +98,30 @@ test("LLM index is served as plain text and links only to published canonical pa
   assert.match(llms, /availability, dimensions, origin, finish, pricing/i, "the index must identify details that require item-level verification");
 });
 
+test("AI discovery files and full LLM text are generated from the published site data", async () => {
+  const aiText = await readFile(path.join(dist, ".well-known", "ai.txt"), "utf8");
+  const summary = JSON.parse(await readFile(path.join(dist, "ai", "summary.json"), "utf8"));
+  const faq = JSON.parse(await readFile(path.join(dist, "ai", "faq.json"), "utf8"));
+  const service = JSON.parse(await readFile(path.join(dist, "ai", "service.json"), "utf8"));
+  const fullText = await readFile(path.join(dist, "llms-full.txt"), "utf8");
+
+  assert.match(aiText, /https:\/\/www\.dsmar\.com\/ai\/summary\.json/);
+  assert.match(aiText, /Do not infer geological classification, origin, dimensions, finish, price, stock, or supply/);
+  assert.equal(summary.name, "Dongsheng Marble");
+  assert.equal(summary.legalName, "福建省东升石业股份有限公司");
+  assert.equal(summary.foundingDate, "2000");
+  assert.equal(summary.product_record_count, manifest.routes.filter((route) => /^\/catalog\/[^/]+\/[^/]+$/.test(route.path)).length);
+  assert.equal(faq.faqs.length, 6);
+  assert.ok(faq.faqs.every((item) => item.source_url === "https://www.dsmar.com/"));
+  assert.ok(faq.faqs.every((item) => item.question.length >= 10 && item.answer.length >= 20));
+  assert.ok(service.capabilities.length > 0);
+  assert.match(fullText, /- Bena White \(ds-baina\):/);
+  assert.match(fullText, /Daily Natural Marble Care Guide/);
+  assert.match(fullText, /naturalstoneinstitute\.org\/consumers\/care\//);
+  assert.match(fullText, /does not publish item-level dimensions, finish, stock, origin, or price/);
+  assert.doesNotMatch(fullText, /<\/?(?:p|h[1-6]|a|div)\b/i, "full LLM text must not contain HTML markup");
+});
+
 test("homepage and inquiry pages do not promise an unverified response deadline", async () => {
   for (const pathname of ["/", "/contact"]) {
     const html = await readFile(htmlPath(routeByPath.get(pathname)), "utf8");
@@ -114,7 +138,7 @@ test("homepage prerender includes real catalog links and matching inquiry guidan
   const webPageSchema = schemas.find((schema) => schema["@type"] === "WebPage");
 
   assert.ok(homeSchema, "homepage must include its visible FAQPage guidance");
-  assert.equal(webPageSchema?.name, "Natural Stone Product Catalog | Dongsheng Marble");
+  assert.equal(webPageSchema?.name, "Natural Marble Catalog & Stone Collections | Dongsheng Marble");
   assert.equal(webPageSchema?.dateModified, "2026-11-25");
   assert.match(html, /Information checked <time dateTime="2026-11-25">25 November 2026<\/time>/);
   assert.equal(homeSchema.mainEntity.length, 6);
