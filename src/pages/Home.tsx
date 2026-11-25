@@ -21,6 +21,10 @@ export default function Home() {
   const [isPaused, setIsPaused] = useState(false);
   const [isFilmPlaying, setIsFilmPlaying] = useState(false);
   const currentSlide = slides[active];
+  const catalogSummary = {
+    productCount: categories.reduce((sum, category) => sum + category.products.length, 0),
+    collectionCount: categories.length,
+  };
 
   const next = useCallback(() => setActive((s) => (s + 1) % slides.length), []);
   const prev = useCallback(() => setActive((s) => (s - 1 + slides.length) % slides.length), []);
@@ -256,11 +260,11 @@ export default function Home() {
             </div>
           </div>
           <div className="grid md:grid-cols-2 gap-4">
-            {getHomeFaq(lang).map((item) => (
+            {getHomeFaq(lang, catalogSummary).map((item) => (
               <details key={item.question} className="group bg-white border border-black/8 p-5 md:p-6">
-                <summary className="cursor-pointer list-none pr-8 text-[#111] text-[15px] font-bold leading-relaxed marker:hidden [&::-webkit-details-marker]:hidden">
-                  <span>{item.question}</span>
-                  <span aria-hidden="true" className="float-right -mr-7 text-[#e60012] text-xl leading-none group-open:rotate-45 transition-transform">+</span>
+                <summary className="relative cursor-pointer list-none pr-8 text-[#111] leading-relaxed marker:hidden [&::-webkit-details-marker]:hidden">
+                  <h3 className="m-0 pr-5 text-[15px] font-bold">{item.question}</h3>
+                  <span aria-hidden="true" className="absolute right-0 top-0 text-[#e60012] text-xl leading-none group-open:rotate-45 transition-transform">+</span>
                 </summary>
                 <p className="mt-4 text-[#111]/65 text-[14px] leading-[1.8]">{item.answer}</p>
               </details>
