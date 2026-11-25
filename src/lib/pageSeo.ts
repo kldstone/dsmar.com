@@ -1,6 +1,7 @@
 import categories from "@/data/catalog";
 import { blogPosts } from "@/content/blog-cn";
 import { faqData } from "@/data/faq";
+import { getHomeFaq } from "@/data/homeFaq";
 import { getProjectCase, projectCases } from "@/data/projectCases";
 import { getTranslation } from "@/lib/i18n";
 import type { Lang } from "@/lib/i18n";
@@ -206,6 +207,29 @@ function makeStructuredData(pathname: string, lang: Lang, image: string) {
         name: getTranslation(lang, item.questionKey),
         acceptedAnswer: { "@type": "Answer", text: getTranslation(lang, item.answerKey) },
       }))),
+    });
+  }
+
+  if (pathname === "/") {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: lang === "zh" ? "东升大理石产品系列" : "Dongsheng Marble Collections",
+      itemListElement: categories.map((category, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: getTranslation(lang, `catalog_category_${category.key}_name`),
+        url: pageUrl(`/catalog/${category.key}`),
+      })),
+    });
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: getHomeFaq(lang).map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer },
+      })),
     });
   }
 

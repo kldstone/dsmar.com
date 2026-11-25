@@ -94,6 +94,31 @@ test("homepage and inquiry pages do not promise an unverified response deadline"
   }
 });
 
+test("homepage prerender includes real catalog links and matching inquiry guidance", async () => {
+  const html = await readFile(htmlPath(routeByPath.get("/")), "utf8");
+  const homeSchema = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
+    .map((match) => JSON.parse(match[1]))
+    .find((schema) => schema["@type"] === "FAQPage");
+
+  assert.ok(homeSchema, "homepage must include its visible FAQPage guidance");
+  assert.equal(homeSchema.mainEntity.length, 3);
+  for (const collection of ["white-series", "beige-series", "grey-series", "dark-series", "color-series", "pattern-series"]) {
+    assert.match(html, new RegExp(`href="/catalog/${collection}"`), `${collection} must be linked in initial HTML`);
+  }
+  assert.match(html, /How can I request a quote for a catalog product\?/);
+  assert.match(html, /Do product images confirm dimensions, finish, and stock\?/);
+  assert.match(html, /Can I inquire if I am not sure about the material or dimensions\?/);
+  assert.match(html, /They do not by themselves confirm a specific lot, dimensions, finish, or current stock\./);
+  assert.match(html, /company profile says its stone business began in 1992/);
+  assert.match(html, /The current catalog lists 40 product entries across 6 collections/);
+  assert.match(html, /Source: Dongsheng company profile/);
+
+  const catalogSchema = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
+    .map((match) => JSON.parse(match[1]))
+    .find((schema) => schema["@type"] === "ItemList");
+  assert.equal(catalogSchema?.itemListElement.length, 6, "homepage ItemList must match its visible catalog collection links");
+});
+
 test("product and article pages include the matching structured data type", async () => {
   const productRoutes = manifest.routes.filter((route) => /^\/catalog\/[^/]+\/[^/]+$/.test(route.path));
   const articleRoutes = manifest.routes.filter((route) => /^\/blog\/[^/]+$/.test(route.path));

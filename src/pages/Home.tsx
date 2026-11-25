@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { optimizedImage, responsiveImage } from "@/lib/images";
 import { useLang } from "@/lib/i18n";
 import { projectCases } from "@/data/projectCases";
+import { getHomeFaq } from "@/data/homeFaq";
+import categories from "@/data/catalog";
 import LazyCatalogSection from "./CatalogSection";
 
 const slides = [
@@ -224,6 +226,49 @@ export default function Home() {
             <div className="overflow-hidden img-hover">
               <img src={optimizedImage("/brand-gallery/home-stone-city.jpg")} alt={t("home_strength_image_alt")} className="w-full aspect-[4/3] object-cover" loading="lazy" decoding="async" />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Product and inquiry guidance */}
+      <section className="bg-[#f7f7f5] py-16 px-6">
+        <div className="max-w-[980px] mx-auto">
+          <div className="max-w-[680px] mb-8">
+            <span className="text-[#e60012] text-[11px] font-bold tracking-[0.20em] uppercase">{lang === "zh" ? "产品与询盘" : "PRODUCTS & INQUIRIES"}</span>
+            <h2 className="text-[#111] text-[clamp(1.5rem,3vw,2rem)] font-black tracking-[0.02em] mt-3 mb-3">{lang === "zh" ? "选材和询价前，先了解这些信息" : "What to know before selecting and quoting stone"}</h2>
+            <p className="text-[#111]/60 text-[15px] leading-relaxed">{lang === "zh" ? "官网目录展示产品名称和图片；具体材料与项目要求需要在询盘中进一步确认。" : "The website catalog presents product names and images; material and project requirements are confirmed through inquiry."}</p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-5 border-y border-black/10 py-6 mb-8">
+            <div>
+              <h3 className="text-[#111] text-[13px] font-bold mb-2">{lang === "zh" ? "企业资料" : "Company profile"}</h3>
+              <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? "东升企业介绍称，石材事业始于1992年，公司于2000年成立，位于福建南安水头。" : "Dongsheng's company profile says its stone business began in 1992, the company was established in 2000, and its headquarters are in Shuitou, Nan'an, Fujian."}</p>
+              <Link to="/about" className="inline-block mt-2 text-[#111] text-[12px] font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">{lang === "zh" ? "查看企业介绍" : "Read the company profile"}</Link>
+            </div>
+            <div>
+              <h3 className="text-[#111] text-[13px] font-bold mb-2">{lang === "zh" ? "公开业务介绍" : "Published business scope"}</h3>
+              <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? "官网列出的业务包括大理石荒料采购与批发、大板生产加工及销售。" : "The company profile lists marble block sourcing and wholesale, slab production and processing, and sales."}</p>
+              <Link to="/about" className="inline-block mt-2 text-[#111] text-[12px] font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">{lang === "zh" ? "来源：东升企业介绍" : "Source: Dongsheng company profile"}</Link>
+            </div>
+            <div>
+              <h3 className="text-[#111] text-[13px] font-bold mb-2">{lang === "zh" ? "官网产品目录" : "Website product catalog"}</h3>
+              <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? `当前目录列有${categories.reduce((sum, category) => sum + category.products.length, 0)}个产品条目，分为${categories.length}个系列；具体规格和供应情况需逐项确认。` : `The current catalog lists ${categories.reduce((sum, category) => sum + category.products.length, 0)} product entries across ${categories.length} collections; specifications and availability require item-by-item confirmation.`}</p>
+              <Link to="/catalog" className="inline-block mt-2 text-[#111] text-[12px] font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">{lang === "zh" ? "查看产品目录" : "View the catalog"}</Link>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            {getHomeFaq(lang).map((item) => (
+              <details key={item.question} className="group bg-white border border-black/8 p-5 md:p-6">
+                <summary className="cursor-pointer list-none pr-8 text-[#111] text-[15px] font-bold leading-relaxed marker:hidden [&::-webkit-details-marker]:hidden">
+                  <span>{item.question}</span>
+                  <span aria-hidden="true" className="float-right -mr-7 text-[#e60012] text-xl leading-none group-open:rotate-45 transition-transform">+</span>
+                </summary>
+                <p className="mt-4 text-[#111]/65 text-[14px] leading-[1.8]">{item.answer}</p>
+              </details>
+            ))}
+          </div>
+          <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-[13px] font-semibold">
+            <Link to="/catalog" className="text-[#111] border-b border-[#e60012] pb-1 hover:text-[#e60012]">{lang === "zh" ? "浏览产品目录" : "Browse the product catalog"}</Link>
+            <Link to="/contact" className="text-[#111] border-b border-[#e60012] pb-1 hover:text-[#e60012]">{lang === "zh" ? "提交项目询盘" : "Send a project inquiry"}</Link>
           </div>
         </div>
       </section>
