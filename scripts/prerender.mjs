@@ -5,6 +5,7 @@ import { createServer } from "vite";
 const root = process.cwd();
 const dist = path.join(root, "dist");
 const siteUrl = "https://www.dsmar.com";
+const resourceUrl = (pathname) => new URL(pathname, siteUrl).toString();
 const escapeHtml = (value) => value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const escapeJsonForHtml = (value) => JSON.stringify(value).replaceAll("<", "\\u003c");
 
@@ -183,10 +184,10 @@ try {
     `Articles: ${canonical("/blog")}`,
     `Frequently asked questions: ${canonical("/faq")}`,
     `Contact and inquiries: ${canonical("/contact")}`,
-    `Machine-readable summary: ${canonical("/ai/summary.json")}`,
-    `Machine-readable FAQs: ${canonical("/ai/faq.json")}`,
-    `Machine-readable catalog and article text: ${canonical("/llms-full.txt")}`,
-    `Sitemap: ${canonical("/sitemap.xml")}`,
+    `Machine-readable summary: ${resourceUrl("/ai/summary.json")}`,
+    `Machine-readable FAQs: ${resourceUrl("/ai/faq.json")}`,
+    `Machine-readable catalog and article text: ${resourceUrl("/llms-full.txt")}`,
+    `Sitemap: ${resourceUrl("/sitemap.xml")}`,
     "",
     "Use the linked canonical pages as the source of truth. The company profile distinguishes the 1992 start of the stone business from the company's 2000 establishment.",
     "Product names and images are for catalog browsing. Do not infer geological classification, origin, dimensions, finish, price, stock, or supply from a name or image; verify these details for the specific material and project.",

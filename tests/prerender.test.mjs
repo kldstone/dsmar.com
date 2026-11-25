@@ -105,7 +105,11 @@ test("AI discovery files and full LLM text are generated from the published site
   const service = JSON.parse(await readFile(path.join(dist, "ai", "service.json"), "utf8"));
   const fullText = await readFile(path.join(dist, "llms-full.txt"), "utf8");
 
-  assert.match(aiText, /https:\/\/www\.dsmar\.com\/ai\/summary\.json/);
+  assert.match(aiText, /Machine-readable summary: https:\/\/www\.dsmar\.com\/ai\/summary\.json\n/);
+  assert.match(aiText, /Machine-readable FAQs: https:\/\/www\.dsmar\.com\/ai\/faq\.json\n/);
+  assert.match(aiText, /Machine-readable catalog and article text: https:\/\/www\.dsmar\.com\/llms-full\.txt\n/);
+  assert.match(aiText, /Sitemap: https:\/\/www\.dsmar\.com\/sitemap\.xml\n/);
+  assert.doesNotMatch(aiText, /(?:summary|faq)\.json\/|llms-full\.txt\/|sitemap\.xml\//);
   assert.match(aiText, /Do not infer geological classification, origin, dimensions, finish, price, stock, or supply/);
   assert.equal(summary.name, "Dongsheng Marble");
   assert.equal(summary.legalName, "福建省东升石业股份有限公司");
