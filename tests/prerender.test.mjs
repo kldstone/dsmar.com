@@ -217,7 +217,7 @@ test("FAQ copy and FAQPage data avoid unverified business commitments", async ()
   }
 });
 
-test("organization structured data uses the published brand identity and contact details", async () => {
+test("organization structured data uses the published company identity and contact details", async () => {
   const html = await readFile(htmlPath({ path: "/" }), "utf8");
   const organizationScript = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
     .map((match) => JSON.parse(match[1]))
@@ -226,8 +226,11 @@ test("organization structured data uses the published brand identity and contact
   assert.ok(organizationScript, "homepage must include Organization JSON-LD");
   assert.equal(organizationScript.name, "DONGSHENG MARBLE");
   assert.deepEqual(organizationScript.alternateName, ["东升大理石"]);
-  assert.equal(organizationScript.legalName, undefined, "a legal name requires confirmation against company registration records");
-  assert.equal(organizationScript.foundingDate, undefined, "a founding date requires confirmation before it is promoted as a legal entity fact");
+  assert.equal(organizationScript.legalName, "福建省东升石业股份有限公司");
+  assert.equal(organizationScript.foundingDate, "2000");
+  assert.deepEqual(organizationScript.sameAs, [
+    "https://www.linkedin.com/company/%E7%A6%8F%E5%BB%BA%E7%9C%81%E4%B8%9C%E5%8D%87%E7%9F%B3%E4%B8%9A%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8",
+  ]);
   assert.equal(organizationScript.telephone, "+86 139 5994 8672");
   assert.equal(organizationScript.email, "dongshengmarble@gmail.com");
   assert.equal(organizationScript.address.addressLocality, "Nan'an");
