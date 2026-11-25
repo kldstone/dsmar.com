@@ -3,14 +3,16 @@ import { Link } from "react-router-dom";
 import { optimizedImage, responsiveImage } from "@/lib/images";
 import { useLang } from "@/lib/i18n";
 import { projectCases } from "@/data/projectCases";
+import { getHomeFaq } from "@/data/homeFaq";
+import categories from "@/data/catalog";
 import LazyCatalogSection from "./CatalogSection";
 
 const slides = [
-  { img: "/hero-slides/desktop-hero-1.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-1.webp", titEn: "DONGSHENG MARBLE", titleKey: "home_slide_heritage_title", descriptionKey: "home_slide_heritage_desc", href: "/about" },
-  { img: "/optimized/project-cases/ziqi-donglai.webp", mobileImg: "/optimized/project-cases/ziqi-donglai.webp", titEn: "PROJECT CASES", titleKey: "home_project_cases_title", descriptionKey: "home_project_cases_desc", href: "/collections/marble" },
-  { img: "/hero-slides/hero-desktop-2.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-3.webp", titEn: "GLOBAL SOURCING", titleKey: "home_slide_sourcing_title", descriptionKey: "home_slide_sourcing_desc", href: "/catalog" },
-  { img: "/hero-slides/hero-desktop-3.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-4.webp", titEn: "COMPLETE CHAIN", titleKey: "home_slide_chain_title", descriptionKey: "home_slide_chain_desc", href: "/catalog" },
-  { img: "/hero-slides/hero-desktop-4.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-5.webp", titEn: "TOP 100 TAXPAYER", titleKey: "home_slide_taxpayer_title", descriptionKey: "home_slide_taxpayer_desc", href: "/about" },
+  { img: "/hero-slides/desktop-hero-1.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-1.webp", altZh: "东升石材城建筑与周边街景航拍", altEn: "Aerial view of the Dongsheng Stone City building and surrounding streets", titEn: "DONGSHENG MARBLE", titleKey: "home_slide_heritage_title", descriptionKey: "home_slide_heritage_desc", href: "/about" },
+  { img: "/optimized/project-cases/ziqi-donglai.webp", mobileImg: "/optimized/project-cases/ziqi-donglai.webp", altZh: "东来紫气项目室内空间中的纹理石材背景墙", altEn: "Veined stone feature wall in the Ziqi Donglai project interior", titEn: "PROJECT CASES", titleKey: "home_project_cases_title", descriptionKey: "home_project_cases_desc", href: "/cases" },
+  { img: "/hero-slides/hero-desktop-2.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-3.webp", altZh: "东升展厅内陈列的天然石材大板", altEn: "Natural stone slabs displayed in the Dongsheng showroom", titEn: "GLOBAL SOURCING", titleKey: "home_slide_sourcing_title", descriptionKey: "home_slide_sourcing_desc", href: "/catalog" },
+  { img: "/hero-slides/hero-desktop-3.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-4.webp", altZh: "室内仓储空间中成排存放的石材大板", altEn: "Rows of stone slabs stored inside a warehouse", titEn: "COMPLETE CHAIN", titleKey: "home_slide_chain_title", descriptionKey: "home_slide_chain_desc", href: "/catalog" },
+  { img: "/hero-slides/hero-desktop-4.jpg", mobileImg: "/optimized/hero-slides/mobile-hero-5.webp", altZh: "东升仓库内包装待运的石材大板", altEn: "Packaged stone slabs ready for transport in a Dongsheng warehouse", titEn: "TOP 100 TAXPAYER", titleKey: "home_slide_taxpayer_title", descriptionKey: "home_slide_taxpayer_desc", href: "/about" },
 ];
 
 export default function Home() {
@@ -19,6 +21,10 @@ export default function Home() {
   const [isPaused, setIsPaused] = useState(false);
   const [isFilmPlaying, setIsFilmPlaying] = useState(false);
   const currentSlide = slides[active];
+  const catalogSummary = {
+    productCount: categories.reduce((sum, category) => sum + category.products.length, 0),
+    collectionCount: categories.length,
+  };
 
   const next = useCallback(() => setActive((s) => (s + 1) % slides.length), []);
   const prev = useCallback(() => setActive((s) => (s - 1 + slides.length) % slides.length), []);
@@ -56,7 +62,7 @@ export default function Home() {
                 <source media="(max-width: 767px)" srcSet={slide.mobileImg} />
                 <img
                   {...responsiveImage(slide.img)}
-                  alt=""
+                  alt={lang === "zh" ? slide.altZh : slide.altEn}
                   loading="eager"
                   fetchPriority={index === 0 ? "high" : "auto"}
                   decoding="async"
@@ -79,7 +85,7 @@ export default function Home() {
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                   {t("nav_quote")}
                 </Link>
-                <Link to="/collections/marble" className="inline-flex items-center gap-2 px-6 py-3 bg-transparent border-2 border-white/30 text-white text-[12px] font-bold tracking-[0.08em] uppercase hover:bg-white/10 transition-colors">{t("home_view_products")}</Link>
+                <Link to="/catalog" className="inline-flex items-center gap-2 px-6 py-3 bg-transparent border-2 border-white/30 text-white text-[12px] font-bold tracking-[0.08em] uppercase hover:bg-white/10 transition-colors">{t("home_view_products")}</Link>
               </div>
             </div>
           </div>
@@ -150,7 +156,7 @@ export default function Home() {
           ))}
         </div>
         <div className="text-center">
-          <Link to="/collections/marble" className="inline-flex items-center gap-2 text-[#111111] text-[12px] font-bold tracking-[0.10em] uppercase border-b-2 border-[#e60012] pb-1 hover:text-[#e60012] transition-colors">
+          <Link to="/cases" className="inline-flex items-center gap-2 text-[#111111] text-[12px] font-bold tracking-[0.10em] uppercase border-b-2 border-[#e60012] pb-1 hover:text-[#e60012] transition-colors">
             {t("home_view_all_cases")}<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L12 8L6 14" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </Link>
         </div>
@@ -224,6 +230,49 @@ export default function Home() {
             <div className="overflow-hidden img-hover">
               <img src={optimizedImage("/brand-gallery/home-stone-city.jpg")} alt={t("home_strength_image_alt")} className="w-full aspect-[4/3] object-cover" loading="lazy" decoding="async" />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Product and inquiry guidance */}
+      <section className="bg-[#f7f7f5] py-16 px-6">
+        <div className="max-w-[980px] mx-auto">
+          <div className="max-w-[680px] mb-8">
+            <span className="text-[#e60012] text-[11px] font-bold tracking-[0.20em] uppercase">{lang === "zh" ? "产品与询盘" : "PRODUCTS & INQUIRIES"}</span>
+            <h2 className="text-[#111] text-[clamp(1.5rem,3vw,2rem)] font-black tracking-[0.02em] mt-3 mb-3">{lang === "zh" ? "选材和询价前，先了解这些信息" : "What to know before selecting and quoting stone"}</h2>
+            <p className="text-[#111]/60 text-[15px] leading-relaxed">{lang === "zh" ? "官网目录展示产品名称和图片；具体材料与项目要求需要在询盘中进一步确认。" : "The website catalog presents product names and images; material and project requirements are confirmed through inquiry."}</p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-5 border-y border-black/10 py-6 mb-8">
+            <div>
+              <h3 className="text-[#111] text-[13px] font-bold mb-2">{lang === "zh" ? "企业资料" : "Company profile"}</h3>
+              <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? "东升企业介绍称，石材事业始于1992年，公司于2000年成立，位于福建南安水头。" : "Dongsheng's company profile says its stone business began in 1992, the company was established in 2000, and its headquarters are in Shuitou, Nan'an, Fujian."}</p>
+              <Link to="/about" className="inline-block mt-2 text-[#111] text-[12px] font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">{lang === "zh" ? "查看企业介绍" : "Read the company profile"}</Link>
+            </div>
+            <div>
+              <h3 className="text-[#111] text-[13px] font-bold mb-2">{lang === "zh" ? "公开业务介绍" : "Published business scope"}</h3>
+              <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? "官网列出的业务包括大理石荒料采购与批发、大板生产加工及销售。" : "The company profile lists marble block sourcing and wholesale, slab production and processing, and sales."}</p>
+              <Link to="/about" className="inline-block mt-2 text-[#111] text-[12px] font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">{lang === "zh" ? "来源：东升企业介绍" : "Source: Dongsheng company profile"}</Link>
+            </div>
+            <div>
+              <h3 className="text-[#111] text-[13px] font-bold mb-2">{lang === "zh" ? "官网产品目录" : "Website product catalog"}</h3>
+              <p className="text-[#111]/65 text-[13px] leading-[1.75]">{lang === "zh" ? `当前目录列有${categories.reduce((sum, category) => sum + category.products.length, 0)}个产品条目，分为${categories.length}个系列；具体规格和供应情况需逐项确认。` : `The current catalog lists ${categories.reduce((sum, category) => sum + category.products.length, 0)} product entries across ${categories.length} collections; specifications and availability require item-by-item confirmation.`}</p>
+              <Link to="/catalog" className="inline-block mt-2 text-[#111] text-[12px] font-semibold border-b border-[#e60012] pb-0.5 hover:text-[#e60012]">{lang === "zh" ? "查看产品目录" : "View the catalog"}</Link>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            {getHomeFaq(lang, catalogSummary).map((item) => (
+              <details key={item.question} className="group bg-white border border-black/8 p-5 md:p-6">
+                <summary className="relative cursor-pointer list-none pr-8 text-[#111] leading-relaxed marker:hidden [&::-webkit-details-marker]:hidden">
+                  <h3 className="m-0 pr-5 text-[15px] font-bold">{item.question}</h3>
+                  <span aria-hidden="true" className="absolute right-0 top-0 text-[#e60012] text-xl leading-none group-open:rotate-45 transition-transform">+</span>
+                </summary>
+                <p className="mt-4 text-[#111]/65 text-[14px] leading-[1.8]">{item.answer}</p>
+              </details>
+            ))}
+          </div>
+          <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-[13px] font-semibold">
+            <Link to="/catalog" className="text-[#111] border-b border-[#e60012] pb-1 hover:text-[#e60012]">{lang === "zh" ? "浏览产品目录" : "Browse the product catalog"}</Link>
+            <Link to="/contact" className="text-[#111] border-b border-[#e60012] pb-1 hover:text-[#e60012]">{lang === "zh" ? "提交项目询盘" : "Send a project inquiry"}</Link>
           </div>
         </div>
       </section>
