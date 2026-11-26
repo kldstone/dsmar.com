@@ -1,7 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { optimizedImage } from "@/lib/images";
-import { loadSearchProducts, type SearchProduct } from "@/lib/searchCatalog";
+import { loadSearchProducts, matchesSearchQuery, type SearchProduct } from "@/lib/searchCatalog";
 import { useLang } from "@/lib/i18n";
 
 type Props = {
@@ -9,13 +9,13 @@ type Props = {
   triggerRef: React.RefObject<HTMLButtonElement | null>;
 };
 
-const normalize = (value: string) => value.trim().toLocaleLowerCase().replace(/\s+/g, "");
-
 export default function ProductSearch({ onClose, triggerRef }: Props) {
   const { lang } = useLang();
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
+  const optionsRef = useRef<HTMLDivElement>(null);
   const listId = useId();
+  const inputId = `${listId}-input`;
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<SearchProduct[]>([]);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -35,12 +35,15 @@ export default function ProductSearch({ onClose, triggerRef }: Props) {
     return () => { active = false; };
   }, []);
 
+  useEffect(() => {
+    if (activeIndex < 0) return;
+    const activeOption = optionsRef.current?.children.item(activeIndex);
+    if (activeOption instanceof HTMLElement) activeOption.scrollIntoView({ block: "nearest" });
+  }, [activeIndex]);
+
   const results = useMemo(() => {
-    const term = normalize(query);
-    if (term.length < 2) return [];
-    return products.filter((product) =>
-      normalize(`${product.nameZh}${product.nameEn}${product.code}${product.categoryZh}${product.categoryEn}`).includes(term),
-    ).slice(0, 6);
+    if (query.trim().length < 2) return [];
+    return products.filter((product) => matchesSearchQuery(product, query)).slice(0, 6);
   }, [products, query]);
 
   function closeAndRestoreFocus() {
@@ -81,12 +84,12 @@ export default function ProductSearch({ onClose, triggerRef }: Props) {
   return (
     <div className="absolute left-0 right-0 top-full z-[70] bg-white border-y border-black/10 shadow-xl" role="search">
       <div className="max-w-[900px] mx-auto px-4 md:px-6 py-4">
-        <label htmlFor="site-product-search" className="sr-only">{prompt}</label>
+        <label htmlFor={inputId} className="sr-only">{prompt}</label>
         <div className="flex items-center gap-2 border-b-2 border-[#222]">
           <svg aria-hidden="true" className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
           <input
             ref={inputRef}
-            id="site-product-search"
+            id={inputId}
             type="search"
             role="combobox"
             aria-expanded={results.length > 0}
@@ -112,7 +115,7 @@ export default function ProductSearch({ onClose, triggerRef }: Props) {
           {status === "ready" && query.trim().length === 1 && <p className="p-4 text-[13px] text-[#555]">{lang === "zh" ? "请至少输入两个字符。" : "Enter at least two characters."}</p>}
           {status === "ready" && query.trim().length >= 2 && results.length === 0 && <p className="p-4 text-[14px] text-[#555]">{lang === "zh" ? "没有找到匹配产品。" : "No matching products found."}</p>}
           {results.length > 0 && (
-            <div id={listId} role="listbox" aria-label={lang === "zh" ? "产品搜索建议" : "Product search suggestions"}>
+            <div ref={optionsRef} id={listId} role="listbox" aria-label={lang === "zh" ? "产品搜索建议" : "Product search suggestions"}>
               {results.map((product, index) => (
                 <div
                   key={product.id}

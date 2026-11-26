@@ -1,6 +1,8 @@
 import categories from "@/data/catalog";
 import { getTranslation } from "@/lib/i18n";
 
+const normalizeSearchValue = (value: string) => value.trim().toLocaleLowerCase().replace(/\s+/g, "");
+
 export type SearchProduct = {
   id: string;
   nameZh: string;
@@ -14,6 +16,14 @@ export type SearchProduct = {
   url: string;
   code: string;
 };
+
+export function matchesSearchQuery(product: SearchProduct, query: string): boolean {
+  const term = normalizeSearchValue(query);
+  if (!term) return true;
+
+  return [product.nameZh, product.nameEn, product.code, product.categoryZh, product.categoryEn]
+    .some((field) => normalizeSearchValue(field).includes(term));
+}
 
 let cache: SearchProduct[] | null = null;
 

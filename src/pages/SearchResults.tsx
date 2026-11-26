@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { optimizedImage } from "@/lib/images";
-import { loadSearchProducts, type SearchProduct } from "@/lib/searchCatalog";
+import { loadSearchProducts, matchesSearchQuery, type SearchProduct } from "@/lib/searchCatalog";
 import { useLang } from "@/lib/i18n";
-
-const normalize = (value: string) => value.trim().toLocaleLowerCase().replace(/\s+/g, "");
 
 export default function SearchResults() {
   const { lang } = useLang();
@@ -27,11 +25,10 @@ export default function SearchResults() {
   }), [products, lang]);
 
   const filtered = useMemo(() => {
-    const term = normalize(query);
     return products.filter((product) => {
       const productCategory = lang === "zh" ? product.categoryZh : product.categoryEn;
       const productType = lang === "zh" ? product.typeZh : product.typeEn;
-      const matchesTerm = !term || normalize(`${product.nameZh}${product.nameEn}${product.code}${productCategory}`).includes(term);
+      const matchesTerm = matchesSearchQuery(product, query);
       return matchesTerm && (!category || productCategory === category) && (!type || productType === type) && (!style || product.styles.includes(style));
     });
   }, [products, query, category, type, style, lang]);
