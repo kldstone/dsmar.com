@@ -42,7 +42,7 @@ export const homeFaq = [
       zh: "不一定。石材的商业名称可能与地质学分类不同。官网名称和图片用于初步浏览；正式选材前，请向东升核实具体材料分类及项目所需信息。",
       en: "Not always. Commercial stone names may differ from scientific geological classifications. Use catalog names and photos for initial browsing, then ask Dongsheng to confirm the material classification and project details before specifying a product.",
     },
-    citationUrls: ["https://www.naturalstoneinstitute.org/designprofessionals/varieties/definition/"],
+    citationUrls: ["https://www.naturalstoneinstitute.org/stoneprofessionals/varieties/definition/"],
   },
   {
     question: {

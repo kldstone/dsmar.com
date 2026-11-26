@@ -321,14 +321,14 @@ export default function Home() {
                   Natural Stone Institute 的
                   <cite><a className="underline underline-offset-2" href="https://www.naturalstoneinstitute.org/consumers/care/" target="_blank" rel="noopener noreferrer">石材养护指南</a></cite>
                   指出，养护方式应结合石材分类与组成；柠檬汁、醋等酸性产品可能使含碳酸盐的石材失去光泽或被蚀刻。其
-                  <cite><a className="underline underline-offset-2" href="https://www.naturalstoneinstitute.org/designprofessionals/varieties/definition/" target="_blank" rel="noopener noreferrer">石材分类说明</a></cite>
+                  <cite><a className="underline underline-offset-2" href="https://www.naturalstoneinstitute.org/stoneprofessionals/varieties/definition/" target="_blank" rel="noopener noreferrer">石材分类说明</a></cite>
                   也介绍了科学分类与商业名称之间的差异。以上为一般行业参考，具体产品和使用场景仍应向供应商确认。
                 </>
               ) : (
                 <>
                   The Natural Stone Institute's <cite><a className="underline underline-offset-2" href="https://www.naturalstoneinstitute.org/consumers/care/" target="_blank" rel="noopener noreferrer">care guide</a></cite>
                   says care depends on a stone's classification and composition. Acidic products such as lemon or vinegar may dull or etch calcareous stones. Its
-                  <cite><a className="underline underline-offset-2" href="https://www.naturalstoneinstitute.org/designprofessionals/varieties/definition/" target="_blank" rel="noopener noreferrer">stone classification guide</a></cite>
+                  <cite><a className="underline underline-offset-2" href="https://www.naturalstoneinstitute.org/stoneprofessionals/varieties/definition/" target="_blank" rel="noopener noreferrer">stone classification guide</a></cite>
                   also explains that scientific and commercial definitions may differ. These are general references; confirm the exact product and use with your supplier.
                 </>
               )}

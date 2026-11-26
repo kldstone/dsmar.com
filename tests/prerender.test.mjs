@@ -164,7 +164,7 @@ test("AI discovery files and full LLM text are generated from the published site
   assert.ok(faq.faqs.every((item) => item.question.length >= 10 && item.answer.length >= 20));
   assert.deepEqual(
     faq.faqs.find((item) => item.question === "Do product names always identify a stone's geological classification?")?.citation_urls,
-    ["https://www.naturalstoneinstitute.org/designprofessionals/varieties/definition/"],
+    ["https://www.naturalstoneinstitute.org/stoneprofessionals/varieties/definition/"],
   );
   assert.deepEqual(
     faq.faqs.find((item) => item.question === "How can I confirm care instructions for natural stone?")?.citation_urls,
