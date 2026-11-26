@@ -2,11 +2,11 @@ import { blogPosts } from "@/content/blog-cn";
 import categories from "@/data/catalog";
 import { projectCases } from "@/data/projectCases";
 
-export type PrerenderRoute = { path: string; indexable: boolean };
+export type PrerenderRoute = { path: string; indexable: boolean; lang: "en" | "zh" };
 
 const coreRoutes = ["/", "/catalog", "/about", "/faq", "/blog", "/contact", "/cases"];
 
-export const prerenderRoutes: PrerenderRoute[] = [
+const contentRoutes = [
   ...coreRoutes.map((path) => ({ path, indexable: true })),
   ...categories.flatMap((category) => [
     { path: `/catalog/${category.key}`, indexable: true },
@@ -19,3 +19,8 @@ export const prerenderRoutes: PrerenderRoute[] = [
   ...projectCases.map((projectCase) => ({ path: `/cases/${projectCase.slug}`, indexable: true })),
   { path: "/search", indexable: false },
 ];
+
+export const prerenderRoutes: PrerenderRoute[] = contentRoutes.flatMap((route) => [
+  { ...route, lang: "en" },
+  { ...route, path: `/zh${route.path === "/" ? "" : route.path}`, lang: "zh" },
+]);

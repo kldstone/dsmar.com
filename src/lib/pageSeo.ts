@@ -16,10 +16,20 @@ export type PageSeo = {
   robots: "index, follow" | "noindex, follow";
   image: string;
   structuredData: Record<string, unknown>[];
+  alternates?: { en: string; zh: string; xDefault: string };
 };
 
 export const absoluteUrl = (path: string) => new URL(path, siteUrl).toString();
-const pageUrl = (path: string) => absoluteUrl(path.endsWith("/") ? path : `${path}/`);
+const localizedPath = (path: string, lang: Lang) => {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return lang === "zh"
+    ? `/zh${normalizedPath === "/" ? "" : normalizedPath}`
+    : normalizedPath;
+};
+const pageUrl = (path: string, lang: Lang = "en") => {
+  const localized = localizedPath(path, lang);
+  return absoluteUrl(localized.endsWith("/") ? localized : `${localized}/`);
+};
 export const localizedBrand = (lang: Lang) => lang === "zh" ? "东升大理石 DONGSHENG MARBLE" : brand;
 
 function breadcrumbLabel(segment: string, lang: Lang, precedingSegments: string[] = []) {
@@ -54,7 +64,7 @@ function breadcrumbLabel(segment: string, lang: Lang, precedingSegments: string[
 }
 
 function makeStructuredData(pathname: string, lang: Lang, image: string, title: string, description: string) {
-  const canonical = pageUrl(pathname);
+  const canonical = pageUrl(pathname, lang);
   const schemas: Record<string, unknown>[] = [
     {
       "@context": "https://schema.org",
@@ -68,7 +78,7 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
       description: lang === "zh"
         ? "主营大理石荒料采购、批发及大板生产加工。"
         : "Marble block sourcing and wholesale, plus marble slab production and processing.",
-      url: `${siteUrl}/`,
+      url: pageUrl("/", lang),
       telephone: "+86 139 5994 8672",
       email: "dongshengmarble@gmail.com",
       address: {
@@ -91,14 +101,14 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       name: brand,
-      url: `${siteUrl}/`,
+      url: pageUrl("/", lang),
       inLanguage: lang === "zh" ? "zh-CN" : "en",
       publisher: { "@id": `${siteUrl}/#organization` },
       potentialAction: {
         "@type": "SearchAction",
         target: {
           "@type": "EntryPoint",
-          urlTemplate: `${siteUrl}/search?q={search_term_string}`,
+          urlTemplate: `${pageUrl("/search", lang)}?q={search_term_string}`,
         },
         "query-input": "required name=search_term_string",
       },
@@ -110,12 +120,12 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: lang === "zh" ? "首页" : "Home", item: `${siteUrl}/` },
+      { "@type": "ListItem", position: 1, name: lang === "zh" ? "首页" : "Home", item: pageUrl("/", lang) },
       ...segments.map((segment, index) => ({
         "@type": "ListItem",
         position: index + 2,
         name: breadcrumbLabel(segment, lang, segments.slice(0, index)),
-        item: pageUrl(`/${segments.slice(0, index + 1).join("/")}`),
+        item: pageUrl(`/${segments.slice(0, index + 1).join("/")}`, lang),
       })),
     ],
   });
@@ -154,7 +164,7 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
               "@type": "Product",
               name: getTranslation(lang, `catalog_product_${product.id}_name`),
               image: absoluteUrl(product.cover),
-              url: pageUrl(`/catalog/${category.key}/${product.id}`),
+              url: pageUrl(`/catalog/${category.key}/${product.id}`, lang),
             },
           })),
         },
@@ -179,7 +189,7 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
             "@type": "ImageObject",
             name: lang === "zh" ? projectCase.name : projectCase.en,
             contentUrl: absoluteUrl(projectCase.cover),
-            url: pageUrl(`/cases/${projectCase.slug}`),
+            url: pageUrl(`/cases/${projectCase.slug}`, lang),
           },
         })),
       },
@@ -244,7 +254,7 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
         "@type": "ListItem",
         position: index + 1,
         name: getTranslation(lang, `catalog_category_${category.key}_name`),
-        url: pageUrl(`/catalog/${category.key}`),
+        url: pageUrl(`/catalog/${category.key}`, lang),
       })),
     });
     schemas.push({
@@ -266,8 +276,11 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
 }
 
 export function resolvePageSeo(inputPath: string, lang: Lang = "en"): PageSeo {
-  const pathname = inputPath.split("?")[0].replace(/\/$/, "") || "/";
-  const canonical = pageUrl(pathname);
+  const inputPathname = inputPath.split("?")[0].replace(/\/$/, "") || "/";
+  const pathname = lang === "zh"
+    ? inputPathname.replace(/^\/zh(?=\/|$)/, "") || "/"
+    : inputPathname;
+  const canonical = pageUrl(pathname, lang);
   const categoryMatch = pathname.match(/^\/catalog\/([^/]+)$/);
   const productMatch = pathname.match(/^\/catalog\/([^/]+)\/([^/]+)$/);
   const isCatalogPage = pathname === "/catalog"
@@ -365,5 +378,12 @@ export function resolvePageSeo(inputPath: string, lang: Lang = "en"): PageSeo {
     robots: nonIndexable ? "noindex, follow" : "index, follow",
     image,
     structuredData: makeStructuredData(pathname, lang, image, title, description),
+    ...(!nonIndexable ? {
+      alternates: {
+        en: pageUrl(pathname, "en"),
+        zh: pageUrl(pathname, "zh"),
+        xDefault: pageUrl(pathname, "en"),
+      },
+    } : {}),
   };
 }

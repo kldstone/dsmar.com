@@ -8,9 +8,10 @@ import { initializeConsentMode } from './lib/analytics'
 initializeConsentMode()
 
 const root = document.getElementById('root')!
+const initialLang = /^\/zh(?:\/|$)/.test(window.location.pathname) ? 'zh' : 'en'
 const app = (
   <StrictMode>
-    <LangProvider>
+    <LangProvider initialLang={initialLang}>
       <App />
     </LangProvider>
   </StrictMode>

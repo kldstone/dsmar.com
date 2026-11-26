@@ -22,6 +22,16 @@ The sitemap lists the site's current canonical pages intended for indexing, incl
 - [Frequently asked questions](https://www.dsmar.com/faq/)
 - [Contact and inquiries](https://www.dsmar.com/contact/)
 
+## 中文页面
+
+- [东升大理石官网首页](https://www.dsmar.com/zh/)
+- [关于东升](https://www.dsmar.com/zh/about/)
+- [石材目录](https://www.dsmar.com/zh/catalog/)
+- [工程案例](https://www.dsmar.com/zh/cases/)
+- [石材资讯](https://www.dsmar.com/zh/blog/)
+- [常见问题](https://www.dsmar.com/zh/faq/)
+- [联系与询盘](https://www.dsmar.com/zh/contact/)
+
 ## Published pages
 
 - [XML sitemap](https://www.dsmar.com/sitemap.xml): canonical product, article, and project case URLs currently included for indexing.

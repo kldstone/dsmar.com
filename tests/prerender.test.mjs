@@ -73,6 +73,25 @@ test("sitemap contains exactly the indexable prerendered routes and no unverifie
   assert.ok(!sitemap.includes("/search"), "search must stay out of sitemap");
 });
 
+test("Chinese pages are independently crawlable with reciprocal language alternates", async () => {
+  const chineseHome = await readFile(htmlPath(routeByPath.get("/zh")), "utf8");
+  const chineseAbout = await readFile(htmlPath(routeByPath.get("/zh/about")), "utf8");
+  const englishHome = await readFile(htmlPath(routeByPath.get("/")), "utf8");
+  const alternateTag = (html, language) => html.match(new RegExp(`<link rel="alternate" hreflang="${language}" href="([^"]+)"\\s*/>`))?.[1];
+
+  assert.match(chineseHome, /<html lang="zh-CN">/);
+  assert.match(chineseHome, /<h1[^>]*>.*东升|<h1[^>]*>.*天然大理石/s);
+  assert.equal(attribute(chineseHome.match(/<link\s+rel="canonical"[^>]*>/i)?.[0] ?? "", "href"), "https://www.dsmar.com/zh/");
+  assert.equal(alternateTag(chineseHome, "en"), "https://www.dsmar.com/");
+  assert.equal(alternateTag(chineseHome, "zh-CN"), "https://www.dsmar.com/zh/");
+  assert.equal(alternateTag(englishHome, "zh-CN"), "https://www.dsmar.com/zh/");
+  assert.match(chineseAbout, /<h1[^>]*>.*东升|<h1[^>]*>.*企业/s);
+  assert.ok(sitemap.includes('xmlns:xhtml="http://www.w3.org/1999/xhtml"'));
+  assert.match(sitemap, /<xhtml:link rel="alternate" hreflang="zh-CN" href="https:\/\/www\.dsmar\.com\/zh\/about\/"\s*\/>/);
+  assert.ok(routeByPath.has("/zh/search"), "the localized search route should exist for navigation");
+  assert.equal(routeByPath.get("/zh/search").indexable, false, "localized search results must remain noindex");
+});
+
 test("RSS feed is generated from published article data and discoverable from the homepage", async () => {
   const blogRoutes = manifest.routes.filter((route) => /^\/blog\/[^/]+$/.test(route.path));
   const homepage = await readFile(htmlPath({ path: "/" }), "utf8");

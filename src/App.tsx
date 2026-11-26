@@ -83,8 +83,9 @@ export function AppRoutes() {
 }
 
 export default function App() {
+  const basename = /^\/zh(?:\/|$)/.test(window.location.pathname) ? "/zh" : "/";
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <ScrollToTop />
       <AppRoutes />
     </BrowserRouter>

@@ -12,13 +12,19 @@ const escapeJsonForHtml = (value) => JSON.stringify(value).replaceAll("<", "\\u0
 
 function metadataMarkup(seo, pathname, { includeCanonical = true, includeStructuredData = true } = {}) {
   const image = new URL(seo.image, siteUrl).toString();
-  const pageType = pathname.startsWith("/blog/") ? "article" : "website";
+  const contentPath = pathname.replace(/^\/zh(?=\/|$)/, "") || "/";
+  const pageType = contentPath.startsWith("/blog/") ? "article" : "website";
   const meta = [
     `<meta name="description" content="${escapeHtml(seo.description)}" />`,
     `<meta name="robots" content="${seo.robots}" />`,
     ...(includeCanonical ? [`<link rel="canonical" href="${escapeHtml(seo.canonical)}" />`] : []),
+    ...(includeCanonical && seo.alternates ? [
+      `<link rel="alternate" hreflang="en" href="${escapeHtml(seo.alternates.en)}" />`,
+      `<link rel="alternate" hreflang="zh-CN" href="${escapeHtml(seo.alternates.zh)}" />`,
+      `<link rel="alternate" hreflang="x-default" href="${escapeHtml(seo.alternates.xDefault)}" />`,
+    ] : []),
     `<meta property="og:type" content="${pageType}" />`,
-    `<meta property="og:site_name" content="DONGSHENG MARBLE" />`,
+    `<meta property="og:site_name" content="${pathname.startsWith("/zh") ? "东升大理石 DONGSHENG MARBLE" : "DONGSHENG MARBLE"}" />`,
     `<meta property="og:title" content="${escapeHtml(seo.title)}" />`,
     `<meta property="og:description" content="${escapeHtml(seo.description)}" />`,
     ...(includeCanonical ? [`<meta property="og:url" content="${escapeHtml(seo.canonical)}" />`] : []),
@@ -37,8 +43,9 @@ function metadataMarkup(seo, pathname, { includeCanonical = true, includeStructu
 
 function renderDocument(template, pathname, seo, appHtml, options) {
   const escapedTitle = escapeHtml(seo.title);
+  const htmlLang = pathname === "/zh" || pathname.startsWith("/zh/") ? "zh-CN" : "en";
   return template
-    .replace(/<html\b([^>]*)>/i, (_match, attributes) => `<html${attributes.replace(/\s+lang="[^"]*"/i, "")} lang="en">`)
+    .replace(/<html\b([^>]*)>/i, (_match, attributes) => `<html${attributes.replace(/\s+lang="[^"]*"/i, "")} lang="${htmlLang}">`)
     .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapedTitle}</title>`)
     .replace(/\s*<meta\s+(?:name="(?:description|keywords|robots)"|property="(?:og:[^"]+|twitter:[^"]+)")[^>]*\/?\s*>/gi, "")
     .replace(/\s*<link\s+(?:rel="(?:canonical|alternate)"|href="[^"]*"\s+rel="(?:canonical|alternate)")[^>]*\/?\s*>/gi, "")
@@ -67,8 +74,8 @@ try {
   const sitemapRoutes = [];
 
   for (const route of prerenderRoutes) {
-    const seo = resolvePageSeo(route.path, "en");
-    const appHtml = await render(route.path);
+    const seo = resolvePageSeo(route.path, route.lang);
+    const appHtml = await render(route.path, route.lang);
     const html = renderDocument(template, route.path, seo, appHtml);
 
     const outputPath = route.path === "/"
@@ -78,11 +85,22 @@ try {
     await writeFile(outputPath, html);
 
     if (route.indexable) {
-      sitemapRoutes.push(`  <url><loc>${escapeHtml(seo.canonical)}</loc></url>`);
+      const englishPath = route.lang === "zh" ? route.path.replace(/^\/zh(?=\/|$)/, "") || "/" : route.path;
+      const chinesePath = route.lang === "zh" ? route.path : `/zh${route.path === "/" ? "" : route.path}`;
+      const englishUrl = resourceUrl(englishPath.endsWith("/") ? englishPath : `${englishPath}/`);
+      const chineseUrl = resourceUrl(chinesePath.endsWith("/") ? chinesePath : `${chinesePath}/`);
+      sitemapRoutes.push([
+        "  <url>",
+        `    <loc>${escapeXml(seo.canonical)}</loc>`,
+        `    <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(englishUrl)}" />`,
+        `    <xhtml:link rel="alternate" hreflang="zh-CN" href="${escapeXml(chineseUrl)}" />`,
+        `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(englishUrl)}" />`,
+        "  </url>",
+      ].join("\n"));
     }
   }
 
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapRoutes.join("\n")}\n</urlset>\n`;
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sitemapRoutes.join("\n")}\n</urlset>\n`;
   await writeFile(path.join(dist, "sitemap.xml"), sitemap);
   const canonical = (pathname) => new URL(pathname.endsWith("/") ? pathname : `${pathname}/`, siteUrl).toString();
   const feedItems = [...blogPosts]

@@ -24,6 +24,13 @@ export default function SEO() {
     setMeta('meta[name="description"]', { name: "description", content: seo.description });
     setMeta('meta[name="robots"]', { name: "robots", content: seo.robots });
     setMeta('link[rel="canonical"]', { rel: "canonical", href: seo.canonical });
+    if (seo.alternates) {
+      setMeta('link[rel="alternate"][hreflang="en"]', { rel: "alternate", hreflang: "en", href: seo.alternates.en });
+      setMeta('link[rel="alternate"][hreflang="zh-CN"]', { rel: "alternate", hreflang: "zh-CN", href: seo.alternates.zh });
+      setMeta('link[rel="alternate"][hreflang="x-default"]', { rel: "alternate", hreflang: "x-default", href: seo.alternates.xDefault });
+    } else {
+      document.head.querySelectorAll('link[rel="alternate"][hreflang]').forEach((element) => element.remove());
+    }
     setMeta('meta[property="og:type"]', { property: "og:type", content: pathname.startsWith("/blog/") ? "article" : "website" });
     setMeta('meta[property="og:site_name"]', { property: "og:site_name", content: localizedBrand(lang) });
     setMeta('meta[property="og:title"]', { property: "og:title", content: seo.title });

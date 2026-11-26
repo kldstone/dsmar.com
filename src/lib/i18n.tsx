@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 14294)
+Total output lines: 458
+
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 
@@ -181,38 +184,7 @@ const translations: Record<string, { zh: string; en: string }> = {
   "faq_pricing_1_q": { zh: "如何获取东升大理石的产品报价？", en: "How can I request a quotation from Dongsheng?" },
   "faq_pricing_1_a": { zh: "请通过联系页面提交询盘，并尽量注明产品名称、所需规格、数量、加工和交付要求。报价及回复时间需结合具体需求确认。", en: "Submit an inquiry through the contact page and include the product name, requested dimensions, quantity, processing, and delivery requirements where available. The quotation and response time depend on the specific inquiry." },
   "faq_pricing_2_q": { zh: "影响大理石价格的主要因素有哪些？", en: "What factors affect marble prices?" },
-  "faq_pricing_2_a": { zh: "报价可能受产品、板材规格、表面处理、数量、库存、加工及运输要求影响。不同供应方的分级和计价方式也可能不同，建议在询价时明确所需条件，并以正式报价为准。", en: "A quotation may depend on the product, slab dimensions, finish, quantity, availability, processing, and shipping requirements. Grading and pricing methods can also vary by supplier. State the requirements clearly and rely on the written quotation for the order." },
-  "faq_pricing_3_q": { zh: "大理石最小起订量是多少？", en: "What is the minimum order quantity for marble?" },
-  "faq_pricing_3_a": { zh: "起订量取决于产品、库存、加工要求和交付地点等条件。官网未公布适用于全部产品的统一起订量，请在询价时提供所需数量并确认订单条件。", en: "Minimum order quantities can depend on the product, availability, processing, and delivery location. The website does not publish one minimum that applies to every product. Include the required quantity in your inquiry and confirm the order terms." },
-  "faq_category_quality": { zh: "关于品质与加工", en: "QUALITY AND PROCESSING" },
-  "faq_quality_1_q": { zh: "东升大理石品控体系是怎样的？", en: "How does Dongsheng control product quality?" },
-  "faq_quality_1_a": { zh: "具体的检验项目、分级方法和尺寸公差应以对应产品资料、订单约定及验收标准为准。询价或下单前，可要求供应方书面确认规格、允许偏差、表面质量和验收方式。", en: "Inspection items, grading methods, and dimensional tolerances should be confirmed in the product information, order, and acceptance criteria for the specific supply. Before ordering, ask the supplier to confirm dimensions, permitted tolerances, surface quality, and inspection method in writing." },
-  "faq_quality_2_q": { zh: "大理石能做哪些表面处理？", en: "Which surface finishes are available for marble?" },
-  "faq_quality_2_a": { zh: "石材常见表面处理包括抛光、哑光等，不同工艺的外观和使用特性各异；可选工艺取决于具体石种和加工条件。请查看产品页面或向供应方确认该产品可提供的表面处理及样板。", en: "Common stone finishes include polished and honed surfaces, with different appearances and use characteristics. Available finishes depend on the stone and processing conditions. Check the product page or ask the supplier which finishes and samples are available for that specific product." },
-  "faq_category_maintenance": { zh: "关于安装与养护", en: "INSTALLATION AND MAINTENANCE" },
-  "faq_maintenance_1_q": { zh: "天然大理石需要做结晶养护吗？多久做一次？", en: "Does natural marble require crystallization maintenance?" },
-  "faq_maintenance_1_a": { zh: "是否需要结晶或其他养护，以及养护间隔，取决于石材种类、表面处理、使用频率和现场状况。请遵循该产品的养护说明，并向石材供应方或安装人员确认适合的清洁与维护方法。", en: "Whether crystallization or another maintenance treatment is suitable, and how often it is needed, depends on the stone, finish, use, and site conditions. Follow the care instructions for the specific product and confirm cleaning and maintenance methods with the supplier or installer." },
-  "faq_maintenance_2_q": { zh: "大理石表面的天然裂纹是质量问题吗？", en: "Are natural fissures in marble considered defects?" },
-  "faq_maintenance_2_a": { zh: "天然石材可能呈现纹理、色差或其他自然特征；具体是否符合质量要求，应按产品说明、样板、订单约定和验收标准判断。购买前请确认可接受的自然特征及缺陷判定方式。", en: "Natural stone can show variations in pattern, color, and other characteristics. Whether a particular feature meets the required quality depends on the product information, sample, order terms, and acceptance criteria. Confirm acceptable natural variation and defect criteria before purchase." },
-  "faq_category_dongsheng": { zh: "关于东升", en: "ABOUT DONGSHENG" },
-  "faq_dongsheng_1_q": { zh: "东升大理石公司在哪里？可以到工厂参观吗？", en: "Where is Dongsheng located, and can I visit the factory?" },
-  "faq_dongsheng_1_a": { zh: "官网联系信息列出的地址为福建省南安市水头镇奎峰工业区。到访安排及具体接待地点请先通过联系页面与公司确认。", en: "The contact information published on the website lists Kuifeng Industrial Zone, Shuitou Town, Nan'an, Fujian. Confirm visiting arrangements and the exact meeting location with the company through its contact page before travelling." },
-  "faq_dongsheng_2_q": { zh: "东升能承接海外订单吗？", en: "Does Dongsheng accept international orders?" },
-  "faq_dongsheng_2_a": { zh: "国际订单的可供产品、目的地、运输方式、包装和贸易条款需按具体需求确认。请在联系页面提交目的地和产品信息，由公司确认是否可承接及相应条件。", en: "Products, destinations, shipping methods, packaging, and trade terms for international orders need to be confirmed for each inquiry. Provide the destination and product information through the contact page so the company can confirm availability and terms." },
-  "faq_dongsheng_3_q": { zh: "东升的矿山资源有哪些？", en: "What quarry resources does Dongsheng have?" },
-  "faq_dongsheng_3_a": { zh: "官网产品目录展示了当前列出的石材名称和图片，但未对全部产品的矿山来源或采购关系作出说明。若项目需要指定产地、批次或供货证明，请在下单前向公司确认并取得相应资料。", en: "The website catalog shows the stone names and images currently listed, but does not state quarry sources or sourcing arrangements for every product. If a project requires a named origin, batch, or supply documentation, confirm this with the company and obtain the relevant records before ordering." },
-  "faq_category_comparison": { zh: "石材材质对比", en: "STONE MATERIAL COMPARISONS" },
-  "faq_comparison_1_q": { zh: "天然大理石和花岗岩有什么区别？", en: "What is the difference between marble and granite?" },
-  "faq_comparison_1_a": { zh: "大理石属于变质岩，花岗岩属于火成岩，两者在矿物组成、纹理和物理性能上存在差异。具体产品的耐磨、耐酸、承载和防滑表现会因石种及表面处理而异，选用前应查看对应技术资料并结合使用场景评估。", en: "Marble is a metamorphic rock, while granite is an igneous rock. They differ in mineral composition, pattern, and physical properties. Wear, acid resistance, load capacity, and slip performance vary by stone and finish; review the product information and intended conditions before selecting a material." },
-  "faq_comparison_2_q": { zh: "深色石材和浅色石材各有什么特点？", en: "What are the differences between light and dark stone?" },
-  "faq_comparison_2_a": { zh: "浅色和深色石材会带来不同的视觉效果，实际外观也会受纹理、光线、板面和铺装方式影响。官网目录可用于初步浏览；选材时建议查看实物样板，并结合空间光线和整体设计确认。", en: "Light and dark stones create different visual effects, while the final appearance also depends on veining, lighting, slab selection, and layout. Use the website catalog for an initial review, then inspect physical samples and consider the space and design before selecting a material." },
-  "faq_category_application": { zh: "石材应用选择", en: "CHOOSING STONE BY APPLICATION" },
-  "faq_application_1_q": { zh: "酒店大堂地面适合用什么石材？", en: "Which stone is suitable for hotel lobby flooring?" },
-  "faq_application_1_a": { zh: "酒店大堂选材需要结合客流、维护计划、地面结构、湿滑风险和整体设计评估。仅凭色系或商品名称无法判断是否适用；请让项目设计与施工团队依据产品资料、样板和现场条件确认。", en: "Hotel lobby materials should be evaluated against foot traffic, maintenance plans, floor construction, slip risk, and the overall design. Color or a product name alone cannot establish suitability. Ask the project design and installation team to review product information, samples, and site conditions." },
-  "faq_application_2_q": { zh: "别墅装修不同区域石材怎么搭配？", en: "How should stone be selected for different areas of a villa?" },
-  "faq_application_2_a": { zh: "不同区域对耐磨、防滑、清洁和耐候的要求不同。先明确使用条件，再对照具体产品的性能资料和表面处理，并由设计、施工人员确认是否适用；不要只依据图片或品类名称决定。", en: "Different areas have different requirements for wear, slip resistance, cleaning, and weather exposure. Define the conditions, review the specific product's performance information and finish, and confirm suitability with the design and installation team. Do not select solely from a photo or category name." },
-  "faq_category_export": { zh: "出口与国际采购", en: "EXPORTS AND INTERNATIONAL SOURCING" },
-  "faq_export_1_q": { zh: "从中国进口石材的流程是怎样的？", en: "What is the process for importing stone from China?" },
+  "faq_pricing_2_a": { zh: "报价可能受产品、板材规格、表面处理、数量、库存、加工及运输要求影响。不同供应方的分级和计价方式也可能不同，建议在询价时明确所需条件…2294 tokens truncated…？", en: "What is the process for importing stone from China?" },
   "faq_export_1_a": { zh: "国际采购通常需要确认产品与规格、样品、报价和合同、交付安排、运输及目的地要求。具体文件、责任和贸易条款应由买卖双方及物流服务方根据目的地规则确认；本页面不替代报关或法律建议。", en: "International procurement commonly involves confirming the product and specifications, samples, quotation and contract, delivery arrangements, shipping, and destination requirements. The parties and logistics provider should confirm required documents, responsibilities, and trade terms under the destination rules; this page is not customs or legal advice." },
   "faq_export_2_q": { zh: "石材出口包装有哪些标准？", en: "What export-packaging standards does Dongsheng use?" },
   "faq_export_2_a": { zh: "包装方式需按石材尺寸、表面处理、运输路线和目的地要求确认。请在询价或下单时书面确认包装材料、固定与防护措施，以及适用的运输要求。", en: "Packaging should be confirmed for the stone dimensions, finish, shipping route, and destination requirements. Before ordering, confirm the packing materials, securing and protective measures, and applicable shipping requirements in writing." },
@@ -426,8 +398,16 @@ const translations: Record<string, { zh: string; en: string }> = {
   "footer_catalog": { zh: "矿山直供", en: "MINE DIRECT" },
 };
 
-export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>("en");
+export function LangProvider({ children, initialLang = "en" }: { children?: ReactNode; initialLang?: Lang }) {
+  const [lang] = useState<Lang>(initialLang);
+  const setLang = (nextLang: Lang) => {
+    if (nextLang === lang) return;
+    const pathname = window.location.pathname.replace(/^\/zh(?=\/|$)/, "") || "/";
+    const localizedPath = nextLang === "zh"
+      ? `/zh${pathname === "/" ? "/" : pathname}`
+      : pathname;
+    window.location.assign(`${localizedPath}${window.location.search}${window.location.hash}`);
+  };
   const t = (key: string, vars?: Record<string, string>) => getTranslation(lang, key, vars);
   return (
     <LangContext.Provider value={{ lang, setLang, t }}>

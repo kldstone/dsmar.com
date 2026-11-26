@@ -10,7 +10,8 @@ import { resolvePageSeo } from "./lib/pageSeo";
 
 export { resolvePageSeo };
 
-export function render(url: string) {
+export function render(url: string, lang: "en" | "zh" = /^\/zh(?:\/|$)/.test(url) ? "zh" : "en") {
+  const basename = lang === "zh" ? "/zh" : "/";
   return new Promise<string>((resolve, reject) => {
     const body = new PassThrough();
     const chunks: Buffer[] = [];
@@ -25,8 +26,8 @@ export function render(url: string) {
     const stream = renderToPipeableStream(
       createElement(
         StaticRouter,
-        { location: url },
-        createElement(LangProvider, null, createElement(AppRoutes)),
+        { location: url, basename },
+        createElement(LangProvider, { initialLang: lang }, createElement(AppRoutes)),
       ),
       {
         onAllReady() {
