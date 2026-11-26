@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { optimizedImage, responsiveImage } from "@/lib/images";
 import { trackConversion } from "@/lib/analytics";
 import { clearInquiryProducts, removeInquiryProduct, useInquiryProducts } from "@/lib/inquiry";
@@ -60,6 +61,7 @@ function getAttribution() {
 
 export default function Contact() {
   const { t, lang } = useLang();
+  const location = useLocation();
   const products = useInquiryProducts();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [values, setValues] = useState<FormValues>(initialValues);
@@ -67,6 +69,14 @@ export default function Contact() {
   const [fileState, setFileState] = useState<FileState>("idle");
   const [submitted, setSubmitted] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (location.hash !== "#inquiry-form") return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.hash]);
 
   const copy = lang === "zh" ? {
     required: "必填",
@@ -266,7 +276,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div>
+          <div id="inquiry-form" className="scroll-mt-28">
             <h2 className="text-[#111] text-[1.6rem] font-black tracking-[0.02em] mb-2">{t("contact_form_title")}</h2>
             <p className="text-[#444] text-[14px] mb-7">{copy.incomplete}</p>
 
