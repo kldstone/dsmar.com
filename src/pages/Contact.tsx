@@ -194,6 +194,7 @@ export default function Contact() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitted === "sending" || fileState === "reading") return;
+    if (!event.currentTarget.reportValidity()) return;
     if (!values.email.trim() && !values.whatsapp.trim()) {
       setSubmitted("server-error");
       setErrorMessage(copy.contactHint);
@@ -202,7 +203,6 @@ export default function Contact() {
 
     setSubmitted("sending");
     setErrorMessage("");
-    trackConversion("form_submit", { source: "contact_page", product_count: products.length });
     try {
       const response = await fetch("/api/inquiry", {
         method: "POST",
@@ -214,6 +214,11 @@ export default function Contact() {
         setSubmitted("server-error");
         setErrorMessage(result.error || copy.serverError);
         return;
+      }
+      try {
+        trackConversion("form_submit", { source: "contact_page", product_count: products.length });
+      } catch {
+        // Analytics failures must not change the confirmed inquiry result.
       }
       setSubmitted("success");
       clearInquiryProducts();
