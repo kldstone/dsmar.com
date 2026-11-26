@@ -146,12 +146,16 @@ test("AI discovery files and full LLM text are generated from the published site
   const aiText = await readFile(path.join(dist, ".well-known", "ai.txt"), "utf8");
   const summary = JSON.parse(await readFile(path.join(dist, "ai", "summary.json"), "utf8"));
   const faq = JSON.parse(await readFile(path.join(dist, "ai", "faq.json"), "utf8"));
+  const faqZh = JSON.parse(await readFile(path.join(dist, "ai", "faq.zh-CN.json"), "utf8"));
   const service = JSON.parse(await readFile(path.join(dist, "ai", "service.json"), "utf8"));
   const fullText = await readFile(path.join(dist, "llms-full.txt"), "utf8");
+  const fullTextZh = await readFile(path.join(dist, "zh", "llms-full.txt"), "utf8");
 
   assert.match(aiText, /Machine-readable summary: https:\/\/www\.dsmar\.com\/ai\/summary\.json\n/);
   assert.match(aiText, /Machine-readable FAQs: https:\/\/www\.dsmar\.com\/ai\/faq\.json\n/);
   assert.match(aiText, /Machine-readable catalog and article text: https:\/\/www\.dsmar\.com\/llms-full\.txt\n/);
+  assert.match(aiText, /中文机器可读 FAQ: https:\/\/www\.dsmar\.com\/ai\/faq\.zh-CN\.json\n/);
+  assert.match(aiText, /中文目录与文章全文: https:\/\/www\.dsmar\.com\/zh\/llms-full\.txt\n/);
   assert.match(aiText, /Sitemap: https:\/\/www\.dsmar\.com\/sitemap\.xml\n/);
   assert.doesNotMatch(aiText, /(?:summary|faq)\.json\/|llms-full\.txt\/|sitemap\.xml\//);
   assert.match(aiText, /Do not infer geological classification, origin, dimensions, finish, price, stock, or supply/);
@@ -162,6 +166,15 @@ test("AI discovery files and full LLM text are generated from the published site
   assert.equal(faq.faqs.length, 6);
   assert.ok(faq.faqs.every((item) => item.source_url === "https://www.dsmar.com/"));
   assert.ok(faq.faqs.every((item) => item.question.length >= 10 && item.answer.length >= 20));
+  assert.equal(faq.inLanguage, "en");
+  assert.equal(faqZh.inLanguage, "zh-CN");
+  assert.equal(faqZh.faqs.length, 6);
+  assert.ok(faqZh.faqs.every((item) => item.source_url === "https://www.dsmar.com/zh/"));
+  assert.ok(faqZh.faqs.every((item) => item.question.length >= 10 && item.answer.length >= 20));
+  assert.deepEqual(
+    faqZh.faqs.find((item) => item.question === "产品名称能准确说明石材的地质分类吗？")?.citation_urls,
+    ["https://www.naturalstoneinstitute.org/stoneprofessionals/varieties/definition/"],
+  );
   assert.deepEqual(
     faq.faqs.find((item) => item.question === "Do product names always identify a stone's geological classification?")?.citation_urls,
     ["https://www.naturalstoneinstitute.org/stoneprofessionals/varieties/definition/"],
@@ -177,6 +190,18 @@ test("AI discovery files and full LLM text are generated from the published site
   assert.match(fullText, /External references: https:\/\/www\.naturalstoneinstitute\.org\/consumers\/care\//);
   assert.match(fullText, /does not publish item-level dimensions, finish, stock, origin, or price/);
   assert.doesNotMatch(fullText, /<\/?(?:p|h[1-6]|a|div)\b/i, "full LLM text must not contain HTML markup");
+  assert.match(fullTextZh, /^# 东升大理石 — 官网公开信息/m);
+  assert.match(fullTextZh, /- 贝纳白 \(ds-baina\):/);
+  assert.match(fullTextZh, /天然大理石日常养护指南：让石材历久弥新/);
+  assert.match(fullTextZh, /https:\/\/www\.dsmar\.com\/zh\/catalog\/white-series\/ds-baina\//);
+  assert.match(fullTextZh, /外部参考: https:\/\/www\.naturalstoneinstitute\.org\/consumers\/care\//);
+  assert.doesNotMatch(fullTextZh, /Daily Natural Marble Care Guide|Frequently asked questions/);
+  assert.doesNotMatch(fullTextZh, /<\/?(?:p|h[1-6]|a|div)\b/i, "Chinese full text must not contain HTML markup");
+  const localizedLinks = [...fullTextZh.matchAll(/https:\/\/www\.dsmar\.com\/[^\s)]+/g)].map(([url]) => url.replace(/[.,;]$/, ""));
+  assert.ok(localizedLinks.length > 20, "Chinese full text must link back to published canonical pages");
+  for (const link of localizedLinks) {
+    assert.ok(sitemapUrlSet.has(link), `${link} must exist in the canonical sitemap`);
+  }
 });
 
 test("homepage and inquiry pages do not promise an unverified response deadline", async () => {

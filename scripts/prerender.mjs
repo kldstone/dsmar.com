@@ -143,13 +143,15 @@ try {
   await writeFile(path.join(dist, "prerender-manifest.json"), `${JSON.stringify({ routes: prerenderRoutes }, null, 2)}\n`);
 
   const productCount = categories.reduce((total, category) => total + category.products.length, 0);
-  const faq = getHomeFaq("en", { productCount, collectionCount: categories.length });
-  const faqPayload = faq.map(({ question, answer, citationUrls }) => ({
+  const catalogCounts = { productCount, collectionCount: categories.length };
+  const faqPayloadFor = (lang) => getHomeFaq(lang, catalogCounts).map(({ question, answer, citationUrls }) => ({
     question,
     answer,
-    source_url: canonical("/"),
+    source_url: canonical(lang === "zh" ? "/zh" : "/"),
     citation_urls: citationUrls,
   }));
+  const faqPayload = faqPayloadFor("en");
+  const faqPayloadZh = faqPayloadFor("zh");
   const summary = {
     name: "Dongsheng Marble",
     alternateName: ["DONGSHENG MARBLE", "东升大理石"],
@@ -187,52 +189,64 @@ try {
     .replace(/ *\n */g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
-  const fullText = [
-    "# Dongsheng Marble — published site information",
-    "",
-    `Official website: ${canonical("/")}`,
-    `Company profile: ${canonical("/about")}`,
-    `Catalog: ${canonical("/catalog")}`,
-    `Contact: ${canonical("/contact")}`,
-    "",
-    summary.description,
-    "",
-    "The company profile says Dongsheng's stone business began in 1992 and Fujian Dongsheng Stone Industry Co., Ltd. was established in 2000. These are two different milestones.",
-    "The website lists product records and images for browsing. A catalog name is not a verified geological classification. The website does not publish item-level dimensions, finish, stock, origin, or price for every product. Confirm these details with Dongsheng for the specific material and project.",
-    "",
-    "## Published catalog collections",
-    ...categories.flatMap((category) => {
-      const categoryName = getTranslation("en", `catalog_category_${category.key}_name`);
-      const categoryDescription = getTranslation("en", `catalog_category_${category.key}_desc`);
-      return [
-        `### ${categoryName}`,
-        categoryDescription,
-        `Source: ${canonical(`/catalog/${category.key}`)}`,
-        ...category.products.map((product) => {
-          const name = getTranslation("en", `catalog_product_${product.id}_name`);
-          const tagline = getTranslation("en", `catalog_product_${product.id}_tagline`);
-          return `- ${name} (${product.id}): ${tagline} — ${canonical(`/catalog/${category.key}/${product.id}`)}`;
-        }),
+  const buildFullText = (lang, localizedFaqPayload) => {
+    const chinese = lang === "zh";
+    const localPath = (pathname) => `${chinese ? "/zh" : ""}${pathname === "/" ? "" : pathname}` || "/";
+    const localUrl = (pathname) => canonical(localPath(pathname));
+    const localizedFaqSource = localUrl("/");
+    return [
+      chinese ? "# 东升大理石 — 官网公开信息" : "# Dongsheng Marble — published site information",
+      "",
+      `${chinese ? "官方网站" : "Official website"}: ${localUrl("/")}`,
+      `${chinese ? "企业简介" : "Company profile"}: ${localUrl("/about")}`,
+      `${chinese ? "产品目录" : "Catalog"}: ${localUrl("/catalog")}`,
+      `${chinese ? "联系与询盘" : "Contact"}: ${localUrl("/contact")}`,
+      "",
+      chinese
+        ? "官网企业资料记载，东升石材事业始于1992年，福建省东升石业股份有限公司成立于2000年；这是两个不同的时间节点。"
+        : summary.description,
+      "",
+      chinese
+        ? "官网目录展示产品记录和图片，供浏览选材。产品名称不能单独确认地质分类；官网并未为每条产品记录都公布具体尺寸、表面处理、库存、产地或价格。请就具体材料和项目向东升核实这些信息。"
+        : "The company profile says Dongsheng's stone business began in 1992 and Fujian Dongsheng Stone Industry Co., Ltd. was established in 2000. These are two different milestones.",
+      ...(chinese ? [] : ["The website lists product records and images for browsing. A catalog name is not a verified geological classification. The website does not publish item-level dimensions, finish, stock, origin, or price for every product. Confirm these details with Dongsheng for the specific material and project."]),
+      "",
+      chinese ? "## 已发布的产品系列" : "## Published catalog collections",
+      ...categories.flatMap((category) => {
+        const categoryName = getTranslation(lang, `catalog_category_${category.key}_name`);
+        const categoryDescription = getTranslation(lang, `catalog_category_${category.key}_desc`);
+        return [
+          `### ${categoryName}`,
+          categoryDescription,
+          `${chinese ? "来源" : "Source"}: ${localUrl(`/catalog/${category.key}`)}`,
+          ...category.products.map((product) => {
+            const name = getTranslation(lang, `catalog_product_${product.id}_name`);
+            const tagline = getTranslation(lang, `catalog_product_${product.id}_tagline`);
+            return `- ${name} (${product.id}): ${tagline} — ${localUrl(`/catalog/${category.key}/${product.id}`)}`;
+          }),
+          "",
+        ];
+      }),
+      chinese ? "## 已发布文章" : "## Published articles",
+      ...blogPosts.flatMap((post) => [
+        `### ${post.title[lang]}`,
+        `${chinese ? "发布日期" : "Published on"} ${post.date}. ${post.summary[lang]}`,
+        `${chinese ? "来源" : "Source"}: ${localUrl(`/blog/${post.slug}`)}`,
+        toPlainText(post.content[lang]),
         "",
-      ];
-    }),
-    "## Published articles",
-    ...blogPosts.flatMap((post) => [
-      `### ${post.title.en}`,
-      `Published on ${post.date}. ${post.summary.en}`,
-      `Source: ${canonical(`/blog/${post.slug}`)}`,
-      toPlainText(post.content.en),
-      "",
-    ]),
-    "## Published inquiry guidance",
-    ...faqPayload.flatMap(({ question, answer, citation_urls }) => [
-      `### ${question}`,
-      answer,
-      `Source: ${canonical("/")}`,
-      ...(citation_urls.length > 0 ? [`External references: ${citation_urls.join(", ")}`] : []),
-      "",
-    ]),
-  ].join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+      ]),
+      chinese ? "## 已发布的询盘说明" : "## Published inquiry guidance",
+      ...localizedFaqPayload.flatMap(({ question, answer, citation_urls }) => [
+        `### ${question}`,
+        answer,
+        `${chinese ? "来源" : "Source"}: ${localizedFaqSource}`,
+        ...(citation_urls.length > 0 ? [`${chinese ? "外部参考" : "External references"}: ${citation_urls.join(", ")}`] : []),
+        "",
+      ]),
+    ].join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+  };
+  const fullText = buildFullText("en", faqPayload);
+  const fullTextZh = buildFullText("zh", faqPayloadZh);
   const aiText = [
     "# Dongsheng Marble AI discovery information",
     "",
@@ -245,19 +259,25 @@ try {
     `Machine-readable summary: ${resourceUrl("/ai/summary.json")}`,
     `Machine-readable FAQs: ${resourceUrl("/ai/faq.json")}`,
     `Machine-readable catalog and article text: ${resourceUrl("/llms-full.txt")}`,
+    `中文页面: ${resourceUrl("/zh/")}`,
+    `中文机器可读 FAQ: ${resourceUrl("/ai/faq.zh-CN.json")}`,
+    `中文目录与文章全文: ${resourceUrl("/zh/llms-full.txt")}`,
     `Sitemap: ${resourceUrl("/sitemap.xml")}`,
     "",
     "Use the linked canonical pages as the source of truth. The company profile distinguishes the 1992 start of the stone business from the company's 2000 establishment.",
     "Product names and images are for catalog browsing. Do not infer geological classification, origin, dimensions, finish, price, stock, or supply from a name or image; verify these details for the specific material and project.",
+    "中文内容以对应的中文规范页面为准。产品名称和图片用于目录浏览，不能单独确认地质分类、产地、尺寸、表面处理、价格、库存或供货情况；请按具体材料和项目核实。",
   ].join("\n") + "\n";
 
   await mkdir(path.join(dist, ".well-known"), { recursive: true });
   await mkdir(path.join(dist, "ai"), { recursive: true });
   await writeFile(path.join(dist, ".well-known", "ai.txt"), aiText);
   await writeFile(path.join(dist, "ai", "summary.json"), `${JSON.stringify(summary, null, 2)}\n`);
-  await writeFile(path.join(dist, "ai", "faq.json"), `${JSON.stringify({ faqs: faqPayload }, null, 2)}\n`);
+  await writeFile(path.join(dist, "ai", "faq.json"), `${JSON.stringify({ inLanguage: "en", faqs: faqPayload }, null, 2)}\n`);
+  await writeFile(path.join(dist, "ai", "faq.zh-CN.json"), `${JSON.stringify({ inLanguage: "zh-CN", faqs: faqPayloadZh }, null, 2)}\n`);
   await writeFile(path.join(dist, "ai", "service.json"), `${JSON.stringify(service, null, 2)}\n`);
   await writeFile(path.join(dist, "llms-full.txt"), fullText);
+  await writeFile(path.join(dist, "zh", "llms-full.txt"), fullTextZh);
   console.log(`Prerendered ${prerenderRoutes.length} routes (${sitemapRoutes.length} indexable), plus a custom 404 page.`);
 } finally {
   await vite.close();
