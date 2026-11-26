@@ -173,7 +173,7 @@ export default function Navbar() {
             <button
               ref={menuButtonRef}
               type="button"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-label={menuOpen ? t("nav_mobile_menu_close") : t("nav_mobile_menu_open")}
               aria-expanded={menuOpen}
               aria-controls="mobile-navigation"
               onClick={toggleMenu}

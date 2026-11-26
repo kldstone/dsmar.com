@@ -31,6 +31,8 @@ const translations: Record<string, { zh: string; en: string }> = {
   "nav_wechat": { zh: "微信", en: "WECHAT" },
   "nav_mobile_menu": { zh: "菜单", en: "MENU" },
   "nav_mobile_close": { zh: "关闭", en: "CLOSE" },
+  "nav_mobile_menu_open": { zh: "打开导航菜单", en: "Open menu" },
+  "nav_mobile_menu_close": { zh: "关闭导航菜单", en: "Close menu" },
 
   "topbar_company": { zh: "东升股份", en: "DONGSHENG INC." },
   "topbar_location": { zh: "中国●水头", en: "SHUITOU, CHINA" },
