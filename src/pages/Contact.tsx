@@ -234,8 +234,8 @@ export default function Contact() {
   return (
     <div>
       <section className="relative h-[45vh] min-h-[340px] bg-[#0f0f0f] overflow-hidden">
-        <img {...responsiveImage("/brand-gallery/hero-contact.jpg")} alt={t("contact_hero_alt")} className="w-full h-full object-cover opacity-80" fetchPriority="high" decoding="async" />
-        <div className="absolute inset-0 bg-black/55" />
+        <img {...responsiveImage("/brand-gallery/hero-contact.jpg")} alt={t("contact_hero_alt")} className="w-full h-full object-cover opacity-90" fetchPriority="high" decoding="async" />
+        <div className="absolute inset-0 bg-black/30" />
         <div className="absolute inset-0 flex items-center justify-center text-center px-6">
           <div>
             <span className="text-white/85 text-[12px] font-bold tracking-[0.12em] uppercase">Contact</span>
