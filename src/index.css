@@ -44,6 +44,10 @@ body {
   max-height: calc(100dvh - 130px - var(--mobile-sticky-cta-height));
 }
 
+.mobile-navigation-panel[hidden] {
+  display: none;
+}
+
 @media (max-width: 1023px) {
   body.mobile-navigation-open .cookie-consent {
     display: none;

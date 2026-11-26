@@ -206,8 +206,8 @@ export default function Navbar() {
           </div>
         )}
 
-        <div id="mobile-navigation" hidden={!menuOpen} className="mobile-navigation-panel lg:hidden border-t border-black/10 bg-white overflow-y-auto overscroll-contain touch-pan-y">
-          <div className="px-5 py-3">
+        <div id="mobile-navigation" hidden={!menuOpen} className="mobile-navigation-panel lg:hidden border-t border-black/10 bg-white flex flex-col overflow-hidden">
+          <div className="px-5 py-3 min-h-0 flex-1 overflow-y-auto overscroll-contain touch-pan-y">
             {navLinks.map((link) => (
               <div key={link.href}>
                 <Link to={link.href} onClick={() => setMenuOpen(false)} className={`flex min-h-[48px] items-center text-[14px] font-semibold border-b border-black/5 ${isActive(link.href) ? "text-[#e60012]" : "text-[#333]"}`}>{link.label}</Link>
@@ -218,7 +218,9 @@ export default function Navbar() {
                 )}
               </div>
             ))}
-            <Link to="/contact" onClick={() => { setMenuOpen(false); trackConversion("quote_cta", { source: "navbar_mobile" }); }} className="mt-4 flex min-h-[48px] items-center justify-center bg-[#e60012] text-white text-[14px] font-bold">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
+          </div>
+          <div className="shrink-0 border-t border-black/5 bg-white px-5 py-3">
+            <Link to="/contact" onClick={() => { setMenuOpen(false); trackConversion("quote_cta", { source: "navbar_mobile" }); }} className="flex min-h-[48px] items-center justify-center bg-[#e60012] text-white text-[14px] font-bold">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
           </div>
         </div>
       </nav>
