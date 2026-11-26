@@ -13,6 +13,7 @@
   --red-bg: rgba(220, 38, 38, 0.08);
   --line: rgba(0, 0, 0, 0.08);
   --line-dark: rgba(0, 0, 0, 0.05);
+  --mobile-sticky-cta-height: calc(4.0625rem + env(safe-area-inset-bottom, 0px));
 }
 
 * {
@@ -40,7 +41,7 @@ body {
 }
 
 .mobile-navigation-panel {
-  max-height: calc(100dvh - 122px - 4.0625rem - env(safe-area-inset-bottom));
+  max-height: calc(100dvh - 122px - var(--mobile-sticky-cta-height));
 }
 
 @media (min-width: 768px) {

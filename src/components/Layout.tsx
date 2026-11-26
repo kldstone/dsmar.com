@@ -21,7 +21,7 @@ export default function Layout() {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col pb-[var(--mobile-sticky-cta-height)] md:pb-0">
       <SEO />
       <a
         href="#main-content"
@@ -30,7 +30,7 @@ export default function Layout() {
         {lang === "zh" ? "跳转到主要内容" : "Skip to main content"}
       </a>
       <Navbar key={`${location.pathname}${location.search}`} />
-      <main id="main-content" tabIndex={-1} className="flex-1 pb-16 md:pb-0">
+      <main id="main-content" tabIndex={-1} className="flex-1">
         <Outlet />
       </main>
       <Footer />
