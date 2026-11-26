@@ -162,10 +162,19 @@ test("AI discovery files and full LLM text are generated from the published site
   assert.equal(faq.faqs.length, 6);
   assert.ok(faq.faqs.every((item) => item.source_url === "https://www.dsmar.com/"));
   assert.ok(faq.faqs.every((item) => item.question.length >= 10 && item.answer.length >= 20));
+  assert.deepEqual(
+    faq.faqs.find((item) => item.question === "Do product names always identify a stone's geological classification?")?.citation_urls,
+    ["https://www.naturalstoneinstitute.org/designprofessionals/varieties/definition/"],
+  );
+  assert.deepEqual(
+    faq.faqs.find((item) => item.question === "How can I confirm care instructions for natural stone?")?.citation_urls,
+    ["https://www.naturalstoneinstitute.org/consumers/care/"],
+  );
   assert.ok(service.capabilities.length > 0);
   assert.match(fullText, /- Bena White \(ds-baina\):/);
   assert.match(fullText, /Daily Natural Marble Care Guide/);
   assert.match(fullText, /naturalstoneinstitute\.org\/consumers\/care\//);
+  assert.match(fullText, /External references: https:\/\/www\.naturalstoneinstitute\.org\/consumers\/care\//);
   assert.match(fullText, /does not publish item-level dimensions, finish, stock, origin, or price/);
   assert.doesNotMatch(fullText, /<\/?(?:p|h[1-6]|a|div)\b/i, "full LLM text must not contain HTML markup");
 });
@@ -199,6 +208,10 @@ test("homepage prerender includes real catalog links and matching inquiry guidan
   assert.match(html, /How many products are listed in Dongsheng(?:&#39;|')s online catalog\?/);
   assert.ok(homeSchema.mainEntity.some((item) => item.name === "Do product names always identify a stone's geological classification?"));
   assert.ok(homeSchema.mainEntity.some((item) => item.name === "How can I confirm care instructions for natural stone?"));
+  assert.ok(homeSchema.mainEntity.some((item) =>
+    item.name === "How can I confirm care instructions for natural stone?"
+      && item.acceptedAnswer.citation?.some((citation) => citation.url === "https://www.naturalstoneinstitute.org/consumers/care/"),
+  ));
   assert.match(html, /<h3[^>]*>How can I request a quote for a catalog product\?<\/h3>/);
   assert.match(html, /They do not by themselves confirm a specific lot, dimensions, finish, or current stock\./);
   assert.match(html, /published company profile records 1992 as the beginning of Dongsheng(?:&#x27;|')s stone business and 2000 as the year the company was established/);

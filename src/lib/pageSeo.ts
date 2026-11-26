@@ -266,7 +266,13 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
       }).map((item) => ({
         "@type": "Question",
         name: item.question,
-        acceptedAnswer: { "@type": "Answer", text: item.answer },
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+          ...(item.citationUrls.length > 0
+            ? { citation: item.citationUrls.map((url) => ({ "@type": "CreativeWork", url })) }
+            : {}),
+        },
       })),
     });
   }

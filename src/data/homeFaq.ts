@@ -42,6 +42,7 @@ export const homeFaq = [
       zh: "不一定。石材的商业名称可能与地质学分类不同。官网名称和图片用于初步浏览；正式选材前，请向东升核实具体材料分类及项目所需信息。",
       en: "Not always. Commercial stone names may differ from scientific geological classifications. Use catalog names and photos for initial browsing, then ask Dongsheng to confirm the material classification and project details before specifying a product.",
     },
+    citationUrls: ["https://www.naturalstoneinstitute.org/designprofessionals/varieties/definition/"],
   },
   {
     question: {
@@ -52,14 +53,20 @@ export const homeFaq = [
       zh: "天然石材的养护方式取决于其地质分类和组成。Natural Stone Institute 指出，柠檬汁、醋等酸性产品可能使含碳酸盐的石材失去光泽或被蚀刻。请结合具体材料和使用场景向供应商或养护专业人员确认。",
       en: "Care depends on a stone's geological classification and composition. The Natural Stone Institute notes that acidic products such as lemon or vinegar may dull or etch calcareous stones. Confirm care for the exact material and application with your supplier or a stone-care professional.",
     },
+    citationUrls: ["https://www.naturalstoneinstitute.org/consumers/care/"],
   },
 ] as const;
 
 export function getHomeFaq(lang: Lang, catalog: { productCount: number; collectionCount: number }) {
   return [
-    ...homeFaq.map(({ question, answer }) => ({ question: question[lang], answer: answer[lang] })),
+    ...homeFaq.map(({ question, answer, ...item }) => ({
+      question: question[lang],
+      answer: answer[lang],
+      citationUrls: "citationUrls" in item ? item.citationUrls : [],
+    })),
     {
       question: lang === "zh" ? "东升官网产品目录目前列出多少个产品？" : "How many products are listed in Dongsheng's online catalog?",
+      citationUrls: [],
       answer: lang === "zh"
         ? `官网目录目前列出 ${catalog.productCount} 条已发布产品记录，分为 ${catalog.collectionCount} 个系列。统计时每条产品记录计为一项，系列数量按目录中的分类记录计算。这些数字只表示官网展示的目录条目，不等于独立石种数、现货数量或已确认供货。选型时请按具体产品核实批次、尺寸、表面处理及供应情况。`
         : `We list ${catalog.productCount} published product records across ${catalog.collectionCount} collections. We count each product record once; the collection total comes from the category records in this catalog. These figures describe website listings only. They do not indicate geological variety, stock, or confirmed supply. Verify the lot, dimensions, finish, and availability of a selected item before specifying it.`,

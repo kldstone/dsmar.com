@@ -144,7 +144,12 @@ try {
 
   const productCount = categories.reduce((total, category) => total + category.products.length, 0);
   const faq = getHomeFaq("en", { productCount, collectionCount: categories.length });
-  const faqPayload = faq.map(({ question, answer }) => ({ question, answer, source_url: canonical("/") }));
+  const faqPayload = faq.map(({ question, answer, citationUrls }) => ({
+    question,
+    answer,
+    source_url: canonical("/"),
+    citation_urls: citationUrls,
+  }));
   const summary = {
     name: "Dongsheng Marble",
     alternateName: ["DONGSHENG MARBLE", "东升大理石"],
@@ -220,7 +225,13 @@ try {
       "",
     ]),
     "## Published inquiry guidance",
-    ...faqPayload.flatMap(({ question, answer }) => [`### ${question}`, answer, `Source: ${canonical("/")}`, ""]),
+    ...faqPayload.flatMap(({ question, answer, citation_urls }) => [
+      `### ${question}`,
+      answer,
+      `Source: ${canonical("/")}`,
+      ...(citation_urls.length > 0 ? [`External references: ${citation_urls.join(", ")}`] : []),
+      "",
+    ]),
   ].join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
   const aiText = [
     "# Dongsheng Marble AI discovery information",
