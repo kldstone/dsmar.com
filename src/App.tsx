@@ -4,7 +4,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import { Suspense, lazy, useEffect, useLayoutEffect } from "react";
 
 function ScrollToTop() {
-  const { pathname, search, key } = useLocation();
+  const { pathname, search, hash, key } = useLocation();
 
   const resetScroll = () => {
     window.scrollTo(0, 0);
@@ -13,13 +13,15 @@ function ScrollToTop() {
   };
 
   useLayoutEffect(() => {
+    if (hash) return;
+
     resetScroll();
     const frame = requestAnimationFrame(() => {
       resetScroll();
       requestAnimationFrame(resetScroll);
     });
     return () => cancelAnimationFrame(frame);
-  }, [pathname, search, key]);
+  }, [pathname, search, hash, key]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
