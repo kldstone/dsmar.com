@@ -108,7 +108,7 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
         "@type": "SearchAction",
         target: {
           "@type": "EntryPoint",
-          urlTemplate: `${pageUrl("/search", lang)}?q={search_term_string}`,
+          urlTemplate: `${siteUrl}${localizedPath("/search", lang)}?q={search_term_string}`,
         },
         "query-input": "required name=search_term_string",
       },
