@@ -39,6 +39,16 @@ body {
   letter-spacing: 0.01em;
 }
 
+.mobile-navigation-panel {
+  max-height: calc(100dvh - 122px - 4.0625rem - env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  .mobile-navigation-panel {
+    max-height: calc(100dvh - 122px);
+  }
+}
+
 img {
   max-width: 100%;
   display: block;

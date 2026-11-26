@@ -193,7 +193,7 @@ export default function Navbar() {
           </div>
         )}
 
-        <div id="mobile-navigation" hidden={!menuOpen} className="lg:hidden border-t border-black/10 bg-white max-h-[calc(100dvh-114px)] overflow-y-auto overscroll-contain touch-pan-y">
+        <div id="mobile-navigation" hidden={!menuOpen} className="mobile-navigation-panel lg:hidden border-t border-black/10 bg-white overflow-y-auto overscroll-contain touch-pan-y">
           <div className="px-5 py-3">
             {navLinks.map((link) => (
               <div key={link.href}>
