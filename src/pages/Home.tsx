@@ -54,7 +54,7 @@ export default function Home() {
   return (
     <div>
       {/* Hero Carousel */}
-      <div className="relative w-full h-screen overflow-hidden bg-black" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+      <div className="relative w-full h-[calc(100svh-7.625rem)] min-h-[480px] overflow-hidden bg-black" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
         {slides.map((slide, index) => (
           <div
             key={slide.img}
@@ -80,7 +80,7 @@ export default function Home() {
             </Link>
           </div>
         ))}
-        <div className="absolute inset-0 z-10 flex items-center">
+        <div className="absolute inset-0 z-10 flex items-center pb-28">
           <div className="w-full max-w-[1280px] mx-auto px-6 md:px-12 lg:px-16">
             <div key={active} className="max-w-[640px]" style={{ animation: "slideFadeIn 1.2s ease-out" }}>
               <h1 className="text-white/60 text-[clamp(0.7rem,1.2vw,0.9rem)] font-light tracking-[0.25em] uppercase mb-4 md:mb-6">{lang === "zh" ? "东升大理石" : "DONGSHENG MARBLE"}</h1>

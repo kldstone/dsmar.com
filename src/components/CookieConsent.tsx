@@ -26,8 +26,8 @@ export default function CookieConsent() {
 
   return (
     <section aria-label={lang === "zh" ? "Cookie 设置" : "Cookie preferences"} className="cookie-consent fixed left-3 right-3 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] md:bottom-4 z-[100] bg-white border border-black/15 shadow-xl">
-      <div className="max-w-[1280px] mx-auto p-3 md:px-5 md:py-3 flex flex-col md:flex-row md:items-center gap-3 md:gap-5">
-        <p className="flex-1 text-[13px] md:text-[14px] leading-relaxed text-[#333]">
+      <div className="max-w-[1280px] mx-auto p-2 md:px-5 md:py-3 flex flex-col md:flex-row md:items-center gap-2 md:gap-5">
+        <p className="flex-1 text-[13px] md:text-[14px] leading-[1.4] md:leading-relaxed text-[#333]">
           {lang === "zh"
             ? "我们仅在您同意后启用分析和广告 Cookie；必要 Cookie 用于网站基本功能。"
             : "We enable analytics and advertising cookies only with your consent. Essential cookies support basic website functions."}
