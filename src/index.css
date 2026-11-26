@@ -41,12 +41,18 @@ body {
 }
 
 .mobile-navigation-panel {
-  max-height: calc(100dvh - 122px - var(--mobile-sticky-cta-height));
+  max-height: calc(100dvh - 130px - var(--mobile-sticky-cta-height));
+}
+
+@media (max-width: 1023px) {
+  body.mobile-navigation-open .cookie-consent {
+    display: none;
+  }
 }
 
 @media (min-width: 768px) {
   .mobile-navigation-panel {
-    max-height: calc(100dvh - 122px);
+    max-height: calc(100dvh - 130px);
   }
 }
 

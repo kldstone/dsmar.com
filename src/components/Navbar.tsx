@@ -37,6 +37,7 @@ export default function Navbar() {
     if (!menuOpen) return;
     lockedScrollY.current = window.scrollY;
     const body = document.body;
+    body.classList.add("mobile-navigation-open");
     const previous = {
       position: body.style.position,
       top: body.style.top,
@@ -48,12 +49,24 @@ export default function Navbar() {
     body.style.width = "100%";
     body.style.overflow = "hidden";
     return () => {
+      body.classList.remove("mobile-navigation-open");
       body.style.position = previous.position;
       body.style.top = previous.top;
       body.style.width = previous.width;
       body.style.overflow = previous.overflow;
       window.scrollTo(0, lockedScrollY.current);
     };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const desktopBreakpoint = window.matchMedia("(min-width: 1024px)");
+    const closeMenuOnDesktop = () => {
+      if (desktopBreakpoint.matches) setMenuOpen(false);
+    };
+    desktopBreakpoint.addEventListener("change", closeMenuOnDesktop);
+    closeMenuOnDesktop();
+    return () => desktopBreakpoint.removeEventListener("change", closeMenuOnDesktop);
   }, [menuOpen]);
 
   useEffect(() => {
@@ -197,15 +210,15 @@ export default function Navbar() {
           <div className="px-5 py-3">
             {navLinks.map((link) => (
               <div key={link.href}>
-                <Link to={link.href} className={`flex min-h-[48px] items-center text-[14px] font-semibold border-b border-black/5 ${isActive(link.href) ? "text-[#e60012]" : "text-[#333]"}`}>{link.label}</Link>
+                <Link to={link.href} onClick={() => setMenuOpen(false)} className={`flex min-h-[48px] items-center text-[14px] font-semibold border-b border-black/5 ${isActive(link.href) ? "text-[#e60012]" : "text-[#333]"}`}>{link.label}</Link>
                 {link.children && (
                   <div className="pl-5 pb-2">
-                    {link.children.map((child) => <Link key={child.href} to={child.href} className="flex min-h-[44px] items-center text-[13px] text-[#444] border-b border-black/5">{child.label}</Link>)}
+                    {link.children.map((child) => <Link key={child.href} to={child.href} onClick={() => setMenuOpen(false)} className="flex min-h-[44px] items-center text-[13px] text-[#444] border-b border-black/5">{child.label}</Link>)}
                   </div>
                 )}
               </div>
             ))}
-            <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "navbar_mobile" })} className="mt-4 flex min-h-[48px] items-center justify-center bg-[#e60012] text-white text-[14px] font-bold">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
+            <Link to="/contact" onClick={() => { setMenuOpen(false); trackConversion("quote_cta", { source: "navbar_mobile" }); }} className="mt-4 flex min-h-[48px] items-center justify-center bg-[#e60012] text-white text-[14px] font-bold">{lang === "zh" ? "获取报价" : "Request a Quote"}</Link>
           </div>
         </div>
       </nav>
