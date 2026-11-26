@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { optimizedImage, responsiveImage } from "@/lib/images";
 import { trackConversion } from "@/lib/analytics";
 import { clearInquiryProducts, removeInquiryProduct, useInquiryProducts } from "@/lib/inquiry";
@@ -61,6 +61,7 @@ function getAttribution() {
 export default function Contact() {
   const { t, lang } = useLang();
   const products = useInquiryProducts();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [values, setValues] = useState<FormValues>(initialValues);
   const [attachment, setAttachment] = useState<Attachment | null>(null);
   const [fileState, setFileState] = useState<FileState>("idle");
@@ -80,6 +81,7 @@ export default function Contact() {
     contactHint: "邮箱和 WhatsApp 填写任意一项即可。",
     incomplete: "资料不完整也可以提交，我们会协助你逐步确认。",
     reference: "参考图片或文件",
+    chooseFile: "选择文件",
     fileHint: "PDF、JPG、JPEG、PNG、WEBP、DWG 或 DXF，最大 2.5 MB。",
     choosing: "文件读取中……",
     formatError: "文件格式不支持，请选择允许的格式。",
@@ -123,6 +125,7 @@ export default function Contact() {
     contactHint: "Provide either an email address or WhatsApp number.",
     incomplete: "It is fine to submit with incomplete details. We can help you confirm them step by step.",
     reference: "Reference image or file",
+    chooseFile: "Choose file",
     fileHint: "PDF, JPG, JPEG, PNG, WEBP, DWG or DXF, up to 2.5 MB.",
     choosing: "Reading file…",
     formatError: "Unsupported file format. Please select an allowed file type.",
@@ -315,9 +318,31 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label htmlFor="inquiry-file" className={labelClass}>{copy.reference} ({copy.optional})</label>
-                  <input id="inquiry-file" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.dwg,.dxf" onChange={(event) => handleFile(event.target.files?.[0])} className="block w-full text-[14px] file:min-h-[44px] file:mr-4 file:border-0 file:bg-[#222] file:text-white file:px-5 file:font-bold" />
-                  <p className="mt-2 text-[#555] text-[12px]">{copy.fileHint}</p>
+                  <p className={labelClass}>{copy.reference} ({copy.optional})</p>
+                  <input
+                    ref={fileInputRef}
+                    id="inquiry-file"
+                    type="file"
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    accept=".pdf,.jpg,.jpeg,.png,.webp,.dwg,.dxf"
+                    onChange={(event) => {
+                      const input = event.currentTarget;
+                      handleFile(input.files?.[0]);
+                      input.value = "";
+                    }}
+                    className="sr-only"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`${copy.chooseFile}: ${copy.reference}`}
+                    aria-describedby="inquiry-file-hint"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex min-h-[44px] items-center bg-[#222] px-5 text-[14px] font-bold text-white hover:bg-[#333] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e60012]"
+                  >
+                    {copy.chooseFile}
+                  </button>
+                  <p id="inquiry-file-hint" className="mt-2 text-[#555] text-[12px]">{copy.fileHint}</p>
                   <div aria-live="polite" className="mt-2 text-[13px]">
                     {fileState === "reading" && <p>{copy.choosing}</p>}
                     {fileState === "ready" && attachment && <p className="flex items-center justify-between gap-3"><span className="truncate">{attachment.name}</span><button type="button" onClick={() => { setAttachment(null); setFileState("idle"); }} className="min-h-[44px] px-3 font-bold text-[#e60012]">{copy.removeFile}</button></p>}
