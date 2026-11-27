@@ -104,6 +104,39 @@ test("RSS feed is generated from published article data and discoverable from th
   }
 });
 
+test("blog articles are ordered by publication date and publish their references to readers and crawlers", async () => {
+  const blogList = await readFile(htmlPath(routeByPath.get("/blog")), "utf8");
+  const listedSlugs = [...new Set([...blogList.matchAll(/<a\b[^>]*href="\/blog\/([^"]+)"/g)].map((match) => match[1]))];
+
+  assert.deepEqual(listedSlugs, [
+    "natural-marble-care-guide",
+    "dongsheng-luxury-stone-transformation",
+    "dongsheng-baishi-cloud-warehouse",
+    "dongsheng-chairman-visit-zhengzhou",
+    "korea-stone-delegation",
+    "dongsheng-hanbaiyu-cooperation",
+  ]);
+
+  const warehouseHtml = await readFile(htmlPath(routeByPath.get("/blog/dongsheng-baishi-cloud-warehouse")), "utf8");
+  const warehouseSchemas = [...warehouseHtml.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
+    .map((match) => JSON.parse(match[1]));
+  const warehouseArticle = warehouseSchemas.find((schema) => schema["@type"] === "Article");
+
+  assert.match(warehouseHtml, /Sources/);
+  assert.match(warehouseHtml, /href="https:\/\/www\.dhge\.cn\/artice426\.html"/);
+  assert.deepEqual(warehouseArticle?.citation, [{
+    "@type": "CreativeWork",
+    name: "Donghua Global: Dongsheng Chairman Wang Shangyun Visits to Launch the Cloud Warehouse Partnership",
+    url: "https://www.dhge.cn/artice426.html",
+  }]);
+  assert.match(await readFile(path.join(dist, "zh", "llms-full.txt"), "utf8"), /外部参考: 东华环球：东升股份董事长王尚云到访，共启百市云仓战略合作 \(https:\/\/www\.dhge\.cn\/artice426\.html\)/);
+
+  const careHtml = await readFile(htmlPath(routeByPath.get("/zh/blog/natural-marble-care-guide")), "utf8");
+  assert.match(careHtml, /资料来源/);
+  assert.match(careHtml, /href="https:\/\/www\.naturalstoneinstitute\.org\/consumers\/care\/"/);
+  assert.match(careHtml, /href="https:\/\/www\.naturalstoneinstitute\.org\/consumers\/sealing-stone\/"/);
+});
+
 test("homepage identity and site search structured data match visible site behavior", async () => {
   const html = await readFile(htmlPath({ path: "/" }), "utf8");
   const schemas = [...html.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]

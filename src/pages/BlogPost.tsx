@@ -41,6 +41,22 @@ export default function BlogPost() {
       <article className="max-w-[760px] mx-auto px-6 py-16">
         <div className="text-[var(--ink)] text-[16px] leading-[2] space-y-5 [&_h2]:text-[1.3rem] [&_h2]:font-black [&_h2]:tracking-[0.03em] [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-[1.1rem] [&_h3]:font-bold [&_h3]:mt-8 [&_h3]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:mb-2 [&_table]:w-full [&_table]:border-collapse [&_th]:bg-[#f5f5f5] [&_th]:text-left [&_th]:p-3 [&_td]:border [&_td]:border-black/10 [&_td]:p-3"
           dangerouslySetInnerHTML={{ __html: post.content[lang] }} />
+        {post.sources && post.sources.length > 0 && (
+          <section className="mt-12 border-t border-black/10 pt-6" aria-labelledby="article-sources-heading">
+            <h2 id="article-sources-heading" className="text-[1.05rem] font-bold">
+              {lang === "zh" ? "资料来源" : "Sources"}
+            </h2>
+            <ul className="mt-3 space-y-2 text-[14px] leading-relaxed">
+              {post.sources.map((source) => (
+                <li key={source.url}>
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-[#e60012] underline underline-offset-4 hover:opacity-70">
+                    {source.title[lang]}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </article>
 
       {/* Tags & Share */}

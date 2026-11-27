@@ -3,6 +3,11 @@ type LocalizedText = {
   en: string;
 };
 
+type BlogSource = {
+  title: LocalizedText;
+  url: string;
+};
+
 export type BlogPost = {
   slug: string;
   title: LocalizedText;
@@ -12,6 +17,7 @@ export type BlogPost = {
   image: string;
   tags: LocalizedText[];
   content: LocalizedText;
+  sources?: BlogSource[];
 };
 
 export const blogPosts: BlogPost[] = [
@@ -34,6 +40,13 @@ export const blogPosts: BlogPost[] = [
     image: "/brand-gallery/blog-expo-2025-07-22-02.jpg",
     tags: [{ zh: "百市云仓", en: "Cloud Warehouse" }, { zh: "战略合作", en: "Strategic Partnership" }, { zh: "全国布局", en: "National Network" }],
     content: { zh: `<h2>「百市云仓」新模式</h2><p>东升股份董事长王尚云近日到访上海东华环球，双方正式达成「百市云仓」战略合作。该模式定位为「窗口+仓库」，专注于源头直供的现货展示与仓储服务。</p><h2>首批1-2万平方米石材入库</h2><p>双方计划首批组织1~2万平方米石材入库，覆盖20~30个品种，解决上海市场「有价无货」的困局。</p>`, en: `<h2>A New Cloud Warehouse Model</h2><p>Dongsheng Chairman Wang Shangyun recently visited Shanghai Donghua Global, where the two sides formally established the Cloud Warehouse strategic partnership. The model combines a showroom with a warehouse to provide direct-source inventory display and storage.</p><h2>Initial Inventory Programme</h2><p>The first phase plans to stock 10,000 to 20,000 square metres of stone across 20 to 30 varieties, improving product availability for the Shanghai market.</p>` },
+    sources: [{
+      title: {
+        zh: "东华环球：东升股份董事长王尚云到访，共启百市云仓战略合作",
+        en: "Donghua Global: Dongsheng Chairman Wang Shangyun Visits to Launch the Cloud Warehouse Partnership",
+      },
+      url: "https://www.dhge.cn/artice426.html",
+    }],
   },
   {
     slug: "dongsheng-hanbaiyu-cooperation",
@@ -77,5 +90,21 @@ export const blogPosts: BlogPost[] = [
       zh: `<p><strong>简要回答：</strong>日常清洁大理石，可用温水配合中性石材清洁剂、石材皂或温和洗涤剂；之后用清水冲净并以软布擦干。石种、表面处理和安装环境不同，具体维护方式也应相应调整。<a href="https://www.naturalstoneinstitute.org/consumers/care/" target="_blank" rel="noopener noreferrer">天然石材行业协会（Natural Stone Institute）的清洁建议</a>提供了通用做法。</p><h2>大理石日常应该怎么清洁？</h2><ul><li>液体洒落后尽快用干净软布按压吸干，不要来回擦拭。</li><li>用温水和中性石材清洁剂、石材皂或温和洗涤剂清洁；按清洁剂说明操作，再用清水冲洗并擦干。</li><li>避免用醋、柠檬汁等酸性用品清洁大理石。含方解石的石材可能被酸性物质蚀刻，表面会失去光泽；研磨性清洁粉也可能刮伤表面。</li></ul><p>以上清洁方法依据 <a href="https://www.naturalstoneinstitute.org/consumers/care/" target="_blank" rel="noopener noreferrer">Natural Stone Institute 的天然石材清洁与养护说明</a>整理。清洁剂若未标明适用于天然石材，请先不要直接用于石面。</p><h2>醋或柠檬汁会损伤大理石吗？</h2><p>可能会。醋和柠檬汁属于酸性物质；对含方解石的大理石，酸可能造成蚀刻，使表面出现暗淡或失光的痕迹。蚀刻是表面受损，不一定是污渍；不确定痕迹类型时，先咨询石材供应商或专业石材修复人员。<a href="https://www.naturalstoneinstitute.org/consumers/care/" target="_blank" rel="noopener noreferrer">Natural Stone Institute 关于酸蚀与清洁的说明</a></p><h2>大理石一定要做封护吗？</h2><p>不一定。是否封护要结合具体石材、用途和安装条件确认。封护剂可能提高对日常污渍的抵抗力，但不代表石材完全防污；请向供应商或安装人员确认产品是否适用，并按产品说明施工。<a href="https://www.naturalstoneinstitute.org/consumers/sealing-stone/" target="_blank" rel="noopener noreferrer">Natural Stone Institute 关于天然石材台面封护的说明</a></p><h2>表面出现暗斑或失光怎么办？</h2><p>先避免继续使用酸性或研磨性清洁剂。酸蚀可能表现为表面失光，和液体渗入造成的污渍并非同一问题；请拍下现场情况并联系石材供应商或专业修复人员判断处理方式。不要先用未经确认的强力清洁剂或抛光剂。</p><h2>维护建议适用于所有石材吗？</h2><p>不适用于所有情况。本指南是一般性的天然石材清洁信息，不能替代针对具体石种、饰面和安装条件的维护说明。采购或安装后，请向供货方索取与实际石材相匹配的清洁和维护建议。</p>`,
       en: `<p><strong>Short answer:</strong> For everyday marble cleaning, use warm water with a neutral stone cleaner, stone soap, or a mild detergent; rinse with clean water and dry with a soft cloth. Care depends on the stone, finish, and installation. This general guidance follows the <a href="https://www.naturalstoneinstitute.org/consumers/care/" target="_blank" rel="noopener noreferrer">Natural Stone Institute's stone-care recommendations</a>.</p><h2>How should I clean marble every day?</h2><ul><li>Blot spills promptly with a clean, soft cloth instead of wiping across the surface.</li><li>Clean with warm water and a neutral stone cleaner, stone soap, or mild detergent. Follow the cleaner's directions, rinse with clean water, and dry the surface.</li><li>Avoid vinegar, lemon juice, and other acidic cleaners. Acids can etch calcite-based stone and dull its finish; abrasive powders may scratch the surface.</li></ul><p>These steps summarize the <a href="https://www.naturalstoneinstitute.org/consumers/care/" target="_blank" rel="noopener noreferrer">Natural Stone Institute's care guidance</a>. Do not apply a cleaner directly to stone unless its label says it is suitable for natural stone.</p><h2>Can vinegar or lemon juice damage marble?</h2><p>Yes, they can. Vinegar and lemon juice are acidic. On calcite-based marble, acids may etch the surface and leave a dull mark. Etching is surface damage and is not necessarily a stain. If you are unsure what caused a mark, ask your stone supplier or a stone-restoration professional. See the <a href="https://www.naturalstoneinstitute.org/consumers/care/" target="_blank" rel="noopener noreferrer">Natural Stone Institute's explanation of acid etching</a>.</p><h2>Does marble always need a sealer?</h2><p>No. Whether to seal depends on the specific stone, use, and installation. A sealer may improve resistance to everyday stains, but it does not make stone stain-proof. Ask your supplier or installer whether a sealer is appropriate and follow its product instructions. See the <a href="https://www.naturalstoneinstitute.org/consumers/sealing-stone/" target="_blank" rel="noopener noreferrer">Natural Stone Institute guidance on sealing natural-stone countertops</a>.</p><h2>What should I do about a dull mark?</h2><p>Stop using acidic or abrasive cleaners on the area. Acid etching can dull a finish and is different from a stain caused by a substance absorbed into the stone. Photograph the area and ask your stone supplier or a qualified restoration professional to identify the issue before applying a strong cleaner or polish.</p><h2>Does this advice apply to every stone?</h2><p>No. This is general natural-stone care information, not a maintenance specification for every stone, finish, or installation. After purchase or installation, ask the supplier for care instructions that match the material and finish at your site.</p>`,
     },
+    sources: [
+      {
+        title: {
+          zh: "Natural Stone Institute：天然石材清洁与养护",
+          en: "Natural Stone Institute: Care and Cleaning of Natural Stone",
+        },
+        url: "https://www.naturalstoneinstitute.org/consumers/care/",
+      },
+      {
+        title: {
+          zh: "Natural Stone Institute：天然石材封护",
+          en: "Natural Stone Institute: Sealing Natural Stone",
+        },
+        url: "https://www.naturalstoneinstitute.org/consumers/sealing-stone/",
+      },
+    ],
   },
 ];

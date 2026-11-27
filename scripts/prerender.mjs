@@ -70,6 +70,7 @@ try {
     vite.ssrLoadModule("/src/data/homeFaq.ts"),
     vite.ssrLoadModule("/src/lib/i18n.tsx"),
   ]);
+  const orderedBlogPosts = [...blogPosts].sort((first, second) => second.date.localeCompare(first.date));
   const template = await readFile(path.join(dist, "index.html"), "utf8");
   const sitemapRoutes = [];
 
@@ -103,21 +104,19 @@ try {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sitemapRoutes.join("\n")}\n</urlset>\n`;
   await writeFile(path.join(dist, "sitemap.xml"), sitemap);
   const canonical = (pathname) => new URL(pathname.endsWith("/") ? pathname : `${pathname}/`, siteUrl).toString();
-  const feedItems = [...blogPosts]
-    .sort((first, second) => second.date.localeCompare(first.date))
-    .map((post) => {
-      const link = canonical(`/blog/${post.slug}`);
-      const pubDate = new Date(`${post.date}T00:00:00Z`).toUTCString();
-      return [
-        "  <item>",
-        `    <title>${escapeXml(post.title.en)}</title>`,
-        `    <link>${escapeXml(link)}</link>`,
-        `    <guid isPermaLink="true">${escapeXml(link)}</guid>`,
-        `    <pubDate>${escapeXml(pubDate)}</pubDate>`,
-        `    <description>${escapeXml(post.summary.en)}</description>`,
-        "  </item>",
-      ].join("\n");
-    });
+  const feedItems = orderedBlogPosts.map((post) => {
+    const link = canonical(`/blog/${post.slug}`);
+    const pubDate = new Date(`${post.date}T00:00:00Z`).toUTCString();
+    return [
+      "  <item>",
+      `    <title>${escapeXml(post.title.en)}</title>`,
+      `    <link>${escapeXml(link)}</link>`,
+      `    <guid isPermaLink="true">${escapeXml(link)}</guid>`,
+      `    <pubDate>${escapeXml(pubDate)}</pubDate>`,
+      `    <description>${escapeXml(post.summary.en)}</description>`,
+      "  </item>",
+    ].join("\n");
+  });
   const rss = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0"><channel>',
@@ -228,10 +227,11 @@ try {
         ];
       }),
       chinese ? "## 已发布文章" : "## Published articles",
-      ...blogPosts.flatMap((post) => [
+      ...orderedBlogPosts.flatMap((post) => [
         `### ${post.title[lang]}`,
         `${chinese ? "发布日期" : "Published on"} ${post.date}. ${post.summary[lang]}`,
         `${chinese ? "来源" : "Source"}: ${localUrl(`/blog/${post.slug}`)}`,
+        ...(post.sources ?? []).map((source) => `${chinese ? "外部参考" : "External reference"}: ${source.title[lang]} (${source.url})`),
         toPlainText(post.content[lang]),
         "",
       ]),

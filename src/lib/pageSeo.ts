@@ -226,6 +226,11 @@ function makeStructuredData(pathname: string, lang: Lang, image: string, title: 
         image: absoluteUrl(post.image),
         datePublished: post.date,
         inLanguage: lang === "zh" ? "zh-CN" : "en",
+        articleSection: post.category[lang],
+        keywords: post.tags.map((tag) => tag[lang]),
+        ...(post.sources && post.sources.length > 0
+          ? { citation: post.sources.map((source) => ({ "@type": "CreativeWork", name: source.title[lang], url: source.url })) }
+          : {}),
         mainEntityOfPage: canonical,
         author: { "@id": `${siteUrl}/#organization` },
         publisher: { "@id": `${siteUrl}/#organization` },

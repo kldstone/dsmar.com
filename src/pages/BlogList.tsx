@@ -3,6 +3,8 @@ import { blogPosts } from "../content/blog-cn";
 import { useLang } from "@/lib/i18n";
 import { optimizedImage, responsiveImage } from "@/lib/images";
 
+const sortedBlogPosts = [...blogPosts].sort((first, second) => second.date.localeCompare(first.date));
+
 export default function BlogList() {
   const { lang, t } = useLang();
   const categories = [
@@ -43,7 +45,7 @@ export default function BlogList() {
       {/* Posts */}
       <section className="max-w-[1100px] mx-auto px-6 pb-20">
         <div className="space-y-10">
-          {blogPosts.map(post => (
+          {sortedBlogPosts.map(post => (
             <article key={post.slug} className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start border-b border-black/5 pb-10">
               <Link to={`/blog/${post.slug}`} className="overflow-hidden md:col-span-1">
                 <img src={optimizedImage(post.image)} alt={post.title[lang]} className="w-full aspect-[4/3] object-cover img-hover" loading="lazy" decoding="async" />
