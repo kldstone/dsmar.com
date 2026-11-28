@@ -24,7 +24,7 @@ export default function BlogPost() {
         <img src={optimizedImage(post.image)} alt={post.title[lang]} className="w-full h-full object-cover opacity-50" fetchPriority="high" decoding="async" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-center justify-center text-center px-6">
-          <div className="max-w-[700px]">
+          <div className="max-w-[900px]">
             <span className="text-white/50 text-[10px] font-bold tracking-[0.16em] uppercase">{post.category[lang]}</span>
             <h1 className="text-white text-[clamp(1.4rem,3vw,2.2rem)] font-black tracking-[0.02em] mt-3 mb-3">{post.title[lang]}</h1>
             <p className="text-white/50 text-[13px]">
