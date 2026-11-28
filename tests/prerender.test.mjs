@@ -112,8 +112,8 @@ test("blog articles are ordered by publication date and publish their references
     "natural-marble-care-guide",
     "dongsheng-luxury-stone-transformation",
     "dongsheng-baishi-cloud-warehouse",
-    "dongsheng-chairman-visit-zhengzhou",
     "korea-stone-delegation",
+    "dongsheng-chairman-visit-zhengzhou",
     "dongsheng-hanbaiyu-cooperation",
   ]);
 
@@ -130,6 +130,43 @@ test("blog articles are ordered by publication date and publish their references
     url: "https://www.dhge.cn/artice426.html",
   }]);
   assert.match(await readFile(path.join(dist, "zh", "llms-full.txt"), "utf8"), /外部参考: 东华环球：东升股份董事长王尚云到访，共启百市云仓战略合作 \(https:\/\/www\.dhge\.cn\/artice426\.html\)/);
+
+  const fullTextZh = await readFile(path.join(dist, "zh", "llms-full.txt"), "utf8");
+  const luxuryHtml = await readFile(htmlPath(routeByPath.get("/zh/blog/dongsheng-luxury-stone-transformation")), "utf8");
+  assert.match(luxuryHtml, /href="https:\/\/www\.dsmar\.com\/about\/"/);
+  assert.match(luxuryHtml, /href="https:\/\/www\.dsmar\.com\/catalog\/"/);
+  assert.doesNotMatch(luxuryHtml + fullTextZh, /独家包矿|单品售价可达18万元|已启用9台|专程到访南安水头/);
+
+  const shangyueHtml = await readFile(htmlPath(routeByPath.get("/zh/blog/dongsheng-hanbaiyu-cooperation")), "utf8");
+  const shangyueSchemas = [...shangyueHtml.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
+    .map((match) => JSON.parse(match[1]));
+  const shangyueArticle = shangyueSchemas.find((schema) => schema["@type"] === "Article");
+  assert.equal(shangyueArticle?.datePublished, "2026-02-07");
+  assert.match(shangyueHtml, /href="https:\/\/www\.shangyuemarble\.com\/xinwenzhongxin\/1451\.html"/);
+  assert.deepEqual(shangyueArticle?.citation, [{
+    "@type": "CreativeWork",
+    name: "尚玥矿业：尚玥2026年经销商大会圆满举行",
+    url: "https://www.shangyuemarble.com/xinwenzhongxin/1451.html",
+  }]);
+  assert.match(fullTextZh, /授权区域、期限、产品范围及当前合作条件/);
+
+  const xiamenHtml = await readFile(htmlPath(routeByPath.get("/zh/blog/korea-stone-delegation")), "utf8");
+  const xiamenSchemas = [...xiamenHtml.matchAll(/<script[^>]*application\/ld\+json[^>]*>(.*?)<\/script>/gs)]
+    .map((match) => JSON.parse(match[1]));
+  const xiamenArticle = xiamenSchemas.find((schema) => schema["@type"] === "Article");
+  assert.equal(xiamenArticle?.datePublished, "2026-03-31");
+  assert.match(xiamenHtml, /href="https:\/\/www\.xmce\.org\/upload\/file9908\.pdf"/);
+  assert.deepEqual(xiamenArticle?.citation, [{
+    "@type": "CreativeWork",
+    name: "厦门市会议展览业协会：2026年第4期会展业简报",
+    url: "https://www.xmce.org/upload/file9908.pdf",
+  }]);
+  assert.match(xiamenHtml, /15\.4万人次/);
+  assert.match(xiamenHtml, /同比增长10\.2%/);
+  assert.doesNotMatch(xiamenHtml, /考察团|专程到访东升/);
+
+  const zhengzhouHtml = await readFile(htmlPath(routeByPath.get("/zh/blog/dongsheng-chairman-visit-zhengzhou")), "utf8");
+  assert.match(zhengzhouHtml, /据东升集团发布的公司动态/);
 
   const careHtml = await readFile(htmlPath(routeByPath.get("/zh/blog/natural-marble-care-guide")), "utf8");
   assert.match(careHtml, /资料来源/);
