@@ -95,6 +95,26 @@ function clientIp(request: ApiRequest) {
   return (Array.isArray(forwarded) ? forwarded[0] : forwarded?.split(",")[0])?.trim() || "unknown";
 }
 
+function headerValue(headers: ApiRequest["headers"], name: string) {
+  const value = headers[name];
+  return (Array.isArray(value) ? value[0] : value)?.split(",")[0]?.trim();
+}
+
+function isAllowedOrigin(origin: string, request: ApiRequest) {
+  if (allowedOrigins.has(origin)) return true;
+  try {
+    const originUrl = new URL(origin);
+    const requestHost = (headerValue(request.headers, "host") || headerValue(request.headers, "x-forwarded-host"))?.toLowerCase();
+    if (!requestHost || originUrl.host.toLowerCase() !== requestHost) return false;
+    if (originUrl.username || originUrl.password || originUrl.pathname !== "/" || originUrl.search || originUrl.hash) return false;
+    const forwardedProtocol = headerValue(request.headers, "x-forwarded-proto")?.toLowerCase();
+    const requestProtocol = forwardedProtocol || (requestHost.startsWith("localhost:") || requestHost.startsWith("127.0.0.1:") ? "http" : "https");
+    return originUrl.protocol === `${requestProtocol}:`;
+  } catch {
+    return false;
+  }
+}
+
 function isRateLimited(ip: string) {
   const now = Date.now();
   const recent = (requestLog.get(ip) ?? []).filter((time) => now - time < 10 * 60 * 1000);
@@ -137,7 +157,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
 
   const originHeader = request.headers.origin;
   const origin = Array.isArray(originHeader) ? originHeader[0] : originHeader;
-  if (origin && !allowedOrigins.has(origin)) return response.status(403).json({ error: "Request origin is not allowed." });
+  if (origin && !isAllowedOrigin(origin, request)) return response.status(403).json({ error: "Request origin is not allowed." });
   const contentLength = Number(request.headers["content-length"] ?? 0);
   if (contentLength > MAX_BODY_BYTES) return response.status(413).json({ error: "Request is too large." });
   if (isRateLimited(clientIp(request))) return response.status(429).json({ error: "Too many requests. Please try again later." });

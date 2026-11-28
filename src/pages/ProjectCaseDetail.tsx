@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getProjectCase } from "@/data/projectCases";
 import { useLang } from "@/lib/i18n";
@@ -8,39 +8,71 @@ export default function ProjectCaseDetail() {
   const { slug } = useParams();
   const projectCase = getProjectCase(slug);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const imageButtons = useRef<(HTMLButtonElement | null)[]>([]);
+  const selectedIndexRef = useRef(selectedIndex);
+  const galleryOpen = selectedIndex !== null;
+
+  useLayoutEffect(() => {
+    selectedIndexRef.current = selectedIndex;
+  }, [selectedIndex]);
+
+  const closeGallery = useCallback(() => {
+    const previousIndex = selectedIndexRef.current;
+    setSelectedIndex(null);
+    requestAnimationFrame(() => {
+      if (previousIndex !== null) imageButtons.current[previousIndex]?.focus();
+    });
+  }, []);
 
   useEffect(() => {
-    if (selectedIndex === null || !projectCase) return;
+    if (!galleryOpen || !projectCase) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     closeRef.current?.focus();
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSelectedIndex(null);
-      if (event.key === "ArrowRight") setSelectedIndex((index) => index === null ? 0 : (index + 1) % projectCase.images.length);
-      if (event.key === "ArrowLeft") setSelectedIndex((index) => index === null ? 0 : (index - 1 + projectCase.images.length) % projectCase.images.length);
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeGallery();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setSelectedIndex((index) => index === null ? 0 : (index + 1) % projectCase.images.length);
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setSelectedIndex((index) => index === null ? 0 : (index - 1 + projectCase.images.length) % projectCase.images.length);
+      } else if (event.key === "Tab") {
+        const dialog = dialogRef.current;
+        if (!dialog) return;
+        const focusable = dialog.querySelectorAll<HTMLElement>("button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])");
+        if (!focusable.length) {
+          event.preventDefault();
+          dialog.focus();
+          return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     };
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [selectedIndex, projectCase]);
-
-  function closeGallery() {
-    const previousIndex = selectedIndex;
-    setSelectedIndex(null);
-    requestAnimationFrame(() => {
-      if (previousIndex !== null) imageButtons.current[previousIndex]?.focus();
-    });
-  }
+  }, [closeGallery, galleryOpen, projectCase]);
 
   if (!projectCase) {
     return (
       <section className="max-w-[800px] mx-auto px-6 py-24 text-center">
         <h1 className="text-[1.6rem] font-black text-[var(--ink)]">{lang === "zh" ? "案例不存在" : "Case not found"}</h1>
-        <Link to="/collections/marble" className="inline-flex min-h-[48px] items-center mt-6 text-[#e60012] text-[13px] font-bold">{lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
+        <Link to="/cases" className="inline-flex min-h-[48px] items-center mt-6 text-[#e60012] text-[13px] font-bold">{lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
       </section>
     );
   }
@@ -84,17 +116,17 @@ export default function ProjectCaseDetail() {
         </div>
 
         <div className="pt-12 text-center">
-          <Link to="/collections/marble" className="inline-flex min-h-[44px] items-center text-[#e60012] text-[13px] font-bold">← {lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
+          <Link to="/cases" className="inline-flex min-h-[44px] items-center text-[#e60012] text-[13px] font-bold">← {lang === "zh" ? "返回工程案例" : "Back to project cases"}</Link>
         </div>
       </section>
 
       {selectedIndex !== null && (
-        <div role="dialog" aria-modal="true" aria-label={`${title} ${lang === "zh" ? "图片预览" : "image preview"}`} className="fixed inset-0 z-[120] bg-black/95 flex items-center justify-center p-3 md:p-8">
+        <div ref={dialogRef} role="dialog" aria-modal="true" aria-label={`${title} ${lang === "zh" ? "图片预览" : "image preview"}`} className="fixed inset-0 z-[120] bg-black/95 flex items-center justify-center p-3 md:p-8" onClick={(event) => { if (event.target === event.currentTarget) closeGallery(); }}>
           <button ref={closeRef} type="button" onClick={closeGallery} aria-label={lang === "zh" ? "关闭图片" : "Close image"} className="absolute top-3 right-3 min-w-[48px] min-h-[48px] bg-white text-[#111] text-[28px] z-10">×</button>
           <button type="button" onClick={() => setSelectedIndex((selectedIndex - 1 + projectCase.images.length) % projectCase.images.length)} aria-label={lang === "zh" ? "上一张" : "Previous image"} className="absolute left-2 md:left-5 min-w-[48px] min-h-[48px] bg-white/90 text-[#111] text-[24px]">‹</button>
           <img src={projectCase.images[selectedIndex]} alt={`${title} ${selectedIndex + 1}`} className="max-h-[90dvh] max-w-[90vw] object-contain" />
           <button type="button" onClick={() => setSelectedIndex((selectedIndex + 1) % projectCase.images.length)} aria-label={lang === "zh" ? "下一张" : "Next image"} className="absolute right-2 md:right-5 min-w-[48px] min-h-[48px] bg-white/90 text-[#111] text-[24px]">›</button>
-          <p className="absolute bottom-3 text-white text-[13px]">{selectedIndex + 1} / {projectCase.images.length}</p>
+          <p aria-live="polite" aria-atomic="true" className="absolute bottom-3 text-white text-[13px]">{selectedIndex + 1} / {projectCase.images.length}</p>
         </div>
       )}
     </div>

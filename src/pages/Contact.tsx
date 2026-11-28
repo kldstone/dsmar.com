@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { optimizedImage, responsiveImage } from "@/lib/images";
 import { trackConversion } from "@/lib/analytics";
 import { clearInquiryProducts, removeInquiryProduct, useInquiryProducts } from "@/lib/inquiry";
@@ -60,12 +61,22 @@ function getAttribution() {
 
 export default function Contact() {
   const { t, lang } = useLang();
+  const location = useLocation();
   const products = useInquiryProducts();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [values, setValues] = useState<FormValues>(initialValues);
   const [attachment, setAttachment] = useState<Attachment | null>(null);
   const [fileState, setFileState] = useState<FileState>("idle");
   const [submitted, setSubmitted] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (location.hash !== "#inquiry-form") return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.hash]);
 
   const copy = lang === "zh" ? {
     required: "必填",
@@ -80,6 +91,7 @@ export default function Contact() {
     contactHint: "邮箱和 WhatsApp 填写任意一项即可。",
     incomplete: "资料不完整也可以提交，我们会协助你逐步确认。",
     reference: "参考图片或文件",
+    chooseFile: "选择文件",
     fileHint: "PDF、JPG、JPEG、PNG、WEBP、DWG 或 DXF，最大 2.5 MB。",
     choosing: "文件读取中……",
     formatError: "文件格式不支持，请选择允许的格式。",
@@ -103,11 +115,11 @@ export default function Contact() {
     submit: "获取报价",
     sending: "提交中……",
     success: "询价已发送",
-    successDesc: "邮件服务已接受您的询价。我们会在一个工作日内进行首次业务回复，并在材料和技术确认后提供正式报价。",
+    successDesc: "邮件服务已接受您的询价。供货情况和正式报价需结合材料及技术信息确认。",
     another: "再提交一条询价",
     serverError: "服务器未能发送询价，请稍后重试。您填写的内容已保留。",
     networkError: "网络连接失败，请检查网络后重试。您填写的内容已保留。",
-    reply: "首次业务回复将在24小时内完成；正式报价将在材料和技术确认后提供。",
+    reply: "供货情况和正式报价会根据材料及技术信息确认。",
     processTitle: "询价流程",
     process: ["提交需求", "材料和技术确认", "样品或图纸确认", "报价", "生产与检验", "包装与运输"],
   } : {
@@ -123,6 +135,7 @@ export default function Contact() {
     contactHint: "Provide either an email address or WhatsApp number.",
     incomplete: "It is fine to submit with incomplete details. We can help you confirm them step by step.",
     reference: "Reference image or file",
+    chooseFile: "Choose file",
     fileHint: "PDF, JPG, JPEG, PNG, WEBP, DWG or DXF, up to 2.5 MB.",
     choosing: "Reading file…",
     formatError: "Unsupported file format. Please select an allowed file type.",
@@ -146,11 +159,11 @@ export default function Contact() {
     submit: "Request a Quote",
     sending: "Submitting…",
     success: "Inquiry sent",
-    successDesc: "The email provider accepted your inquiry. Expect an initial business reply within 24 hours; a formal quotation follows material and technical confirmation.",
+    successDesc: "The email provider accepted your inquiry. Availability and a formal quotation depend on the material and technical details provided.",
     another: "Send another inquiry",
     serverError: "The server could not send your inquiry. Please try again. Your information has been kept.",
     networkError: "The network request failed. Check your connection and try again. Your information has been kept.",
-    reply: "Business reply within 24 hours. Formal quotation after material and technical confirmation.",
+    reply: "Availability and a formal quotation are confirmed against the material and technical details.",
     processTitle: "Inquiry process",
     process: ["Submit your requirements", "Material and technical confirmation", "Sample or drawing approval", "Quotation", "Production and inspection", "Packing and shipment"],
   };
@@ -191,6 +204,7 @@ export default function Contact() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitted === "sending" || fileState === "reading") return;
+    if (!event.currentTarget.reportValidity()) return;
     if (!values.email.trim() && !values.whatsapp.trim()) {
       setSubmitted("server-error");
       setErrorMessage(copy.contactHint);
@@ -199,7 +213,6 @@ export default function Contact() {
 
     setSubmitted("sending");
     setErrorMessage("");
-    trackConversion("form_submit", { source: "contact_page", product_count: products.length });
     try {
       const response = await fetch("/api/inquiry", {
         method: "POST",
@@ -211,6 +224,11 @@ export default function Contact() {
         setSubmitted("server-error");
         setErrorMessage(result.error || copy.serverError);
         return;
+      }
+      try {
+        trackConversion("form_submit", { source: "contact_page", product_count: products.length });
+      } catch {
+        // Analytics failures must not change the confirmed inquiry result.
       }
       setSubmitted("success");
       clearInquiryProducts();
@@ -226,8 +244,8 @@ export default function Contact() {
   return (
     <div>
       <section className="relative h-[45vh] min-h-[340px] bg-[#0f0f0f] overflow-hidden">
-        <img {...responsiveImage("/brand-gallery/hero-contact.jpg")} alt={t("contact_hero_alt")} className="w-full h-full object-cover opacity-80" fetchPriority="high" decoding="async" />
-        <div className="absolute inset-0 bg-black/55" />
+        <img {...responsiveImage("/brand-gallery/hero-contact.jpg")} alt={t("contact_hero_alt")} className="w-full h-full object-cover opacity-90" fetchPriority="high" decoding="async" />
+        <div className="absolute inset-0 bg-black/30" />
         <div className="absolute inset-0 flex items-center justify-center text-center px-6">
           <div>
             <span className="text-white/85 text-[12px] font-bold tracking-[0.12em] uppercase">Contact</span>
@@ -258,7 +276,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div>
+          <div id="inquiry-form" className="scroll-mt-28">
             <h2 className="text-[#111] text-[1.6rem] font-black tracking-[0.02em] mb-2">{t("contact_form_title")}</h2>
             <p className="text-[#444] text-[14px] mb-7">{copy.incomplete}</p>
 
@@ -315,9 +333,31 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label htmlFor="inquiry-file" className={labelClass}>{copy.reference} ({copy.optional})</label>
-                  <input id="inquiry-file" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.dwg,.dxf" onChange={(event) => handleFile(event.target.files?.[0])} className="block w-full text-[14px] file:min-h-[44px] file:mr-4 file:border-0 file:bg-[#222] file:text-white file:px-5 file:font-bold" />
-                  <p className="mt-2 text-[#555] text-[12px]">{copy.fileHint}</p>
+                  <p className={labelClass}>{copy.reference} ({copy.optional})</p>
+                  <input
+                    ref={fileInputRef}
+                    id="inquiry-file"
+                    type="file"
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    accept=".pdf,.jpg,.jpeg,.png,.webp,.dwg,.dxf"
+                    onChange={(event) => {
+                      const input = event.currentTarget;
+                      handleFile(input.files?.[0]);
+                      input.value = "";
+                    }}
+                    className="sr-only"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`${copy.chooseFile}: ${copy.reference}`}
+                    aria-describedby="inquiry-file-hint"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex min-h-[44px] items-center bg-[#222] px-5 text-[14px] font-bold text-white hover:bg-[#333] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e60012]"
+                  >
+                    {copy.chooseFile}
+                  </button>
+                  <p id="inquiry-file-hint" className="mt-2 text-[#555] text-[12px]">{copy.fileHint}</p>
                   <div aria-live="polite" className="mt-2 text-[13px]">
                     {fileState === "reading" && <p>{copy.choosing}</p>}
                     {fileState === "ready" && attachment && <p className="flex items-center justify-between gap-3"><span className="truncate">{attachment.name}</span><button type="button" onClick={() => { setAttachment(null); setFileState("idle"); }} className="min-h-[44px] px-3 font-bold text-[#e60012]">{copy.removeFile}</button></p>}

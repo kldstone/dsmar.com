@@ -24,10 +24,15 @@ export default function BlogPost() {
         <img src={optimizedImage(post.image)} alt={post.title[lang]} className="w-full h-full object-cover opacity-50" fetchPriority="high" decoding="async" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-center justify-center text-center px-6">
-          <div className="max-w-[700px]">
+          <div className="max-w-[900px]">
             <span className="text-white/50 text-[10px] font-bold tracking-[0.16em] uppercase">{post.category[lang]}</span>
             <h1 className="text-white text-[clamp(1.4rem,3vw,2.2rem)] font-black tracking-[0.02em] mt-3 mb-3">{post.title[lang]}</h1>
-            <p className="text-white/50 text-[13px]">{post.date}</p>
+            <p className="text-white/50 text-[13px]">
+              {lang === "zh" ? "发布方：" : "Published by "}
+              <Link to="/about" className="text-white/70 hover:text-white">{lang === "zh" ? "东升石业" : "DONGSHENG MARBLE"}</Link>
+              <span aria-hidden="true"> · </span>
+              <time dateTime={post.date}>{post.date}</time>
+            </p>
           </div>
         </div>
       </section>
@@ -36,6 +41,22 @@ export default function BlogPost() {
       <article className="max-w-[760px] mx-auto px-6 py-16">
         <div className="text-[var(--ink)] text-[16px] leading-[2] space-y-5 [&_h2]:text-[1.3rem] [&_h2]:font-black [&_h2]:tracking-[0.03em] [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-[1.1rem] [&_h3]:font-bold [&_h3]:mt-8 [&_h3]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:mb-2 [&_table]:w-full [&_table]:border-collapse [&_th]:bg-[#f5f5f5] [&_th]:text-left [&_th]:p-3 [&_td]:border [&_td]:border-black/10 [&_td]:p-3"
           dangerouslySetInnerHTML={{ __html: post.content[lang] }} />
+        {post.sources && post.sources.length > 0 && (
+          <section className="mt-12 border-t border-black/10 pt-6" aria-labelledby="article-sources-heading">
+            <h2 id="article-sources-heading" className="text-[1.05rem] font-bold">
+              {lang === "zh" ? "资料来源" : "Sources"}
+            </h2>
+            <ul className="mt-3 space-y-2 text-[14px] leading-relaxed">
+              {post.sources.map((source) => (
+                <li key={source.url}>
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-[#e60012] underline underline-offset-4 hover:opacity-70">
+                    {source.title[lang]}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </article>
 
       {/* Tags & Share */}

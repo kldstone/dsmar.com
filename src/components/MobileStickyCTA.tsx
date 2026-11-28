@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { trackConversion } from "@/lib/analytics";
 import { addInquiryProduct, useCurrentInquiryProduct } from "@/lib/inquiry";
 import { useLang } from "@/lib/i18n";
@@ -26,12 +26,21 @@ export default function MobileStickyCTA() {
   const { lang } = useLang();
   const currentProduct = useCurrentInquiryProduct();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  function goToInquiry() {
+    if (location.pathname === "/contact") {
+      document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    navigate("/contact#inquiry-form");
+  }
 
   function addCurrent(goToContact: boolean) {
     if (!currentProduct) return;
     addInquiryProduct(currentProduct);
     trackConversion("product_inquiry_add", { product_id: currentProduct.id, source: "mobile_sticky" });
-    if (goToContact) navigate("/contact");
+    if (goToContact) goToInquiry();
   }
 
   const whatsappMessage = currentProduct
@@ -65,10 +74,10 @@ export default function MobileStickyCTA() {
             <WhatsAppIcon />
             {lang === "zh" ? "WhatsApp咨询" : "WHATSAPP"}
           </a>
-          <Link to="/contact" onClick={() => trackConversion("quote_cta", { source: "mobile_sticky" })} className="flex-1 min-h-[48px] flex items-center justify-center gap-2 bg-[#e60012] text-white text-[12px] font-bold">
+          <button type="button" onClick={() => { trackConversion("quote_cta", { source: "mobile_sticky" }); goToInquiry(); }} className="flex-1 min-h-[48px] flex items-center justify-center gap-2 bg-[#e60012] text-white text-[12px] font-bold">
             <EnvelopeIcon />
             {lang === "zh" ? "获取报价" : "REQUEST QUOTE"}
-          </Link>
+          </button>
         </>
       )}
     </div>

@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Layout from "./components/Layout";
 import LoadingScreen from "./components/LoadingScreen";
 import { Suspense, lazy, useEffect, useLayoutEffect } from "react";
 
 function ScrollToTop() {
-  const { pathname, search, key } = useLocation();
+  const { pathname, search, hash, key } = useLocation();
 
   const resetScroll = () => {
     window.scrollTo(0, 0);
@@ -13,13 +13,15 @@ function ScrollToTop() {
   };
 
   useLayoutEffect(() => {
+    if (hash) return;
+
     resetScroll();
     const frame = requestAnimationFrame(() => {
       resetScroll();
       requestAnimationFrame(resetScroll);
     });
     return () => cancelAnimationFrame(frame);
-  }, [pathname, search, key]);
+  }, [pathname, search, hash, key]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -42,9 +44,8 @@ function ScrollToTop() {
 }
 
 const Home = lazy(() => import("./pages/Home"));
-const Collections = lazy(() => import("./pages/Collections"));
-const CollectionDetail = lazy(() => import("./pages/CollectionDetail"));
 const ProjectCaseDetail = lazy(() => import("./pages/ProjectCaseDetail"));
+const ProjectCases = lazy(() => import("./pages/ProjectCases"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const FAQ = lazy(() => import("./pages/FAQ"));
@@ -56,18 +57,17 @@ const CatalogDetail = lazy(() => import("./pages/CatalogDetail"));
 const SearchResults = lazy(() => import("./pages/SearchResults"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-export default function App() {
+export function AppRoutes() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Suspense fallback={<LoadingScreen />}>
-        <Routes>
-          <Route element={<Layout />}>
+    <Suspense fallback={<LoadingScreen />}>
+      <Routes>
+        <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/collections" element={<Collections />} />
-            <Route path="/collections/marble" element={<Collections filter="marble" />} />
-            <Route path="/collections/product/:id" element={<CollectionDetail />} />
+            <Route path="/collections" element={<Navigate to="/catalog" replace />} />
+            <Route path="/collections/marble" element={<Navigate to="/cases" replace />} />
+            <Route path="/collections/product/:id" element={<Navigate to="/catalog" replace />} />
             <Route path="/cases/:slug" element={<ProjectCaseDetail />} />
+            <Route path="/cases" element={<ProjectCases />} />
             <Route path="/about" element={<About />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/blog" element={<BlogList />} />
@@ -78,9 +78,18 @@ export default function App() {
             <Route path="/catalog/:category/:id" element={<CatalogDetail />} />
             <Route path="/search" element={<SearchResults />} />
             <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </Suspense>
+        </Route>
+      </Routes>
+    </Suspense>
+  );
+}
+
+export default function App() {
+  const basename = /^\/zh(?:\/|$)/.test(window.location.pathname) ? "/zh" : "/";
+  return (
+    <BrowserRouter basename={basename}>
+      <ScrollToTop />
+      <AppRoutes />
     </BrowserRouter>
   );
 }

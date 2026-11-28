@@ -1,5 +1,5 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import './index.css'
 import { LangProvider } from './lib/i18n'
 import App from './App.tsx'
@@ -7,10 +7,18 @@ import { initializeConsentMode } from './lib/analytics'
 
 initializeConsentMode()
 
-createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root')!
+const initialLang = /^\/zh(?:\/|$)/.test(window.location.pathname) ? 'zh' : 'en'
+const app = (
   <StrictMode>
-    <LangProvider>
+    <LangProvider initialLang={initialLang}>
       <App />
     </LangProvider>
-  </StrictMode>,
+  </StrictMode>
 )
+
+if (root.hasChildNodes()) {
+  hydrateRoot(root, app)
+} else {
+  createRoot(root).render(app)
+}
